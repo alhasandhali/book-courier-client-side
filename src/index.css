@@ -1,2 +1,99 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+@theme {
+  --color-paper-bg: #F8F5F2; /* Kept for legacy compatibility if needed, but using snippet vars below */
+  
+  /* Palette Extraction */
+  --color-bg-body: #fdfbf7;
+  --color-bg-card: #ffffff;
+  --color-text-main: #1a1a1a;
+  --color-text-muted: #787878;
+  --color-accent-gold: #c69c6d;
+  --color-accent-green: #4ade80;
+
+  /* Card Backgrounds */
+  --color-card-blue: #a7d7de;
+  --color-card-yellow: #f3d55b;
+  --color-card-purple: #9f8189;
+  --color-card-black: #2c2c2c;
+
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Inter", sans-serif;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-bg-body);
+    font-family: var(--font-sans);
+    color: var(--color-text-main);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-accent-gold text-white px-8 py-3.5 border-none text-[0.95rem] font-medium cursor-pointer inline-flex items-center gap-2.5 transition-opacity duration-300;
+  }
+  .btn-primary:hover {
+    @apply opacity-90;
+  }
+
+  .btn-outline {
+    @apply bg-transparent border border-[#e5e5e5] px-3.5 py-1.5 rounded text-[0.8rem] text-text-main font-medium cursor-pointer hover:border-text-main transition-colors duration-200;
+  }
+
+
+  .section-head {
+    @apply flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 sm:gap-0 mb-6 sm:mb-8 md:mb-9 mt-12 sm:mt-16 md:mt-20;
+  }
+  .section-head h2 {
+    @apply font-serif text-[1.5rem] sm:text-[1.75rem] md:text-[2rem] font-semibold text-[#4a4a4a];
+  }
+  .see-all {
+    @apply text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem] text-text-muted font-medium flex items-center gap-1.5 hover:text-accent-gold transition-colors;
+  }
+  
+  /* Arch Shapes */
+  .arch-card {
+    @apply w-[31%] rounded-t-[100px] pt-[30px] px-[15px] pb-0 flex items-end justify-center relative;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+  }
+  .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+  }
+
+  /* Category Scroll Animation */
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-scroll {
+    animation: scroll 20s linear infinite;
+  }
+
+  @media (min-width: 640px) {
+    .animate-scroll {
+      animation: scroll 25s linear infinite;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .animate-scroll {
+      animation: scroll 30s linear infinite;
+    }
+  }
+
+  .animate-scroll:hover {
+    animation-play-state: paused;
+  }
+}

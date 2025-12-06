@@ -1,0 +1,28 @@
+import React from 'react';
+import Hero from '../Hero/Hero';
+import RecommendedBooks from '../RecommendedBooks/RecommendedBooks';
+import Categories from '../Categories/Categories';
+import RecentlyAdded from '../RecentlyAdded/RecentlyAdded';
+import BestSellers from '../BestSellers/BestSellers';
+import PromoBanners from '../PromoBanners/PromoBanners';
+import Services from '../Services/Services';
+import PopularBooks from '../PopularBooks/PopularBooks';
+import Testimonials from '../Testimonials/Testimonials';
+
+const Home = () => {
+    return (
+        <main className="w-full">
+            <Hero />
+            <Categories />
+            <RecommendedBooks />
+            <RecentlyAdded />
+            <BestSellers />
+            <PopularBooks />
+            <PromoBanners />
+            <Services />
+            <Testimonials />
+        </main>
+    );
+};
+
+export default Home;
