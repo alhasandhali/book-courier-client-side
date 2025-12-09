@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouteError, Link } from 'react-router';
 
 const ErrorPage = () => {
-    const error = useRouteError(); // Assuming using new data router practices where possible, though basic cleanup is priority.
+    const error = useRouteError();
 
     return (
         <div className="min-h-screen bg-base-200 flex flex-col items-center justify-center p-4 text-center">

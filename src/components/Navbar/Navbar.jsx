@@ -21,7 +21,6 @@ const Navbar = () => {
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-    // Placeholder user state - replace with actual auth logic later
     const user = null;
 
     const linkClass = "text-black border-b-2 border-transparent hover:border-accent-gold hover:text-accent-gold transition-all duration-300 ease-in-out";
@@ -64,7 +63,6 @@ const Navbar = () => {
                                 </svg>
                             </div>
                         </div>
-
                         {/* Theme Toggle Button */}
                         <div className="flex items-center justify-end">
                             <label className="swap swap-rotate">
@@ -79,7 +77,7 @@ const Navbar = () => {
                             </label>
                         </div>
 
-                        {/* User Profile / Actions */}
+                        {/* User Profile */}
                         {user ? (
                             <button aria-label="User Account">
                                 <svg className="h-8 w-8 text-gray-700 hover:text-black" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

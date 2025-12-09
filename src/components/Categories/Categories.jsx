@@ -26,7 +26,6 @@ const Categories = () => {
         <div className="w-10/12 m-auto overflow-hidden border-y border-[#eaeaea] my-8 sm:my-12 md:my-16">
             <div className="category-slider py-4 sm:py-6 md:py-8">
                 <div className="category-track flex gap-6 sm:gap-8 md:gap-12 animate-scroll">
-                    {/* First set */}
                     {categories.map((cat, index) => (
                         <div
                             key={`cat-1-${index}`}

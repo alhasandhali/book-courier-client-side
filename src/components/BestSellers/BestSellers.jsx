@@ -2,29 +2,26 @@ import React from 'react';
 import BookCard from '../BookCard/BookCard';
 import { Link } from 'react-router';
 
+import { useQuery } from '@tanstack/react-query';
+import useAxios from '../../hooks/useAxios';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, FreeMode, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/free-mode';
+
 const BestSellers = () => {
-    const books = [
-        {
-            title: "How To Talk", author: "Leil Lowndes", price: "$35",
-            image: "https://m.media-amazon.com/images/I/711cvC8nK3L._AC_UF1000,1000_QL80_.jpg",
-            bgClass: "bg-card-blue"
-        },
-        {
-            title: "The 10X Rule", author: "Grant Cardone", price: "$35",
-            image: "https://m.media-amazon.com/images/I/71d17-91kUL._AC_UF1000,1000_QL80_.jpg",
-            bgClass: "bg-card-yellow"
-        },
-        {
-            title: "Rich Dad...", author: "Robert Kiyosaki", price: "$35",
-            image: "https://m.media-amazon.com/images/I/81bsw6fnUiL._AC_UF1000,1000_QL80_.jpg",
-            bgClass: "bg-card-purple"
-        },
-        {
-            title: "Steal Like An Artist", author: "Austin Kleon", price: "$35",
-            image: "https://m.media-amazon.com/images/I/61mIq2iJUXL._AC_UF1000,1000_QL80_.jpg",
-            bgClass: "bg-card-black text-white"
-        },
-    ];
+    const axiosPublic = useAxios();
+
+    const { data: books = [] } = useQuery({
+        queryKey: ['bestSellers'],
+        queryFn: async () => {
+            const res = await axiosPublic.get('/books');
+            return res.data;
+        }
+    });
+
+    const displayedBooks = books.slice(0, 4);
 
     return (
         <section className="w-11/12 sm:w-10/12 mx-auto py-6 sm:py-8 md:py-10">
@@ -34,10 +31,42 @@ const BestSellers = () => {
                     See all <i className="fa-solid fa-arrow-right-long"></i>
                 </Link>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-                {books.map((book, index) => (
-                    <BookCard key={index} book={book} variant="bestseller" />
+
+            <div className="hidden md:grid md:grid-cols-4 gap-5 sm:gap-6">
+                {displayedBooks.map((book, index) => (
+                    <BookCard key={book._id || index} book={book} variant="bestseller" />
                 ))}
+            </div>
+
+            <div className="md:hidden">
+                <Swiper
+                    slidesPerView={1.2}
+                    spaceBetween={20}
+                    freeMode={true}
+                    loop={true}
+                    autoplay={{
+                        delay: 2500,
+                        disableOnInteraction: false,
+                    }}
+                    breakpoints={{
+                        480: {
+                            slidesPerView: 2.1,
+                            spaceBetween: 20,
+                        }
+                    }}
+                    pagination={{
+                        clickable: true,
+                        dynamicBullets: true
+                    }}
+                    modules={[Pagination, FreeMode, Autoplay]}
+                    className="!pb-12"
+                >
+                    {displayedBooks.map((book, index) => (
+                        <SwiperSlide key={book._id || index}>
+                            <BookCard book={book} variant="bestseller" />
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
             </div>
         </section>
     );

@@ -1,14 +1,26 @@
 import React from 'react';
 import BookCard from '../BookCard/BookCard';
 import { Link } from 'react-router';
+import useAxios from '../../hooks/useAxios';
+import { useQuery } from '@tanstack/react-query';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, FreeMode, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/free-mode';
 
 const RecentlyAdded = () => {
-    const books = [
-        { title: "House of stars", author: "Lili Loveless", price: "$35", image: "https://m.media-amazon.com/images/I/91tA-j-A5eL._AC_UF1000,1000_QL80_.jpg" },
-        { title: "Charles dickens", author: "History belly", price: "$35", image: "https://m.media-amazon.com/images/I/81EvI+G5QpL._AC_UF1000,1000_QL80_.jpg" },
-        { title: "Curveball", author: "Barry Zito", price: "$15", image: "https://m.media-amazon.com/images/I/91+1H-5d4AL._AC_UF1000,1000_QL80_.jpg" },
-        { title: "Prince & a Spy", author: "Rory Clements", price: "$25", image: "https://m.media-amazon.com/images/I/71s72r-kRjL._AC_UF1000,1000_QL80_.jpg" },
-    ];
+    const axiosPublic = useAxios();
+
+    const { data: books = [] } = useQuery({
+        queryKey: ['books'],
+        queryFn: async () => {
+            const res = await axiosPublic.get('/books');
+            return res.data;
+        }
+    });
+
+    const displayedBooks = books.slice(0, 4);
 
     return (
         <section className="w-11/12 sm:w-10/12 mx-auto py-6 sm:py-8 md:py-10">
@@ -18,10 +30,44 @@ const RecentlyAdded = () => {
                     See all <i className="fa-solid fa-arrow-right-long"></i>
                 </Link>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-5">
-                {books.map((book, index) => (
-                    <BookCard key={index} book={book} variant="default" />
+
+            {/* Desktop View */}
+            <div className="hidden md:grid md:grid-cols-4 gap-5 sm:gap-6">
+                {displayedBooks.map((book, index) => (
+                    <BookCard key={book._id || index} book={book} variant="default" />
                 ))}
+            </div>
+
+            {/* Mobile View */}
+            <div className="md:hidden">
+                <Swiper
+                    slidesPerView={1.2}
+                    spaceBetween={20}
+                    freeMode={true}
+                    loop={true}
+                    autoplay={{
+                        delay: 2500,
+                        disableOnInteraction: false,
+                    }}
+                    breakpoints={{
+                        480: {
+                            slidesPerView: 2.1,
+                            spaceBetween: 20,
+                        }
+                    }}
+                    pagination={{
+                        clickable: true,
+                        dynamicBullets: true
+                    }}
+                    modules={[Pagination, FreeMode, Autoplay]}
+                    className="!pb-12"
+                >
+                    {displayedBooks.map((book, index) => (
+                        <SwiperSlide key={book._id || index}>
+                            <BookCard book={book} variant="default" />
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
             </div>
         </section>
     );

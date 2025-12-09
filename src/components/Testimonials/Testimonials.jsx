@@ -104,7 +104,7 @@ const Testimonials = () => {
                         spaceBetween: 24,
                     },
                 }}
-                className="testimonials-swiper pb-10 sm:pb-12"
+                className="testimonials-swiper !pb-5 md:!pb-10"
             >
                 {testimonials.map((testi, index) => (
                     <SwiperSlide key={index}>
@@ -117,7 +117,7 @@ const Testimonials = () => {
                                         <span className="text-[0.7rem] sm:text-[0.75rem] text-[#aaa]">{testi.handle}</span>
                                     </div>
                                 </div>
-                                <div className="rating flex gap-0.5">
+                                <div className="testimonial-rating flex gap-0.5">
                                     {[...Array(5)].map((_, i) => (
                                         <i key={i} className="fa-solid fa-star text-[#fbbf24] text-[0.65rem] sm:text-[0.7rem]"></i>
                                     ))}
