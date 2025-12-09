@@ -70,7 +70,7 @@ const Footer = () => {
           </div>
           <div className="footer-col">
             <h4 className="text-[0.75rem] sm:text-[0.8rem] uppercase tracking-[1px] mb-4 sm:mb-6 text-[#333] font-bold">
-              Security
+              Quick Links
             </h4>
             <ul className="flex flex-col gap-3 sm:gap-4">
               <li>
@@ -78,7 +78,7 @@ const Footer = () => {
                   to="#"
                   className="text-[0.85rem] sm:text-[0.9rem] text-[#666] hover:text-accent-gold transition-colors"
                 >
-                  Privacy policy
+                  Shipping Information
                 </Link>
               </li>
               <li>
@@ -86,7 +86,7 @@ const Footer = () => {
                   to="#"
                   className="text-[0.85rem] sm:text-[0.9rem] text-[#666] hover:text-accent-gold transition-colors"
                 >
-                  Terms & conditions
+                  Return Policy
                 </Link>
               </li>
               <li>
@@ -94,7 +94,15 @@ const Footer = () => {
                   to="#"
                   className="text-[0.85rem] sm:text-[0.9rem] text-[#666] hover:text-accent-gold transition-colors"
                 >
-                  Delivery Information
+                  FAQ
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="#"
+                  className="text-[0.85rem] sm:text-[0.9rem] text-[#666] hover:text-accent-gold transition-colors"
+                >
+                  Terms & Conditions
                 </Link>
               </li>
             </ul>

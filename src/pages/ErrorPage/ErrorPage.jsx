@@ -107,7 +107,7 @@ const ErrorPage = () => {
                     </Link>
 
                     <Link
-                        to="/all-books"
+                        to="/books"
                         className="px-6 py-3 sm:px-8 sm:py-3.5 bg-white border-2 border-accent-gold text-accent-gold font-semibold rounded-full shadow-md hover:shadow-lg hover:bg-accent-gold hover:text-white hover:scale-105 transition-all duration-300 w-full sm:w-auto"
                     >
                         <span className="flex items-center justify-center gap-2">

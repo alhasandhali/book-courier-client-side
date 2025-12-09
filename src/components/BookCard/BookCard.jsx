@@ -24,7 +24,7 @@ const BookCard = ({ book, variant = "default" }) => {
               </button>
             </div>
           </div>
-          <div className="book-info">
+          <div className="book-info px-5">
             <h3 className="font-serif text-[1rem] sm:text-[1.1rem] font-bold mb-1 text-card-black group-hover:text-accent-gold transition-colors line-clamp-1">
               {book.title}
             </h3>
@@ -32,7 +32,7 @@ const BookCard = ({ book, variant = "default" }) => {
               {book.author}
             </p>
           </div>
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between mb-2 px-5">
             <div className="price font-serif font-bold text-[1.1rem] text-text-main group-hover:text-accent-gold transition-colors">
               {typeof book.price === 'number' ? `$${book.price.toFixed(2)}` : book.price}
             </div>
@@ -65,7 +65,7 @@ const BookCard = ({ book, variant = "default" }) => {
               className="h-[80%] w-auto shadow-sm transition-transform duration-500 group-hover:scale-105"
             />
           </div>
-          <div className="book-info">
+          <div className="book-info px-5">
             <h3 className="font-serif text-[1rem] sm:text-[1.1rem] font-bold mb-1 text-card-black group-hover:text-accent-gold transition-colors line-clamp-1">
               {book.title}
             </h3>
@@ -84,7 +84,7 @@ const BookCard = ({ book, variant = "default" }) => {
             )}
           </div>
         </Link>
-        <div className="card-actions flex justify-between items-center gap-2 mt-auto">
+        <div className="card-actions flex justify-between items-center gap-2 mt-auto px-5">
           <span className="price font-serif font-bold text-[1.1rem] text-text-main">
             {book.price}
           </span>
@@ -118,7 +118,7 @@ const BookCard = ({ book, variant = "default" }) => {
             {book.title}
           </h3>
           <p
-            className={`text-[0.85rem] mb-3 sm:mb-4 ${book.bgClass?.includes("black")
+            className={`text-[0.85rem] mb-2 ${book.bgClass?.includes("black")
               ? "text-gray-300"
               : "text-gray-600"
               } font-medium`}
