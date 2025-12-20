@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { NavLink, Link } from "react-router";
 import logo from "../../assets/logo.png";
 import "./Navbar.css";
+import useAuth from "../../hooks/useAuth";
 
 const Navbar = () => {
   const [theme, setTheme] = useState(
@@ -24,7 +25,7 @@ const Navbar = () => {
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const user = null;
+  const { user, logOut } = useAuth();
 
   const linkClass =
     "text-black border-b-2 border-transparent hover:border-accent-gold hover:text-accent-gold transition-all duration-300 ease-in-out";
@@ -126,22 +127,58 @@ const Navbar = () => {
 
             {/* User Profile */}
             {user ? (
-              <button aria-label="User Account">
-                <svg
-                  className="h-8 w-8 text-gray-700 hover:text-black"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
+              <div className="dropdown dropdown-end z-50">
+                <div
+                  tabIndex={0}
+                  role="button"
+                  className="btn btn-ghost btn-circle avatar hover:ring-2 hover:ring-accent-gold transition-all"
                 >
-                  <path
-                    d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  ></path>
-                </svg>
-              </button>
+                  <div className="w-10 rounded-full border-2 border-gray-300">
+                    <img
+                      alt="User Profile"
+                      src={
+                        user?.photoURL ||
+                        "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                      }
+                    />
+                  </div>
+                </div>
+                <ul
+                  tabIndex={0}
+                  className="menu menu-sm dropdown-content mt-3 z-[1] p-3 shadow-lg bg-white rounded-xl w-56 border border-gray-100"
+                >
+                  <li className="px-3 py-2 border-b border-gray-100 mb-2">
+                    <div className="flex items-center gap-2 pointer-events-none">
+                      <div className="w-10 h-10 rounded-full bg-accent-gold text-white flex items-center justify-center font-bold">
+                        {user?.displayName?.charAt(0)?.toUpperCase() || "U"}
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-semibold text-text-main text-sm">
+                          {user?.displayName || "User"}
+                        </p>
+                        <p className="text-xs text-text-muted truncate">
+                          {user?.email}
+                        </p>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <Link to="/dashboard" className="flex items-center gap-3 py-2.5 hover:bg-gray-50 rounded-lg transition-colors">
+                      <i className="fas fa-th-large w-4 text-center text-accent-gold"></i>
+                      <span className="font-medium">Dashboard</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <button
+                      onClick={logOut}
+                      className="flex items-center gap-3 py-2.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors w-full"
+                    >
+                      <i className="fas fa-sign-out-alt w-4 text-center"></i>
+                      <span className="font-medium">Log out</span>
+                    </button>
+                  </li>
+                </ul>
+              </div>
             ) : (
               <div className="hidden lg:flex items-center space-x-2">
                 <Link
@@ -211,11 +248,21 @@ const Navbar = () => {
                 </NavLink>
               </li>
               {user && (
-                <li>
-                  <NavLink to="/dashboard" className={mobileLinkClass}>
-                    Dashboard
-                  </NavLink>
-                </li>
+                <>
+                  <li>
+                    <NavLink to="/dashboard" className={mobileLinkClass}>
+                      Dashboard
+                    </NavLink>
+                  </li>
+                  <li>
+                    <button
+                      onClick={logOut}
+                      className="block w-full text-left py-2 text-red-500 hover:text-red-700 transition-all duration-300 ease-in-out border-b-2 border-transparent"
+                    >
+                      Log out
+                    </button>
+                  </li>
+                </>
               )}
               {!user && (
                 <div className="flex flex-col gap-2 mt-2">

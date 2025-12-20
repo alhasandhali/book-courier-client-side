@@ -1,12 +1,23 @@
 import React, { useState } from "react";
-import { useParams, Link } from "react-router";
+import { useParams, Link, useNavigate } from "react-router";
 import useAxios from "../../hooks/useAxios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
+import useAuth from "../../hooks/useAuth";
+import toast from "react-hot-toast";
 
 const BookDetails = () => {
   const { id } = useParams();
   const axiosPublic = useAxios();
+  const axiosSecure = useAxiosSecure();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Form State
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
 
   const {
     data: book,
@@ -19,6 +30,41 @@ const BookDetails = () => {
       return res.data;
     },
   });
+
+  const handlePlaceOrder = async (e) => {
+    e.preventDefault();
+    if (!user) {
+      toast.error("Please login to place an order");
+      navigate("/login");
+      return;
+    }
+
+    const orderData = {
+      bookId: book._id,
+      bookTitle: book.title,
+      bookImage: book.image,
+      userEmail: user.email,
+      userName: user.displayName,
+      phone,
+      address,
+      quantity,
+      totalPrice: book.price * quantity,
+      status: 'pending',
+      orderDate: new Date().toISOString()
+    };
+
+    try {
+      await axiosSecure.post('/order', orderData);
+      toast.success("Order placed successfully!");
+      setIsModalOpen(false);
+      // Optional: reduce stock here or let backend handle it
+      setPhone("");
+      setAddress("");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to place order");
+    }
+  };
 
   if (isLoading) {
     return (
@@ -50,9 +96,8 @@ const BookDetails = () => {
           {[...Array(5)].map((_, i) => (
             <i
               key={i}
-              className={`fa-star ${
-                i < Math.floor(ratingVal) ? "fa-solid" : "fa-regular"
-              } text-sm`}
+              className={`fa-star ${i < Math.floor(ratingVal) ? "fa-solid" : "fa-regular"
+                } text-sm`}
             ></i>
           ))}
         </div>
@@ -75,7 +120,7 @@ const BookDetails = () => {
   };
 
   return (
-    <section className="w-11/12 max-w-[1200px] mx-auto py-8 sm:py-12 md:py-16">
+    <section className="w-11/12 max-w-[1200px] mx-auto py-8 sm:py-12 md:py-16 relative">
       <div className="text-sm breadcrumbs text-text-muted mb-6 sm:mb-10">
         <ul>
           <li>
@@ -169,12 +214,12 @@ const BookDetails = () => {
                 </button>
               </div>
 
-              <button className="btn-primary flex-1 justify-center rounded-lg h-[50px] shadow-lg shadow-accent-gold/20 hover:shadow-accent-gold/30">
-                <i className="fa-solid fa-bolt"></i> Borrow Now
-              </button>
-
-              <button className="btn-outline flex-1 justify-center rounded-lg h-[50px] border-gray-300 hover:border-accent-gold hover:text-accent-gold">
-                <i className="fa-solid fa-cart-shopping"></i> Add to Cart
+              <button
+                onClick={() => setIsModalOpen(true)}
+                disabled={book.stock <= 0}
+                className="btn-primary flex-1 justify-center rounded-lg h-[50px] shadow-lg shadow-accent-gold/20 hover:shadow-accent-gold/30 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <i className="fa-solid fa-bolt"></i> Order Now
               </button>
 
               <button className="h-[50px] px-6 rounded-lg border border-gray-200 font-bold hover:border-black transition-colors">
@@ -233,6 +278,66 @@ const BookDetails = () => {
           </div>
         </div>
       </div>
+
+      {/* Order Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl w-full max-w-lg p-6 sm:p-8 shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-2xl font-serif font-bold text-text-main">Place Order</h3>
+              <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
+                <i className="fa-solid fa-xmark text-xl"></i>
+              </button>
+            </div>
+
+            <form onSubmit={handlePlaceOrder} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="form-control">
+                  <label className="label text-xs uppercase font-bold text-text-muted">Name</label>
+                  <input type="text" value={user?.displayName || ""} disabled className="input input-bordered w-full bg-gray-50" />
+                </div>
+                <div className="form-control">
+                  <label className="label text-xs uppercase font-bold text-text-muted">Email</label>
+                  <input type="email" value={user?.email || ""} disabled className="input input-bordered w-full bg-gray-50" />
+                </div>
+              </div>
+
+              <div className="form-control">
+                <label className="label text-xs uppercase font-bold text-text-muted">Phone Number</label>
+                <input
+                  type="tel"
+                  required
+                  placeholder="+1 (555) 000-0000"
+                  className="input input-bordered w-full focus:input-primary"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
+              </div>
+
+              <div className="form-control">
+                <label className="label text-xs uppercase font-bold text-text-muted">Shipping Address</label>
+                <textarea
+                  required
+                  placeholder="Enter your full address"
+                  className="textarea textarea-bordered w-full h-24 focus:textarea-primary resize-none"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                ></textarea>
+              </div>
+
+              <div className="bg-gray-50 p-4 rounded-lg flex justify-between items-center text-sm font-medium text-text-main">
+                <span>Quantity: {quantity}</span>
+                <span>Total: <span className="text-accent-gold font-bold text-lg">${(book.price * quantity).toFixed(2)}</span></span>
+              </div>
+
+              <button type="submit" className="btn-primary w-full py-3 rounded-lg text-lg font-bold shadow-lg shadow-accent-gold/20 hover:shadow-accent-gold/30 mt-4">
+                Confirm Order
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
     </section>
   );
 };

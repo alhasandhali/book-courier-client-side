@@ -11,6 +11,13 @@ const AllBooks = () => {
     const [minRating, setMinRating] = useState(0);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 12;
+
+    React.useEffect(() => {
+        setCurrentPage(1);
+    }, [selectedCategories, priceRange, minRating, sortBy]);
+
     const parsePrice = (price) => {
         if (typeof price === 'number') return price;
         if (typeof price === 'string') {
@@ -79,6 +86,10 @@ const AllBooks = () => {
         return filtered;
     }, [books, selectedCategories, priceRange, minRating, sortBy]);
 
+    const totalPages = Math.ceil(filteredAndSortedBooks.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const currentBooks = filteredAndSortedBooks.slice(startIndex, startIndex + itemsPerPage);
+
     const handleCategoryToggle = (category) => {
         setSelectedCategories(prev =>
             prev.includes(category)
@@ -92,7 +103,12 @@ const AllBooks = () => {
         setPriceRange([0, 100]);
         setMinRating(0);
         setSortBy('newest');
+        setCurrentPage(1);
     };
+
+    React.useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [currentPage]);
 
     const hasActiveFilters = selectedCategories.length > 0 || priceRange[0] > 0 || priceRange[1] < 100 || minRating > 0;
 
@@ -295,11 +311,78 @@ const AllBooks = () => {
                                 )}
                             </div>
                         ) : (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
-                                {filteredAndSortedBooks.map((book) => (
-                                    <BookCard key={book._id} book={book} variant="default" />
-                                ))}
-                            </div>
+                            <>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6 mb-10">
+                                    {currentBooks.map((book) => (
+                                        <BookCard key={book._id} book={book} variant="default" />
+                                    ))}
+                                </div>
+
+                                {totalPages > 1 && (
+                                    <div className="flex justify-center items-center gap-2">
+                                        <button
+                                            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                            disabled={currentPage === 1}
+                                            className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-200 text-text-muted hover:border-accent-gold hover:text-accent-gold disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-gray-200 disabled:hover:text-text-muted transition-all"
+                                        >
+                                            <i className="fa-solid fa-chevron-left"></i>
+                                        </button>
+
+                                        <div className="flex gap-2">
+                                            {[...Array(totalPages)].map((_, idx) => {
+                                                const pageNumber = idx + 1;
+                                                if (totalPages > 7) {
+                                                    if (
+                                                        pageNumber === 1 ||
+                                                        pageNumber === totalPages ||
+                                                        (pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1)
+                                                    ) {
+                                                        return (
+                                                            <button
+                                                                key={pageNumber}
+                                                                onClick={() => setCurrentPage(pageNumber)}
+                                                                className={`w-10 h-10 flex items-center justify-center rounded-full transition-all ${currentPage === pageNumber
+                                                                    ? 'bg-accent-gold text-white shadow-md transform scale-105'
+                                                                    : 'border border-gray-200 text-text-muted hover:border-accent-gold hover:text-accent-gold'
+                                                                    }`}
+                                                            >
+                                                                {pageNumber}
+                                                            </button>
+                                                        );
+                                                    } else if (
+                                                        (pageNumber === currentPage - 2 && currentPage > 3) ||
+                                                        (pageNumber === currentPage + 2 && currentPage < totalPages - 2)
+                                                    ) {
+                                                        return <span key={pageNumber} className="w-10 h-10 flex items-center justify-center text-gray-400">...</span>;
+                                                    }
+                                                    return null;
+                                                }
+
+                                                return (
+                                                    <button
+                                                        key={pageNumber}
+                                                        onClick={() => setCurrentPage(pageNumber)}
+                                                        className={`w-10 h-10 flex items-center justify-center rounded-full transition-all ${currentPage === pageNumber
+                                                            ? 'bg-accent-gold text-white shadow-md transform scale-105'
+                                                            : 'border border-gray-200 text-text-muted hover:border-accent-gold hover:text-accent-gold'
+                                                            }`}
+                                                    >
+                                                        {pageNumber}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+
+                                        <button
+                                            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                            disabled={currentPage === totalPages}
+                                            className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-200 text-text-muted hover:border-accent-gold hover:text-accent-gold disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-gray-200 disabled:hover:text-text-muted transition-all"
+                                        >
+                                            <i className="fa-solid fa-chevron-right"></i>
+                                        </button>
+                                    </div>
+                                )}
+                            </>
                         )}
                     </main>
                 </div>

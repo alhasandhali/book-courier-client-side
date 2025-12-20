@@ -29,6 +29,13 @@
     color: var(--color-text-main);
     -webkit-font-smoothing: antialiased;
   }
+  button,
+  input[type="file"] {
+    cursor: pointer;
+  }
+  input[type="file"]::file-selector-button {
+    cursor: pointer;
+  }
 }
 
 @layer components {
