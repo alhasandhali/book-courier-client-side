@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router';
 import useAxios from '../../hooks/useAxios';
 import BookCard from '../../components/BookCard/BookCard';
 
@@ -11,12 +12,33 @@ const AllBooks = () => {
     const [minRating, setMinRating] = useState(0);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || "");
+
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 12;
 
-    React.useEffect(() => {
+    useEffect(() => {
         setCurrentPage(1);
-    }, [selectedCategories, priceRange, minRating, sortBy]);
+    }, [selectedCategories, priceRange, minRating, sortBy, searchTerm]);
+
+    // Update state when URL changes
+    useEffect(() => {
+        const query = searchParams.get('search') || "";
+        if (query !== searchTerm) {
+            setSearchTerm(query);
+        }
+    }, [searchParams]);
+
+    // Update URL when search term changes (optional but good for syncing)
+    const handleSearchChange = (value) => {
+        setSearchTerm(value);
+        if (value) {
+            setSearchParams({ search: value });
+        } else {
+            setSearchParams({});
+        }
+    };
 
     const parsePrice = (price) => {
         if (typeof price === 'number') return price;
@@ -44,6 +66,15 @@ const AllBooks = () => {
 
     const filteredAndSortedBooks = useMemo(() => {
         let filtered = [...books];
+
+        if (searchTerm) {
+            const term = searchTerm.toLowerCase();
+            filtered = filtered.filter(book =>
+                book.title?.toLowerCase().includes(term) ||
+                book.author?.toLowerCase().includes(term) ||
+                book.category?.toLowerCase().includes(term)
+            );
+        }
 
         if (selectedCategories.length > 0) {
             filtered = filtered.filter(book =>
@@ -103,6 +134,8 @@ const AllBooks = () => {
         setPriceRange([0, 100]);
         setMinRating(0);
         setSortBy('newest');
+        setSearchTerm("");
+        setSearchParams({});
         setCurrentPage(1);
     };
 
@@ -110,7 +143,7 @@ const AllBooks = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [currentPage]);
 
-    const hasActiveFilters = selectedCategories.length > 0 || priceRange[0] > 0 || priceRange[1] < 100 || minRating > 0;
+    const hasActiveFilters = selectedCategories.length > 0 || priceRange[0] > 0 || priceRange[1] < 1000 || minRating > 0 || searchTerm;
 
     return (
         <div className="min-h-screen bg-bg-body">
@@ -122,6 +155,27 @@ const AllBooks = () => {
                     <p className="text-text-muted text-sm sm:text-base">
                         Discover our complete collection of {books.length} books
                     </p>
+                </div>
+
+                <div className="mb-8 max-w-2xl">
+                    <div className="relative group">
+                        <i className="fa-solid fa-search absolute left-5 top-1/2 -translate-y-1/2 text-text-muted group-focus-within:text-accent-gold transition-colors"></i>
+                        <input
+                            type="text"
+                            placeholder="Search by title, author, or category..."
+                            value={searchTerm}
+                            onChange={(e) => handleSearchChange(e.target.value)}
+                            className="w-full py-4 pl-12 pr-6 bg-white border border-gray-100 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-accent-gold/20 focus:border-accent-gold transition-all text-sm sm:text-base"
+                        />
+                        {searchTerm && (
+                            <button
+                                onClick={() => handleSearchChange("")}
+                                className="absolute right-5 top-1/2 -translate-y-1/2 text-text-muted hover:text-red-500 transition-colors"
+                            >
+                                <i className="fa-solid fa-circle-xmark"></i>
+                            </button>
+                        )}
+                    </div>
                 </div>
 
                 <div className="flex gap-6 lg:gap-8">
@@ -136,34 +190,37 @@ const AllBooks = () => {
 
                     <aside className={`
                         fixed lg:sticky top-0 left-0 h-screen lg:h-auto
-                        w-72 lg:w-64 xl:w-72 flex-shrink-0
+                        w-80 lg:w-64 xl:w-72 flex-shrink-0
                         bg-white lg:bg-transparent
                         shadow-2xl lg:shadow-none
-                        z-40 lg:z-auto
-                        transition-transform duration-300
+                        z-[100] lg:z-auto
+                        transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1)
                         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
                         overflow-y-auto
-                        p-6 lg:p-0
+                        p-8 lg:p-0
                     `}>
-                        <div className="lg:sticky lg:top-6">
-                            <div className="flex items-center justify-between mb-6 lg:mb-0">
-                                <h2 className="text-xl font-serif font-bold text-text-main lg:hidden">
-                                    Filters & Sort
-                                </h2>
+                        <div className="lg:sticky lg:top-24">
+                            <div className="flex items-center justify-between mb-8 lg:hidden">
+                                <div>
+                                    <h2 className="text-2xl font-serif font-bold text-text-main">
+                                        Filters
+                                    </h2>
+                                    <p className="text-xs text-text-muted font-medium uppercase tracking-wider mt-1">Refine your search</p>
+                                </div>
                                 <button
                                     onClick={() => setIsSidebarOpen(false)}
-                                    className="lg:hidden text-text-muted hover:text-text-main"
+                                    className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-text-muted hover:text-red-500 transition-colors shadow-sm"
                                 >
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
+                                    <i className="fa-solid fa-times"></i>
                                 </button>
                             </div>
 
                             <div className="space-y-6">
-                                <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                                    <h3 className="font-serif font-bold text-lg mb-4 text-text-main">Sort By</h3>
-                                    <div className="space-y-2">
+                                <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100/50">
+                                    <h3 className="font-serif font-bold text-lg mb-4 text-text-main flex items-center gap-2">
+                                        <i className="fa-solid fa-sort-amount-down text-accent-gold text-sm"></i> Sort By
+                                    </h3>
+                                    <div className="space-y-2.5">
                                         {[
                                             { value: 'newest', label: 'Newest First' },
                                             { value: 'price-low', label: 'Price: Low to High' },
@@ -178,9 +235,9 @@ const AllBooks = () => {
                                                     value={option.value}
                                                     checked={sortBy === option.value}
                                                     onChange={(e) => setSortBy(e.target.value)}
-                                                    className="w-4 h-4 text-accent-gold focus:ring-accent-gold"
+                                                    className="radio radio-xs radio-primary"
                                                 />
-                                                <span className="text-sm text-text-muted group-hover:text-text-main transition-colors">
+                                                <span className={`text-sm transition-colors ${sortBy === option.value ? 'text-text-main font-bold' : 'text-text-muted group-hover:text-text-main'}`}>
                                                     {option.label}
                                                 </span>
                                             </label>
@@ -189,18 +246,20 @@ const AllBooks = () => {
                                 </div>
 
                                 {categories.length > 0 && (
-                                    <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                                        <h3 className="font-serif font-bold text-lg mb-4 text-text-main">Categories</h3>
-                                        <div className="space-y-2 max-h-48 overflow-y-auto">
+                                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100/50">
+                                        <h3 className="font-serif font-bold text-lg mb-4 text-text-main flex items-center gap-2">
+                                            <i className="fa-solid fa-layer-group text-accent-gold text-sm"></i> Categories
+                                        </h3>
+                                        <div className="space-y-2.5 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
                                             {categories.map(category => (
                                                 <label key={category} className="flex items-center gap-3 cursor-pointer group">
                                                     <input
                                                         type="checkbox"
                                                         checked={selectedCategories.includes(category)}
                                                         onChange={() => handleCategoryToggle(category)}
-                                                        className="w-4 h-4 text-accent-gold rounded focus:ring-accent-gold"
+                                                        className="checkbox checkbox-xs checkbox-primary rounded"
                                                     />
-                                                    <span className="text-sm text-text-muted group-hover:text-text-main transition-colors">
+                                                    <span className={`text-sm transition-colors ${selectedCategories.includes(category) ? 'text-text-main font-bold' : 'text-text-muted group-hover:text-text-main'}`}>
                                                         {category}
                                                     </span>
                                                 </label>
@@ -209,32 +268,37 @@ const AllBooks = () => {
                                     </div>
                                 )}
 
-                                <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                                    <h3 className="font-serif font-bold text-lg mb-4 text-text-main">Price Range</h3>
-                                    <div className="space-y-3">
-                                        <div className="flex items-center justify-between text-sm">
-                                            <span className="text-text-muted">${priceRange[0]}</span>
-                                            <span className="text-text-muted">${priceRange[1]}</span>
+                                <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100/50">
+                                    <h3 className="font-serif font-bold text-lg mb-4 text-text-main flex items-center gap-2">
+                                        <i className="fa-solid fa-tags text-accent-gold text-sm"></i> Price Range
+                                    </h3>
+                                    <div className="space-y-4">
+                                        <div className="flex items-center justify-between text-xs font-bold text-text-muted">
+                                            <span>$0</span>
+                                            <span className="bg-accent-gold/10 text-accent-gold px-2 py-1 rounded-md">${priceRange[1]}</span>
                                         </div>
                                         <input
                                             type="range"
                                             min="0"
-                                            max="100"
+                                            max="1000"
+                                            step="10"
                                             value={priceRange[1]}
                                             onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-                                            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-accent-gold"
+                                            className="range range-xs range-primary"
                                         />
                                     </div>
                                 </div>
 
-                                <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                                    <h3 className="font-serif font-bold text-lg mb-4 text-text-main">Rating</h3>
-                                    <div className="space-y-2">
+                                <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100/50">
+                                    <h3 className="font-serif font-bold text-lg mb-4 text-text-main flex items-center gap-2">
+                                        <i className="fa-solid fa-star text-accent-gold text-sm"></i> Min Rating
+                                    </h3>
+                                    <div className="space-y-2.5">
                                         {[
                                             { value: 0, label: 'All Ratings' },
-                                            { value: 3, label: '3+ Stars' },
-                                            { value: 4, label: '4+ Stars' },
-                                            { value: 4.5, label: '4.5+ Stars' },
+                                            { value: 3, label: '3.0+' },
+                                            { value: 4, label: '4.0+' },
+                                            { value: 4.5, label: '4.5+' },
                                         ].map(option => (
                                             <label key={option.value} className="flex items-center gap-3 cursor-pointer group">
                                                 <input
@@ -243,12 +307,12 @@ const AllBooks = () => {
                                                     value={option.value}
                                                     checked={minRating === option.value}
                                                     onChange={() => setMinRating(option.value)}
-                                                    className="w-4 h-4 text-accent-gold focus:ring-accent-gold"
+                                                    className="radio radio-xs radio-primary"
                                                 />
-                                                <span className="text-sm text-text-muted group-hover:text-text-main transition-colors flex items-center gap-1">
+                                                <span className={`text-sm transition-colors flex items-center gap-1.5 ${minRating === option.value ? 'text-text-main font-bold' : 'text-text-muted group-hover:text-text-main'}`}>
                                                     {option.label}
                                                     {option.value > 0 && (
-                                                        <i className="fa-solid fa-star text-yellow-400 text-xs"></i>
+                                                        <i className="fa-solid fa-star text-yellow-400 text-[10px]"></i>
                                                     )}
                                                 </span>
                                             </label>
@@ -259,9 +323,9 @@ const AllBooks = () => {
                                 {hasActiveFilters && (
                                     <button
                                         onClick={clearFilters}
-                                        className="w-full bg-red-50 text-red-600 py-3 rounded-lg font-medium hover:bg-red-100 transition-colors text-sm"
+                                        className="w-full bg-red-50 text-red-600 py-3.5 rounded-xl font-bold hover:bg-red-100 transition-all text-xs uppercase tracking-wider border border-red-100/50 flex items-center justify-center gap-2"
                                     >
-                                        Clear All Filters
+                                        <i className="fa-solid fa-trash-can"></i> Clear All Filters
                                     </button>
                                 )}
                             </div>
@@ -271,7 +335,7 @@ const AllBooks = () => {
                     {isSidebarOpen && (
                         <div
                             onClick={() => setIsSidebarOpen(false)}
-                            className="fixed inset-0 bg-black/50 z-30 lg:hidden"
+                            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[90] lg:hidden animate-in fade-in duration-300"
                         />
                     )}
 

@@ -17,11 +17,13 @@ const MyOrders = () => {
         queryKey: ["my-orders", user?.email],
         queryFn: async () => {
             if (!user?.email) return [];
-            const res = await axiosSecure.get(`/orders?email=${user.email}`);
-            return res.data;
+            const res = await axiosSecure.get(`/orders?userEmail=${user.email}`);
+            return res.data.filter(order => order.email === user.email || order.userEmail === user.email);
         },
         enabled: !!user?.email,
     });
+
+
 
     const handleCancelOrder = async (orderId) => {
         if (!confirm("Are you sure you want to cancel this order?")) return;
@@ -49,7 +51,8 @@ const MyOrders = () => {
             <h2 className="text-3xl font-serif font-bold text-text-main mb-6">
                 My Orders
             </h2>
-            <div className="overflow-x-auto bg-white rounded-xl shadow-md border border-gray-100">
+            {/* Desktop Table View */}
+            <div className="hidden lg:block overflow-x-auto bg-white rounded-xl shadow-md border border-gray-100">
                 <table className="table w-full">
                     {/* head */}
                     <thead className="bg-gray-50 text-text-muted uppercase text-xs font-semibold">
@@ -96,7 +99,8 @@ const MyOrders = () => {
                                     {order.status === "pending" && (
                                         <>
                                             <Link
-                                                to={`/payment/${order._id}`}
+                                                to={`/dashboard/payment/${order._id}`}
+                                                state={{ order }}
                                                 className="px-3 py-1.5 bg-green-500 text-white text-xs rounded-md hover:bg-green-600 transition-colors shadow-sm"
                                             >
                                                 Pay Now
@@ -119,12 +123,70 @@ const MyOrders = () => {
                         ))}
                     </tbody>
                 </table>
-                {orders.length === 0 && (
-                    <div className="p-8 text-center text-text-muted">
-                        You haven't placed any orders yet.
-                    </div>
-                )}
             </div>
+
+            {/* Mobile Card View */}
+            <div className="lg:hidden space-y-4">
+                {orders.map((order) => (
+                    <div key={order._id} className="bg-white p-5 rounded-xl border border-gray-100 shadow-md space-y-4">
+                        <div className="flex justify-between items-start border-b border-gray-50 pb-3">
+                            <h3 className="font-bold text-text-main line-clamp-1 flex-1">{order.bookTitle}</h3>
+                            <span
+                                className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${order.status === "pending"
+                                    ? "bg-yellow-100 text-yellow-600 border border-yellow-200"
+                                    : order.status === "shipped"
+                                        ? "bg-blue-100 text-blue-600 border border-blue-200"
+                                        : order.status === "paid"
+                                            ? "bg-green-100 text-green-700 border border-green-200"
+                                            : order.status === "cancelled"
+                                                ? "bg-red-100 text-red-600 border border-red-200"
+                                                : "bg-gray-100 text-gray-600 border border-gray-200"
+                                    }`}
+                            >
+                                {order.status}
+                            </span>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Order Date</p>
+                                <p className="text-xs font-semibold text-text-muted">{new Date(order.orderDate).toLocaleDateString()}</p>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Total Price</p>
+                                <p className="text-sm font-bold text-text-main">${order.totalPrice?.toFixed(2) || "0.00"}</p>
+                            </div>
+                        </div>
+
+                        {order.status === "pending" && (
+                            <div className="flex gap-3 pt-2">
+                                <Link
+                                    to={`/dashboard/payment/${order._id}`}
+                                    state={{ order }}
+                                    className="flex-1 bg-green-500 text-white text-center py-2.5 rounded-lg text-xs font-bold hover:bg-green-600 shadow-sm transition-all"
+                                >
+                                    Pay Now
+                                </Link>
+                                <button
+                                    onClick={() => handleCancelOrder(order._id)}
+                                    className="flex-1 bg-white text-red-500 border border-red-100 py-2.5 rounded-lg text-xs font-bold hover:bg-red-50 transition-all"
+                                >
+                                    Cancel Order
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                ))}
+            </div>
+
+            {orders.length === 0 && (
+                <div className="p-12 text-center bg-white rounded-xl border border-gray-100 mt-4 shadow-sm">
+                    <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-300">
+                        <i className="fa-solid fa-shopping-basket text-2xl"></i>
+                    </div>
+                    <p className="text-text-muted font-medium">You haven't placed any orders yet.</p>
+                </div>
+            )}
         </div>
     );
 };

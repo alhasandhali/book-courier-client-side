@@ -10,7 +10,7 @@ const DashboardLayout = ({ title, sidebarLinks }) => {
             {/* Mobile Sidebar Overlay */}
             {isSidebarOpen && (
                 <div
-                    className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+                    className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] lg:hidden"
                     onClick={() => setIsSidebarOpen(false)}
                 ></div>
             )}
@@ -18,75 +18,79 @@ const DashboardLayout = ({ title, sidebarLinks }) => {
             {/* Sidebar */}
             <aside
                 className={`
-                    fixed lg:sticky top-0 left-0 h-screen lg:min-h-screen
-                    w-64 bg-[#f3f0ea] z-0 transform transition-transform duration-300 ease-in-out
-                    ${isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+                    fixed lg:sticky top-0 left-0 h-screen lg:h-[calc(100vh-80px)] lg:top-20
+                    w-72 sm:w-80 lg:w-64 bg-[#f3f0ea] z-[70] transform transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1)
+                    ${isSidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full lg:translate-x-0"}
                     overflow-y-auto
-                    lg:pt-24
                     flex flex-col
+                    border-r border-gray-100 lg:border-none
                 `}
             >
-                {/* Logo & Title Section */}
-                <div className="p-5 border-b border-gray-200 flex justify-between items-center lg:mt-0 mt-24 flex-shrink-0">
-                    <div className="flex-1">
-                        <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                            <img src={logo} alt="BookCourier Logo" className="w-8 h-8" />
-                            <span className="text-lg font-serif font-bold text-text-main">BookCourier</span>
-                        </Link>
-                        <p className="text-xs text-text-muted mt-1.5 ml-10 font-medium">{title}</p>
+                {/* Logo & Title Section (only visible in mobile drawer or if needed) */}
+                <div className="p-6 border-b border-gray-200/50 flex justify-between items-center lg:hidden">
+                    <div className="flex items-center gap-2">
+                        <img src={logo} alt="BookCourier Logo" className="w-8 h-8" />
+                        <span className="text-xl font-serif font-bold text-text-main">BookCourier</span>
                     </div>
-                    {/* Close button for mobile */}
                     <button
-                        className="lg:hidden text-gray-400 hover:text-red-500 transition-colors p-1"
+                        className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors shadow-sm"
                         onClick={() => setIsSidebarOpen(false)}
-                        aria-label="Close sidebar"
                     >
                         <i className="fas fa-times text-lg"></i>
                     </button>
                 </div>
 
-                {/* Navigation Links */}
-                <nav className="p-3 space-y-1 flex-1 overflow-y-auto">
-                    {sidebarLinks.map((link) => (
-                        <NavLink
-                            key={link.name}
-                            to={link.path}
-                            end={link.end}
-                            onClick={() => setIsSidebarOpen(false)}
-                            className={({ isActive }) =>
-                                `flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${isActive
-                                    ? "bg-accent-gold text-white shadow-md"
-                                    : "text-text-muted hover:bg-gray-50 hover:text-text-main hover:shadow-sm"
-                                }`
-                            }
-                        >
-                            <i className={`fas ${link.icon} w-5 text-center`}></i>
-                            <span className="font-medium text-sm">{link.name}</span>
-                        </NavLink>
-                    ))}
-                </nav>
+                <div className="p-6 lg:p-4">
+                    <p className="text-[10px] uppercase font-bold text-text-muted tracking-[2px] mb-4 opacity-60">
+                        {title}
+                    </p>
+                    {/* Navigation Links */}
+                    <nav className="space-y-1.5 font-medium">
+                        {sidebarLinks.map((link) => (
+                            <NavLink
+                                key={link.name}
+                                to={link.path}
+                                end={link.end}
+                                onClick={() => setIsSidebarOpen(false)}
+                                className={({ isActive }) =>
+                                    `flex items-center gap-3.5 px-4 py-3.5 rounded-xl transition-all duration-300 ${isActive
+                                        ? "bg-black text-white shadow-lg shadow-black/10 scale-[1.02]"
+                                        : "text-text-muted hover:bg-white hover:text-text-main hover:shadow-sm"
+                                    }`
+                                }
+                            >
+                                <i className={`fas ${link.icon} w-5 text-center text-sm ${link.isActive ? 'text-white' : 'text-accent-gold'}`}></i>
+                                <span className="text-sm">{link.name}</span>
+                            </NavLink>
+                        ))}
+                    </nav>
+                </div>
 
-                {/* Bottom Padding for better scroll experience */}
-                <div className="h-4 flex-shrink-0"></div>
+                {/* Sidebar Footer or User info could go here for mobile */}
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 p-4 lg:p-8 w-full">
-                {/* Mobile Toggle Button */}
-                <div className="lg:hidden mb-6 flex items-center gap-3 bg-white p-4 rounded-lg shadow-sm">
-                    <button
-                        onClick={() => setIsSidebarOpen(true)}
-                        className="text-text-main hover:text-accent-gold transition-colors"
-                    >
-                        <i className="fas fa-bars text-2xl"></i>
-                    </button>
-                    <span className="font-serif font-bold text-lg text-text-main">
-                        {title}
-                    </span>
+            <main className="flex-1 w-full min-w-0">
+                {/* Mobile Dash Header */}
+                <div className="lg:hidden sticky top-0 z-[40] bg-white/80 backdrop-blur-md border-b border-gray-100 p-4 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={() => setIsSidebarOpen(true)}
+                            className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-text-main hover:text-accent-gold transition-colors"
+                        >
+                            <i className="fas fa-bars-staggered"></i>
+                        </button>
+                        <h2 className="font-serif font-bold text-lg text-text-main">{title}</h2>
+                    </div>
+                    <Link to="/" className="w-8 h-8">
+                        <img src={logo} alt="Logo" className="w-full h-full object-contain" />
+                    </Link>
                 </div>
 
-                <div className="max-w-7xl mx-auto">
-                    <Outlet />
+                <div className="p-4 sm:p-6 lg:p-10">
+                    <div className="max-w-7xl mx-auto">
+                        <Outlet />
+                    </div>
                 </div>
             </main>
         </div>

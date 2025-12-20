@@ -9,9 +9,10 @@ const LibrarianOrders = () => {
     const { user, loading } = useAuth();
 
     const { data: orders = [], refetch, isLoading } = useQuery({
-        queryKey: ["librarian-orders"],
+        queryKey: ["librarian-orders", user?.email],
         queryFn: async () => {
-            const res = await axiosSecure.get("/orders");
+            if (!user?.email) return [];
+            const res = await axiosSecure.get(`/orders/librarian?email=${user.email}`);
             return res.data;
         },
         enabled: !loading && !!user

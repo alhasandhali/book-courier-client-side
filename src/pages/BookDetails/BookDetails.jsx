@@ -19,6 +19,10 @@ const BookDetails = () => {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
 
+  // Review State
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewComment, setReviewComment] = useState("");
+
   const {
     data: book,
     isLoading,
@@ -44,6 +48,8 @@ const BookDetails = () => {
       bookTitle: book.title,
       bookImage: book.image,
       userEmail: user.email,
+      email: user.email,
+      userId: user.uid,
       userName: user.displayName,
       phone,
       address,
@@ -63,6 +69,109 @@ const BookDetails = () => {
     } catch (error) {
       console.error(error);
       toast.error("Failed to place order");
+    }
+  };
+
+  // Wishlist Logic
+  const {
+    data: wishlist = [],
+    refetch: refetchWishlist,
+  } = useQuery({
+    queryKey: ["wishlist", user?.email],
+    queryFn: async () => {
+      if (!user?.email) return [];
+      const res = await axiosSecure.get(`/wishlist?email=${user.email}`);
+      return res.data;
+    },
+    enabled: !!user?.email,
+  });
+
+  const wishlistItem = wishlist.find(item => (item.bookId?._id === id) || (item.bookId === id));
+  const isInWishlist = !!wishlistItem;
+
+  const handleWishlistToggle = async () => {
+    if (!user) {
+      toast.error("Please login to add to wishlist");
+      navigate("/login");
+      return;
+    }
+
+    try {
+      if (isInWishlist) {
+        await axiosSecure.delete(`/wishlist/${wishlistItem._id}`);
+        toast.success("Removed from wishlist");
+      } else {
+        const wishData = {
+          email: user.email,
+          bookId: id,
+          title: book.title, // Fallback if populate fails
+          image: book.image,
+          price: book.price,
+          author: book.author
+        };
+        await axiosSecure.post('/wishlist', wishData);
+        toast.success("Added to wishlist");
+      }
+      refetchWishlist();
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update wishlist");
+    }
+  };
+
+  // Reviews Logic
+  const {
+    data: reviews = [],
+    refetch: refetchReviews,
+  } = useQuery({
+    queryKey: ["reviews", id],
+    queryFn: async () => {
+      // Assuming there is an endpoint to fetch reviews by book ID
+      // If not, we might need to filter client-side from a general endpoint, 
+      // but let's try a specific query parameter first
+      try {
+        const res = await axiosPublic.get(`/reviews?bookId=${id}`);
+        return res.data;
+      } catch (error) {
+        return [];
+      }
+    },
+  });
+
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+    if (!user) {
+      toast.error("Please login to submit a review");
+      navigate("/login");
+      return;
+    }
+
+    const reviewData = {
+      bookId: book._id, // Using Object ID
+      bookIdString: id, // Fallback if backend needs string match
+      userId: user.uid,
+      userName: user.displayName,
+      userImage: user.photoURL,
+      rating: parseInt(reviewRating),
+      comment: reviewComment,
+      status: "approved",
+      helpful: {
+        count: 0,
+        users: []
+      },
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    try {
+      await axiosSecure.post('/review', reviewData);
+      toast.success("Review submitted successfully!");
+      setReviewComment("");
+      setReviewRating(5);
+      refetchReviews();
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to submit review");
     }
   };
 
@@ -121,21 +230,15 @@ const BookDetails = () => {
 
   return (
     <section className="w-11/12 max-w-[1200px] mx-auto py-8 sm:py-12 md:py-16 relative">
-      <div className="text-sm breadcrumbs text-text-muted mb-6 sm:mb-10">
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/books">Books</Link>
-          </li>
-          <li className="font-semibold text-text-main overflow-hidden text-ellipsis whitespace-nowrap max-w-[200px]">
-            {book.title}
-          </li>
-        </ul>
+      <div className="text-[10px] sm:text-xs uppercase tracking-widest font-bold text-text-muted mb-8 flex flex-wrap gap-2 items-center">
+        <Link to="/" className="hover:text-accent-gold transition-colors">Home</Link>
+        <i className="fa-solid fa-chevron-right text-[8px] opacity-30"></i>
+        <Link to="/books" className="hover:text-accent-gold transition-colors">Books</Link>
+        <i className="fa-solid fa-chevron-right text-[8px] opacity-30"></i>
+        <span className="text-text-main truncate max-w-[150px] sm:max-w-none">{book.title}</span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-14 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-14 items-start mb-16">
         <div className="bg-[#F8F5F2] rounded-2xl p-8 sm:p-12 md:p-16 flex items-center justify-center relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/40 rounded-bl-[100px] -mr-8 -mt-8"></div>
           <div className="absolute bottom-0 left-0 w-24 h-24 bg-accent-gold/5 rounded-tr-[80px] -ml-4 -mb-4"></div>
@@ -222,8 +325,14 @@ const BookDetails = () => {
                 <i className="fa-solid fa-bolt"></i> Order Now
               </button>
 
-              <button className="h-[50px] px-6 rounded-lg border border-gray-200 font-bold hover:border-black transition-colors">
-                <i className="fa-regular fa-heart"></i>
+              <button
+                onClick={handleWishlistToggle}
+                className={`h-[50px] px-6 rounded-lg border font-bold transition-all ${isInWishlist
+                  ? "border-red-500 bg-red-50 text-red-500 hover:bg-red-100"
+                  : "border-gray-200 hover:border-black text-text-main"
+                  }`}
+              >
+                <i className={`${isInWishlist ? "fa-solid text-red-500" : "fa-regular"} fa-heart`}></i>
               </button>
             </div>
 
@@ -278,6 +387,88 @@ const BookDetails = () => {
           </div>
         </div>
       </div>
+
+      {/* Reviews Section */}
+      <div className="max-w-[800px] border-t border-gray-100 pt-12">
+        <h3 className="text-2xl font-serif font-bold text-text-main mb-8">Customer Reviews</h3>
+
+        {/* Add Review Form */}
+        {user ? (
+          <div className="bg-gray-50 p-6 rounded-xl mb-10 border border-gray-100">
+            <h4 className="text-lg font-bold text-text-main mb-4">Write a Review</h4>
+            <form onSubmit={handleSubmitReview}>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-text-muted mb-2">Rating</label>
+                <div className="flex gap-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => setReviewRating(star)}
+                      className={`text-2xl transition-colors ${reviewRating >= star ? "text-orange-400" : "text-gray-300"}`}
+                    >
+                      <i className="fa-solid fa-star"></i>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-text-muted mb-2">Comment</label>
+                <textarea
+                  required
+                  value={reviewComment}
+                  onChange={(e) => setReviewComment(e.target.value)}
+                  className="textarea textarea-bordered w-full h-32 focus:outline-none focus:border-accent-gold rounded-lg"
+                  placeholder="Share your thoughts about this book..."
+                ></textarea>
+              </div>
+              <button type="submit" className="btn-primary px-6 py-2.5 rounded-lg text-sm font-bold shadow-md">
+                Submit Review
+              </button>
+            </form>
+          </div>
+        ) : (
+          <div className="bg-gray-50 p-6 rounded-xl mb-10 border border-gray-100 text-center">
+            <p className="text-text-muted mb-4">Please log in to write a review.</p>
+            <Link to="/login" className="btn-primary px-6 py-2.5 rounded-lg text-sm font-bold">Log In</Link>
+          </div>
+        )}
+
+        {/* Reviews List */}
+        <div className="space-y-6">
+          {reviews.length === 0 ? (
+            <p className="text-text-muted italic">No reviews yet. Be the first to review!</p>
+          ) : (
+            reviews.map((review) => (
+              <div key={review._id || Math.random()} className="border-b border-gray-100 last:border-0 pb-6 last:pb-0">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
+                    <img
+                      src={review.userImage || "https://via.placeholder.com/40"}
+                      alt="User"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h5 className="font-bold text-text-main text-sm">{review.userName || "Anonymous User"}</h5>
+                    <p className="text-xs text-text-muted">{new Date(review.createdAt).toLocaleDateString()}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 text-orange-400 text-xs mb-2">
+                  {[...Array(5)].map((_, i) => (
+                    <i
+                      key={i}
+                      className={`fa-star ${i < (review.rating || 0) ? "fa-solid" : "fa-regular"}`}
+                    ></i>
+                  ))}
+                </div>
+                <p className="text-text-muted text-sm leading-relaxed">{review.comment}</p>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
 
       {/* Order Modal */}
       {isModalOpen && (
@@ -343,3 +534,4 @@ const BookDetails = () => {
 };
 
 export default BookDetails;
+

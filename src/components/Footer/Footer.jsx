@@ -4,122 +4,89 @@ import logo from "../../assets/logo.png";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#f3f0ea] pt-10 sm:pt-12 md:pt-[50px] pb-6 sm:pb-[30px] w-full">
-      <div className="w-11/12 sm:w-10/12 mx-auto">
-        <div className="footer-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2.5fr_1fr_1fr_1.2fr] gap-8 sm:gap-10 mb-8">
-          <div className="footer-col">
-            <Link to="/" className="flex items-center space-x-1 mb-4 sm:mb-5">
+    <footer className="bg-[#fcfbf9] border-t border-gray-100 pt-16 pb-8 w-full mt-auto">
+      <div className="w-11/12 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1.5fr] gap-12 mb-16">
+          <div className="space-y-6">
+            <Link to="/" className="flex items-center gap-2 group">
               <img
                 src={logo}
-                alt="BookCourier-Logo"
-                className="h-7 w-7 sm:h-8 sm:w-8"
+                alt="BookCourier Logo"
+                className="h-8 w-8 transition-transform group-hover:rotate-12"
               />
-              <span className="font-serif text-[1.2rem] sm:text-[1.4rem] text-accent-gold font-bold">
-                BookCourier
+              <span className="font-serif text-2xl text-text-main font-bold">
+                Book<span className="text-accent-gold">Courier</span>
               </span>
             </Link>
-            <p className="footer-desc text-[0.85rem] sm:text-[0.9rem] text-[#666] leading-[1.7] mb-4 sm:mb-5 max-w-[320px]">
-              A publications company that specializes to make famous books, and
-              deliver it to customers with reasonable price.
+            <p className="text-sm text-text-muted leading-relaxed max-w-xs">
+              Empowering readers through a curated collection of literature, delivered with heart and efficiency.
             </p>
-            <div className="socials flex gap-4 sm:gap-5">
-              <i className="fa-brands fa-facebook-f text-[#333] text-[1rem] sm:text-[1.1rem] cursor-pointer hover:text-accent-gold transition-colors"></i>
-              <i className="fa-brands fa-instagram text-[#333] text-[1rem] sm:text-[1.1rem] cursor-pointer hover:text-accent-gold transition-colors"></i>
-              <i className="fa-brands fa-twitter text-[#333] text-[1rem] sm:text-[1.1rem] cursor-pointer hover:text-accent-gold transition-colors"></i>
-              <i className="fa-brands fa-linkedin-in text-[#333] text-[1rem] sm:text-[1.1rem] cursor-pointer hover:text-accent-gold transition-colors"></i>
+            <div className="flex gap-4">
+              {['facebook-f', 'instagram', 'twitter', 'linkedin-in'].map(social => (
+                <Link key={social} to="#" className="w-9 h-9 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 hover:text-accent-gold hover:shadow-md transition-all">
+                  <i className={`fa-brands fa-${social} text-sm`}></i>
+                </Link>
+              ))}
             </div>
           </div>
-          <div className="footer-col">
-            <h4 className="text-[0.75rem] sm:text-[0.8rem] uppercase tracking-[1px] mb-4 sm:mb-6 text-[#333] font-bold">
-              Menu
+
+          <div>
+            <h4 className="text-xs uppercase tracking-[2px] font-bold text-text-main mb-6">
+              Platform
             </h4>
-            <ul className="flex flex-col gap-3 sm:gap-4">
-              <li>
-                <Link
-                  to="#"
-                  className="text-[0.85rem] sm:text-[0.9rem] text-[#666] hover:text-accent-gold transition-colors"
-                >
-                  Online support
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="#"
-                  className="text-[0.85rem] sm:text-[0.9rem] text-[#666] hover:text-accent-gold transition-colors"
-                >
-                  Our services
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="#"
-                  className="text-[0.85rem] sm:text-[0.9rem] text-[#666] hover:text-accent-gold transition-colors"
-                >
-                  Order return
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="#"
-                  className="text-[0.85rem] sm:text-[0.9rem] text-[#666] hover:text-accent-gold transition-colors"
-                >
-                  Privacy policy
-                </Link>
-              </li>
+            <ul className="space-y-4">
+              {['New Arrivals', 'Best Sellers', 'All Books', 'Support'].map(item => (
+                <li key={item}>
+                  <Link to="#" className="text-sm text-text-muted hover:text-accent-gold transition-colors flex items-center gap-2 group">
+                    <span className="w-1 h-1 rounded-full bg-accent-gold opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                    {item}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
-          <div className="footer-col">
-            <h4 className="text-[0.75rem] sm:text-[0.8rem] uppercase tracking-[1px] mb-4 sm:mb-6 text-[#333] font-bold">
-              Quick Links
+
+          <div>
+            <h4 className="text-xs uppercase tracking-[2px] font-bold text-text-main mb-6">
+              Company
             </h4>
-            <ul className="flex flex-col gap-3 sm:gap-4">
-              <li>
-                <Link
-                  to="#"
-                  className="text-[0.85rem] sm:text-[0.9rem] text-[#666] hover:text-accent-gold transition-colors"
-                >
-                  Shipping Information
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="#"
-                  className="text-[0.85rem] sm:text-[0.9rem] text-[#666] hover:text-accent-gold transition-colors"
-                >
-                  Return Policy
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="#"
-                  className="text-[0.85rem] sm:text-[0.9rem] text-[#666] hover:text-accent-gold transition-colors"
-                >
-                  FAQ
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="#"
-                  className="text-[0.85rem] sm:text-[0.9rem] text-[#666] hover:text-accent-gold transition-colors"
-                >
-                  Terms & Conditions
-                </Link>
-              </li>
+            <ul className="space-y-4">
+              {['About Us', 'Privacy Policy', 'Terms of Service', 'Contact'].map(item => (
+                <li key={item}>
+                  <Link to="#" className="text-sm text-text-muted hover:text-accent-gold transition-colors flex items-center gap-2 group">
+                    <span className="w-1 h-1 rounded-full bg-accent-gold opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                    {item}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
-          <div className="footer-col">
-            <h4 className="text-[0.75rem] sm:text-[0.8rem] uppercase tracking-[1px] mb-4 sm:mb-6 text-[#333] font-bold">
+
+          <div className="bg-[#f3f0ea] p-8 rounded-3xl space-y-4">
+            <h4 className="text-xs uppercase tracking-[2px] font-bold text-text-main">
               Get in touch
             </h4>
-            <ul className="flex flex-col gap-3 sm:gap-4 text-[0.85rem] sm:text-[0.9rem] text-[#666] list-none">
-              <li>Address: Celina, Delaware 10299</li>
-              <li>Email: paperhaven@gmail.com</li>
-              <li>Phone: (671) 555-0110</li>
-            </ul>
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                <i className="fa-solid fa-location-dot text-accent-gold mt-1 text-xs"></i>
+                <p className="text-sm text-text-muted">123 Book Avenue, Literature City, LC 45678</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <i className="fa-solid fa-envelope text-accent-gold text-xs"></i>
+                <p className="text-sm text-text-muted">hello@bookcourier.com</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <i className="fa-solid fa-phone text-accent-gold text-xs"></i>
+                <p className="text-sm text-text-muted">+1 (555) 000-0000</p>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="copyright text-center text-[0.75rem] sm:text-[0.8rem] text-[#999] border-t border-[#e5e2dc] pt-4 sm:pt-6">
-          Copyright @ 2025 BookCourier All rights reserved.
+
+        <div className="pt-8 border-t border-gray-100 text-center">
+          <p className="text-xs text-text-muted font-medium">
+            &copy; {new Date().getFullYear()} BookCourier. Designed with <i className="fa-solid fa-heart text-red-400 mx-1"></i> for book lovers.
+          </p>
         </div>
       </div>
     </footer>

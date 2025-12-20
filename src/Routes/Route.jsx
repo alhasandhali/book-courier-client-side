@@ -12,9 +12,12 @@ import Register from "../pages/Register/Register";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import DashboardHome from "../pages/Dashboard/DashboardHome";
 import MyOrders from "../pages/Dashboard/User/MyOrders";
+import Payment from "../pages/Dashboard/User/Payment";
 import MyProfile from "../pages/Dashboard/Shared/MyProfile";
 import Invoices from "../pages/Dashboard/User/Invoices";
+import Wishlist from "../pages/Dashboard/User/Wishlist";
 import AddBook from "../pages/Dashboard/Librarian/AddBook";
+
 import MyBooks from "../pages/Dashboard/Librarian/MyBooks";
 import LibrarianOrders from "../pages/Dashboard/Librarian/LibrarianOrders";
 import AllUsers from "../pages/Dashboard/Admin/AllUsers";
@@ -76,22 +79,35 @@ export const router = createBrowserRouter([
             path: "invoices",
             element: <Invoices />,
           },
+          {
+            path: "wishlist",
+            element: <Wishlist />,
+          },
+          {
+            path: "payment/:id",
+            element: <Payment />,
+          },
           // Librarian Routes
           {
             path: "books",
             element: <MyBooks />,
           },
           {
+            path: "my-books",
+            element: <MyBooks />,
+          },
+          {
             path: "add-book",
             element: <AddBook />,
           },
+
           {
             path: "issued-books",
-            element: <LibrarianOrders />, // Reusing for now as placeholder
+            element: <LibrarianOrders />,
           },
           {
             path: "returns",
-            element: <LibrarianOrders />, // Reusing for now
+            element: <LibrarianOrders />,
           },
           // Admin Routes
           {
@@ -104,7 +120,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "orders",
-            element: <LibrarianOrders />, // Shared for now
+            element: <LibrarianOrders />,
           }
         ]
       },

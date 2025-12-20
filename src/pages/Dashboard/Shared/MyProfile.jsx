@@ -22,7 +22,6 @@ const MyProfile = () => {
 
             // 2. Update DB (Optional but recommended to keep sync)
             // Assuming endpoint PATCH /user/:email exists or similar
-            // For now just updating Firebase is visually sufficient for frontend
 
             setIsEditing(false);
             toast.success("Profile updated successfully!");
