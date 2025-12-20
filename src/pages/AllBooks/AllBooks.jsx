@@ -161,6 +161,8 @@ const AllBooks = () => {
                     <div className="relative group">
                         <i className="fa-solid fa-search absolute left-5 top-1/2 -translate-y-1/2 text-text-muted group-focus-within:text-accent-gold transition-colors"></i>
                         <input
+                            id="allBooksSearch"
+                            name="search"
                             type="text"
                             placeholder="Search by title, author, or category..."
                             value={searchTerm}

@@ -46,7 +46,7 @@ const Hero = () => {
               grabCursor={true}
               modules={[EffectCards, Pagination, Autoplay]}
               className="w-[220px] sm:w-[260px] md:w-[300px] h-80 sm:h-[380px] md:h-[420px] pb-12!"
-              loop={books.length > 3}
+              loop={books.length >= 5}
               pagination={{ clickable: true }}
               autoplay={{
                 delay: 2000,

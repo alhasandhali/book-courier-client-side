@@ -99,8 +99,10 @@ const AddBook = () => {
                 {/* Basic Info */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label className="block text-sm font-medium text-text-main mb-1">Book Title</label>
+                        <label htmlFor="title" className="block text-sm font-medium text-text-main mb-1">Book Title</label>
                         <input
+                            id="title"
+                            name="title"
                             type="text"
                             {...register("title", { required: "Title is required" })}
                             placeholder="All the Light We Cannot See"
@@ -109,8 +111,10 @@ const AddBook = () => {
                         {errors.title && <span className="text-red-500 text-xs mt-1">{errors.title.message}</span>}
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-text-main mb-1">Author Name</label>
+                        <label htmlFor="author" className="block text-sm font-medium text-text-main mb-1">Author Name</label>
                         <input
+                            id="author"
+                            name="author"
                             type="text"
                             {...register("author", { required: "Author is required" })}
                             placeholder="Anthony Doerr"
@@ -122,8 +126,10 @@ const AddBook = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label className="block text-sm font-medium text-text-main mb-1">Category</label>
+                        <label htmlFor="category" className="block text-sm font-medium text-text-main mb-1">Category</label>
                         <select
+                            id="category"
+                            name="category"
                             {...register("category", { required: "Category is required" })}
                             className="w-full px-4 py-2 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold outline-none bg-bg-body text-text-main"
                         >
@@ -141,8 +147,10 @@ const AddBook = () => {
                         {errors.category && <span className="text-red-500 text-xs mt-1">{errors.category.message}</span>}
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-text-main mb-1">Language</label>
+                        <label htmlFor="language" className="block text-sm font-medium text-text-main mb-1">Language</label>
                         <input
+                            id="language"
+                            name="language"
                             type="text"
                             {...register("language", { required: "Language is required" })}
                             placeholder="English"
@@ -155,8 +163,10 @@ const AddBook = () => {
                 {/* Status & Visibility */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label className="block text-sm font-medium text-text-main mb-1">Status</label>
+                        <label htmlFor="status" className="block text-sm font-medium text-text-main mb-1">Status</label>
                         <select
+                            id="status"
+                            name="status"
                             {...register("status")}
                             className="w-full px-4 py-2 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold outline-none bg-bg-body text-text-main"
                         >
@@ -165,8 +175,10 @@ const AddBook = () => {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-text-main mb-1">Visibility</label>
+                        <label htmlFor="visibility" className="block text-sm font-medium text-text-main mb-1">Visibility</label>
                         <select
+                            id="visibility"
+                            name="visibility"
                             {...register("visibility")}
                             className="w-full px-4 py-2 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold outline-none bg-bg-body text-text-main"
                         >
@@ -179,8 +191,10 @@ const AddBook = () => {
                 {/* Pricing & Stock */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div>
-                        <label className="block text-sm font-medium text-text-main mb-1">Price ($)</label>
+                        <label htmlFor="price" className="block text-sm font-medium text-text-main mb-1">Price ($)</label>
                         <input
+                            id="price"
+                            name="price"
                             type="number"
                             step="0.01"
                             {...register("price", { required: "Required", min: 0 })}
@@ -190,8 +204,10 @@ const AddBook = () => {
                         {errors.price && <span className="text-red-500 text-xs mt-1">{errors.price.message}</span>}
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-text-main mb-1">Discount (%)</label>
+                        <label htmlFor="discount" className="block text-sm font-medium text-text-main mb-1">Discount (%)</label>
                         <input
+                            id="discount"
+                            name="discount"
                             type="number"
                             {...register("discount", { min: 0, max: 100 })}
                             placeholder="0"
@@ -199,8 +215,10 @@ const AddBook = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-text-main mb-1">Stock</label>
+                        <label htmlFor="stock" className="block text-sm font-medium text-text-main mb-1">Stock</label>
                         <input
+                            id="stock"
+                            name="stock"
                             type="number"
                             {...register("stock", { required: "Required", min: 0 })}
                             placeholder="12"
@@ -209,8 +227,10 @@ const AddBook = () => {
                         {errors.stock && <span className="text-red-500 text-xs mt-1">{errors.stock.message}</span>}
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-text-main mb-1">Min Stock Alert</label>
+                        <label htmlFor="minStockAlert" className="block text-sm font-medium text-text-main mb-1">Min Stock Alert</label>
                         <input
+                            id="minStockAlert"
+                            name="minStockAlert"
                             type="number"
                             {...register("minStockAlert", { min: 1 })}
                             placeholder="5"
@@ -221,8 +241,10 @@ const AddBook = () => {
 
                 {/* Tags */}
                 <div>
-                    <label className="block text-sm font-medium text-text-main mb-1">Tags (comma separated)</label>
+                    <label htmlFor="tags" className="block text-sm font-medium text-text-main mb-1">Tags (comma separated)</label>
                     <input
+                        id="tags"
+                        name="tags"
                         type="text"
                         {...register("tags")}
                         placeholder="romance, classic, bestseller"
@@ -233,8 +255,10 @@ const AddBook = () => {
                 {/* Delivery Info */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
-                        <label className="block text-sm font-medium text-text-main mb-1">Delivery Time (Days)</label>
+                        <label htmlFor="deliveryTimeDays" className="block text-sm font-medium text-text-main mb-1">Delivery Time (Days)</label>
                         <input
+                            id="deliveryTimeDays"
+                            name="deliveryTimeDays"
                             type="number"
                             {...register("deliveryTimeDays", { min: 1 })}
                             placeholder="3"
@@ -242,8 +266,10 @@ const AddBook = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-text-main mb-1">Delivery Charge ($)</label>
+                        <label htmlFor="deliveryCharge" className="block text-sm font-medium text-text-main mb-1">Delivery Charge ($)</label>
                         <input
+                            id="deliveryCharge"
+                            name="deliveryCharge"
                             type="number"
                             step="0.01"
                             {...register("deliveryCharge", { min: 0 })}
@@ -252,8 +278,10 @@ const AddBook = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-text-main mb-1">Avail. Cities (comma sep)</label>
+                        <label htmlFor="availableCities" className="block text-sm font-medium text-text-main mb-1">Avail. Cities (comma sep)</label>
                         <input
+                            id="availableCities"
+                            name="availableCities"
                             type="text"
                             {...register("availableCities")}
                             placeholder="Austin, Dallas"
@@ -264,8 +292,10 @@ const AddBook = () => {
 
                 {/* Image Upload */}
                 <div>
-                    <label className="block text-sm font-medium text-text-main mb-1">Book Cover Image</label>
+                    <label htmlFor="bookImage" className="block text-sm font-medium text-text-main mb-1">Book Cover Image</label>
                     <input
+                        id="bookImage"
+                        name="image"
                         type="file"
                         accept="image/jpeg, image/png, image/jpg"
                         {...register("image", {
@@ -287,8 +317,10 @@ const AddBook = () => {
 
                 {/* Description */}
                 <div>
-                    <label className="block text-sm font-medium text-text-main mb-1">Description</label>
+                    <label htmlFor="description" className="block text-sm font-medium text-text-main mb-1">Description</label>
                     <textarea
+                        id="description"
+                        name="description"
                         {...register("description", { required: "Description is required" })}
                         rows="4"
                         placeholder="Book synopsis..."

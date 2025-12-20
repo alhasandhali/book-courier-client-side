@@ -101,7 +101,7 @@ const Testimonials = () => {
         modules={[Autoplay, Pagination]}
         spaceBetween={16}
         slidesPerView={1}
-        loop={true}
+        loop={testimonials.length >= 6}
         autoplay={{
           delay: 3000,
           disableOnInteraction: false,

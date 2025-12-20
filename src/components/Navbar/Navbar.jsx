@@ -84,6 +84,8 @@ const Navbar = () => {
             {/* Search Input (Hidden on mobile) */}
             <form onSubmit={handleSearch} className="group relative hidden md:block">
               <input
+                id="navbarSearch"
+                name="search"
                 type="text"
                 placeholder="Search books..."
                 value={searchQuery}

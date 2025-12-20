@@ -401,18 +401,20 @@ const BookDetails = () => {
             <form onSubmit={handlePlaceOrder} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="form-control">
-                  <label className="label text-xs uppercase font-bold text-text-muted">Name</label>
-                  <input type="text" value={user?.displayName || ""} disabled className="input input-bordered w-full bg-bg-body opacity-60 text-text-main border-card-border" />
+                  <label htmlFor="customerName" className="label text-xs uppercase font-bold text-text-muted">Name</label>
+                  <input id="customerName" name="customerName" type="text" value={user?.displayName || ""} disabled className="input input-bordered w-full bg-bg-body opacity-60 text-text-main border-card-border" />
                 </div>
                 <div className="form-control">
-                  <label className="label text-xs uppercase font-bold text-text-muted">Email</label>
-                  <input type="email" value={user?.email || ""} disabled className="input input-bordered w-full bg-bg-body opacity-60 text-text-main border-card-border" />
+                  <label htmlFor="customerEmail" className="label text-xs uppercase font-bold text-text-muted">Email</label>
+                  <input id="customerEmail" name="customerEmail" type="email" value={user?.email || ""} disabled className="input input-bordered w-full bg-bg-body opacity-60 text-text-main border-card-border" />
                 </div>
               </div>
 
               <div className="form-control">
-                <label className="label text-xs uppercase font-bold text-text-muted">Phone Number</label>
+                <label htmlFor="phone" className="label text-xs uppercase font-bold text-text-muted">Phone Number</label>
                 <input
+                  id="phone"
+                  name="phone"
                   type="tel"
                   required
                   placeholder="+1 (555) 000-0000"
@@ -423,8 +425,10 @@ const BookDetails = () => {
               </div>
 
               <div className="form-control">
-                <label className="label text-xs uppercase font-bold text-text-muted">Shipping Address</label>
+                <label htmlFor="address" className="label text-xs uppercase font-bold text-text-muted">Shipping Address</label>
                 <textarea
+                  id="address"
+                  name="address"
                   required
                   placeholder="Enter your full address"
                   className="textarea textarea-bordered w-full h-24 focus:textarea-primary resize-none bg-bg-body text-text-main border-card-border"
@@ -452,8 +456,10 @@ const BookDetails = () => {
           <h3 className="font-bold text-xl text-text-main mb-4">Write a Review</h3>
           <form onSubmit={handleSubmitReview} className="space-y-4">
             <div className="form-control">
-              <label className="label text-xs uppercase font-bold text-text-muted">Rating</label>
+              <label htmlFor="reviewRating" className="label text-xs uppercase font-bold text-text-muted">Rating</label>
               <select
+                id="reviewRating"
+                name="reviewRating"
                 className="select select-bordered w-full bg-bg-body text-text-main border-card-border"
                 value={reviewRating}
                 onChange={(e) => setReviewRating(e.target.value)}
@@ -462,8 +468,10 @@ const BookDetails = () => {
               </select>
             </div>
             <div className="form-control">
-              <label className="label text-xs uppercase font-bold text-text-muted">Comment</label>
+              <label htmlFor="reviewComment" className="label text-xs uppercase font-bold text-text-muted">Comment</label>
               <textarea
+                id="reviewComment"
+                name="reviewComment"
                 className="textarea textarea-bordered w-full bg-bg-body text-text-main border-card-border h-32"
                 placeholder="Share your thoughts about this book..."
                 value={reviewComment}

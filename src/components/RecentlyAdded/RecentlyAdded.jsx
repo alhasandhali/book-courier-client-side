@@ -44,7 +44,7 @@ const RecentlyAdded = () => {
           slidesPerView={1.2}
           spaceBetween={20}
           freeMode={true}
-          loop={true}
+          loop={displayedBooks.length >= 3}
           autoplay={{
             delay: 2500,
             disableOnInteraction: false,

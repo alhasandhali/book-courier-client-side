@@ -205,8 +205,10 @@ const Login = () => {
               )}
             </div>
             <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 cursor-pointer">
+              <label htmlFor="rememberMe" className="flex items-center gap-2 cursor-pointer">
                 <input
+                  id="rememberMe"
+                  name="rememberMe"
                   type="checkbox"
                   {...register("rememberMe")}
                   className="w-4 h-4 text-accent-gold rounded focus:ring-accent-gold cursor-pointer"
