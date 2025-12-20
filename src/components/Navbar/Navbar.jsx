@@ -48,7 +48,7 @@ const Navbar = () => {
           {/* Left Side */}
           <Link to="/" className="flex items-center space-x-1 shrink-0">
             <img src={logo} alt="BookCourier-Logo" className="h-8 w-8" />
-            <span className="hidden xs:block font-serif text-[1.2rem] sm:text-[1.4rem] text-accent-gold font-bold transition-all">
+            <span className="font-serif text-[1.1rem] sm:text-[1.4rem] text-accent-gold font-bold">
               BookCourier
             </span>
           </Link>
