@@ -15,11 +15,9 @@ const BookDetails = () => {
   const [quantity, setQuantity] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Form State
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
 
-  // Review State
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewComment, setReviewComment] = useState("");
 
@@ -63,7 +61,6 @@ const BookDetails = () => {
       await axiosSecure.post('/order', orderData);
       toast.success("Order placed successfully!");
       setIsModalOpen(false);
-      // Optional: reduce stock here or let backend handle it
       setPhone("");
       setAddress("");
     } catch (error) {
@@ -72,7 +69,6 @@ const BookDetails = () => {
     }
   };
 
-  // Wishlist Logic
   const {
     data: wishlist = [],
     refetch: refetchWishlist,
@@ -104,7 +100,7 @@ const BookDetails = () => {
         const wishData = {
           email: user.email,
           bookId: id,
-          title: book.title, // Fallback if populate fails
+          title: book.title,
           image: book.image,
           price: book.price,
           author: book.author
@@ -119,16 +115,12 @@ const BookDetails = () => {
     }
   };
 
-  // Reviews Logic
   const {
     data: reviews = [],
     refetch: refetchReviews,
   } = useQuery({
     queryKey: ["reviews", id],
     queryFn: async () => {
-      // Assuming there is an endpoint to fetch reviews by book ID
-      // If not, we might need to filter client-side from a general endpoint, 
-      // but let's try a specific query parameter first
       try {
         const res = await axiosPublic.get(`/reviews?bookId=${id}`);
         return res.data;
@@ -147,8 +139,8 @@ const BookDetails = () => {
     }
 
     const reviewData = {
-      bookId: book._id, // Using Object ID
-      bookIdString: id, // Fallback if backend needs string match
+      bookId: book._id,
+      bookIdString: id,
       userId: user.uid,
       userName: user.displayName,
       userImage: user.photoURL,
@@ -186,7 +178,7 @@ const BookDetails = () => {
   if (isError || !book) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-center">
-        <h2 className="text-2xl font-serif font-bold mb-4">Book not found</h2>
+        <h2 className="text-2xl font-serif font-bold mb-4 text-text-main">Book not found</h2>
         <Link to="/" className="btn-primary rounded-full">
           Return Home
         </Link>
@@ -205,7 +197,7 @@ const BookDetails = () => {
           {[...Array(5)].map((_, i) => (
             <i
               key={i}
-              className={`fa-star ${i < Math.floor(ratingVal) ? "fa-solid" : "fa-regular"
+              className={`fa-star ${i < Math.floor(ratingVal || 0) ? "fa-solid" : "fa-regular"
                 } text-sm`}
             ></i>
           ))}
@@ -214,7 +206,7 @@ const BookDetails = () => {
           ({ratingVal || 0})
         </span>
         {ratingCount > 0 && (
-          <span className="text-text-muted text-sm border-l border-gray-300 pl-2 ml-1">
+          <span className="text-text-muted text-sm border-l border-card-border pl-2 ml-1">
             {ratingCount} reviews
           </span>
         )}
@@ -230,17 +222,19 @@ const BookDetails = () => {
 
   return (
     <section className="w-11/12 max-w-[1200px] mx-auto py-8 sm:py-12 md:py-16 relative">
-      <div className="text-[10px] sm:text-xs uppercase tracking-widest font-bold text-text-muted mb-8 flex flex-wrap gap-2 items-center">
-        <Link to="/" className="hover:text-accent-gold transition-colors">Home</Link>
-        <i className="fa-solid fa-chevron-right text-[8px] opacity-30"></i>
-        <Link to="/books" className="hover:text-accent-gold transition-colors">Books</Link>
-        <i className="fa-solid fa-chevron-right text-[8px] opacity-30"></i>
-        <span className="text-text-main truncate max-w-[150px] sm:max-w-none">{book.title}</span>
+      <div className="text-sm breadcrumbs text-text-muted mb-6 sm:mb-10">
+        <ul>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/books">Books</Link></li>
+          <li className="font-semibold text-text-main overflow-hidden text-ellipsis whitespace-nowrap max-w-[200px]">
+            {book.title}
+          </li>
+        </ul>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-14 items-start mb-16">
-        <div className="bg-[#F8F5F2] rounded-2xl p-8 sm:p-12 md:p-16 flex items-center justify-center relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-white/40 rounded-bl-[100px] -mr-8 -mt-8"></div>
+        <div className="bg-bg-body rounded-2xl p-8 sm:p-12 md:p-16 flex items-center justify-center relative overflow-hidden group border border-card-border">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-bl-[100px] -mr-8 -mt-8"></div>
           <div className="absolute bottom-0 left-0 w-24 h-24 bg-accent-gold/5 rounded-tr-[80px] -ml-4 -mb-4"></div>
 
           <img
@@ -267,7 +261,7 @@ const BookDetails = () => {
 
           {renderRating()}
 
-          <div className="flex items-center gap-4 mb-6 sm:mb-8 pb-6 sm:pb-8 border-b border-gray-100">
+          <div className="flex items-center gap-4 mb-6 sm:mb-8 pb-6 sm:pb-8 border-b border-card-border">
             <div className="flex items-baseline gap-2">
               <span className="font-serif text-3xl sm:text-4xl font-bold text-accent-gold">
                 ${book.price}
@@ -291,13 +285,13 @@ const BookDetails = () => {
 
           <div className="mb-6 sm:mb-8">
             <p className="text-text-muted leading-relaxed text-[0.95rem] sm:text-[1rem]">
-              {book.description}
+              {book.description || `Discover the captivating world of ${book.title}, a masterpiece by ${book.author}.`}
             </p>
           </div>
 
           <div className="mt-auto">
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-6">
-              <div className="flex items-center border border-gray-200 rounded-lg px-2 h-[50px] w-fit">
+              <div className="flex items-center border border-card-border rounded-lg px-2 h-[50px] w-fit">
                 <button
                   onClick={() => handleQuantityChange("dec")}
                   className="w-8 h-full flex items-center justify-center text-text-muted hover:text-text-main disabled:opacity-30"
@@ -322,66 +316,28 @@ const BookDetails = () => {
                 disabled={book.stock <= 0}
                 className="btn-primary flex-1 justify-center rounded-lg h-[50px] shadow-lg shadow-accent-gold/20 hover:shadow-accent-gold/30 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <i className="fa-solid fa-bolt"></i> Order Now
+                <i className="fa-solid fa-bolt mr-2"></i> Order Now
               </button>
 
               <button
                 onClick={handleWishlistToggle}
-                className={`h-[50px] px-6 rounded-lg border font-bold transition-all ${isInWishlist
-                  ? "border-red-500 bg-red-50 text-red-500 hover:bg-red-100"
-                  : "border-gray-200 hover:border-black text-text-main"
-                  }`}
+                className={`h-[50px] px-6 rounded-lg border border-card-border font-bold transition-all ${isInWishlist ? 'text-red-500 border-red-200 bg-red-50' : 'text-text-main hover:border-accent-gold hover:text-accent-gold'}`}
               >
-                <i className={`${isInWishlist ? "fa-solid text-red-500" : "fa-regular"} fa-heart`}></i>
+                <i className={`fa-${isInWishlist ? 'solid' : 'regular'} fa-heart`}></i>
               </button>
             </div>
 
             {book.delivery && (
-              <div className="bg-[#f9f9f9] rounded-xl p-4 sm:p-5 flex flex-col gap-3 text-sm">
+              <div className="bg-bg-body rounded-xl p-4 sm:p-5 flex flex-col gap-3 text-sm border border-card-border">
                 <div className="flex items-start gap-3">
                   <i className="fa-solid fa-truck-fast text-accent-gold mt-0.5"></i>
                   <div>
-                    <p className="font-bold text-text-main mb-0.5">
-                      Standard Delivery
-                    </p>
+                    <p className="font-bold text-text-main mb-0.5">Standard Delivery</p>
                     <p className="text-text-muted text-xs">
-                      {book.delivery.deliveryTimeDays
-                        ? `Estimated ${book.delivery.deliveryTimeDays} days`
-                        : "3-5 business days"}
-                      •{" "}
-                      {book.delivery.deliveryCharge > 0
-                        ? `$${book.delivery.deliveryCharge}`
-                        : "Free"}
+                      {book.delivery.deliveryTimeDays ? `Estimated ${book.delivery.deliveryTimeDays} days` : "3-5 business days"} • {book.delivery.deliveryCharge > 0 ? `$${book.delivery.deliveryCharge}` : "Free"}
                     </p>
                   </div>
                 </div>
-                {book.delivery.availableCities &&
-                  book.delivery.availableCities.length > 0 && (
-                    <div className="flex items-start gap-3 pt-2 border-t border-gray-200/50">
-                      <i className="fa-solid fa-location-dot text-accent-gold mt-0.5"></i>
-                      <div>
-                        <p className="font-bold text-text-main mb-0.5">
-                          Available In
-                        </p>
-                        <p className="text-text-muted text-xs">
-                          {book.delivery.availableCities.join(", ")}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-              </div>
-            )}
-
-            {book.tags && book.tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-6">
-                {book.tags.map((tag, i) => (
-                  <span
-                    key={i}
-                    className="text-xs bg-gray-100 text-text-muted px-2.5 py-1 rounded hover:bg-gray-200 transition-colors cursor-default"
-                  >
-                    #{tag}
-                  </span>
-                ))}
               </div>
             )}
           </div>
@@ -389,65 +345,30 @@ const BookDetails = () => {
       </div>
 
       {/* Reviews Section */}
-      <div className="max-w-[800px] border-t border-gray-100 pt-12">
-        <h3 className="text-2xl font-serif font-bold text-text-main mb-8">Customer Reviews</h3>
+      <div className="border-t border-card-border pt-12 mt-12">
+        <div className="flex justify-between items-center mb-10">
+          <h3 className="font-serif text-2xl sm:text-3xl font-bold text-text-main">Reader Reviews</h3>
+          {user ? (
+            <button
+              onClick={() => document.getElementById('review_modal').showModal()}
+              className="text-accent-gold font-bold hover:underline"
+            >
+              Write a Review
+            </button>
+          ) : (
+            <Link to="/login" className="text-accent-gold font-bold hover:underline">Log in to review</Link>
+          )}
+        </div>
 
-        {/* Add Review Form */}
-        {user ? (
-          <div className="bg-gray-50 p-6 rounded-xl mb-10 border border-gray-100">
-            <h4 className="text-lg font-bold text-text-main mb-4">Write a Review</h4>
-            <form onSubmit={handleSubmitReview}>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-text-muted mb-2">Rating</label>
-                <div className="flex gap-2">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      type="button"
-                      onClick={() => setReviewRating(star)}
-                      className={`text-2xl transition-colors ${reviewRating >= star ? "text-orange-400" : "text-gray-300"}`}
-                    >
-                      <i className="fa-solid fa-star"></i>
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-text-muted mb-2">Comment</label>
-                <textarea
-                  required
-                  value={reviewComment}
-                  onChange={(e) => setReviewComment(e.target.value)}
-                  className="textarea textarea-bordered w-full h-32 focus:outline-none focus:border-accent-gold rounded-lg"
-                  placeholder="Share your thoughts about this book..."
-                ></textarea>
-              </div>
-              <button type="submit" className="btn-primary px-6 py-2.5 rounded-lg text-sm font-bold shadow-md">
-                Submit Review
-              </button>
-            </form>
-          </div>
-        ) : (
-          <div className="bg-gray-50 p-6 rounded-xl mb-10 border border-gray-100 text-center">
-            <p className="text-text-muted mb-4">Please log in to write a review.</p>
-            <Link to="/login" className="btn-primary px-6 py-2.5 rounded-lg text-sm font-bold">Log In</Link>
-          </div>
-        )}
-
-        {/* Reviews List */}
         <div className="space-y-6">
           {reviews.length === 0 ? (
             <p className="text-text-muted italic">No reviews yet. Be the first to review!</p>
           ) : (
             reviews.map((review) => (
-              <div key={review._id || Math.random()} className="border-b border-gray-100 last:border-0 pb-6 last:pb-0">
+              <div key={review._id || Math.random()} className="border-b border-card-border last:border-0 pb-6 last:pb-0">
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
-                    <img
-                      src={review.userImage || "https://via.placeholder.com/40"}
-                      alt="User"
-                      className="w-full h-full object-cover"
-                    />
+                  <div className="w-10 h-10 rounded-full bg-bg-card border border-card-border overflow-hidden">
+                    <img src={review.userImage || "https://via.placeholder.com/40"} alt="User" className="w-full h-full object-cover" />
                   </div>
                   <div>
                     <h5 className="font-bold text-text-main text-sm">{review.userName || "Anonymous User"}</h5>
@@ -456,10 +377,7 @@ const BookDetails = () => {
                 </div>
                 <div className="flex items-center gap-1 text-orange-400 text-xs mb-2">
                   {[...Array(5)].map((_, i) => (
-                    <i
-                      key={i}
-                      className={`fa-star ${i < (review.rating || 0) ? "fa-solid" : "fa-regular"}`}
-                    ></i>
+                    <i key={i} className={`fa-star ${i < (review.rating || 0) ? "fa-solid" : "fa-regular"}`}></i>
                   ))}
                 </div>
                 <p className="text-text-muted text-sm leading-relaxed">{review.comment}</p>
@@ -469,14 +387,13 @@ const BookDetails = () => {
         </div>
       </div>
 
-
       {/* Order Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl w-full max-w-lg p-6 sm:p-8 shadow-2xl animate-in fade-in zoom-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
+          <div className="bg-bg-card border border-card-border rounded-2xl w-full max-w-lg p-6 sm:p-8 shadow-2xl animate-in fade-in zoom-in duration-200">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-2xl font-serif font-bold text-text-main">Place Order</h3>
-              <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
+              <button onClick={() => setIsModalOpen(false)} className="text-text-muted hover:text-red-500 transition-colors">
                 <i className="fa-solid fa-xmark text-xl"></i>
               </button>
             </div>
@@ -485,11 +402,11 @@ const BookDetails = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div className="form-control">
                   <label className="label text-xs uppercase font-bold text-text-muted">Name</label>
-                  <input type="text" value={user?.displayName || ""} disabled className="input input-bordered w-full bg-gray-50" />
+                  <input type="text" value={user?.displayName || ""} disabled className="input input-bordered w-full bg-bg-body opacity-60 text-text-main border-card-border" />
                 </div>
                 <div className="form-control">
                   <label className="label text-xs uppercase font-bold text-text-muted">Email</label>
-                  <input type="email" value={user?.email || ""} disabled className="input input-bordered w-full bg-gray-50" />
+                  <input type="email" value={user?.email || ""} disabled className="input input-bordered w-full bg-bg-body opacity-60 text-text-main border-card-border" />
                 </div>
               </div>
 
@@ -499,7 +416,7 @@ const BookDetails = () => {
                   type="tel"
                   required
                   placeholder="+1 (555) 000-0000"
-                  className="input input-bordered w-full focus:input-primary"
+                  className="input input-bordered w-full focus:input-primary bg-bg-body text-text-main border-card-border"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                 />
@@ -510,13 +427,13 @@ const BookDetails = () => {
                 <textarea
                   required
                   placeholder="Enter your full address"
-                  className="textarea textarea-bordered w-full h-24 focus:textarea-primary resize-none"
+                  className="textarea textarea-bordered w-full h-24 focus:textarea-primary resize-none bg-bg-body text-text-main border-card-border"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                 ></textarea>
               </div>
 
-              <div className="bg-gray-50 p-4 rounded-lg flex justify-between items-center text-sm font-medium text-text-main">
+              <div className="bg-bg-body p-4 rounded-lg flex justify-between items-center text-sm font-medium text-text-main border border-card-border">
                 <span>Quantity: {quantity}</span>
                 <span>Total: <span className="text-accent-gold font-bold text-lg">${(book.price * quantity).toFixed(2)}</span></span>
               </div>
@@ -529,9 +446,40 @@ const BookDetails = () => {
         </div>
       )}
 
+      {/* Review Modal Placeholder (if you need a functional one, otherwise DaisyUI standard) */}
+      <dialog id="review_modal" className="modal">
+        <div className="modal-box bg-bg-card border border-card-border">
+          <h3 className="font-bold text-xl text-text-main mb-4">Write a Review</h3>
+          <form onSubmit={handleSubmitReview} className="space-y-4">
+            <div className="form-control">
+              <label className="label text-xs uppercase font-bold text-text-muted">Rating</label>
+              <select
+                className="select select-bordered w-full bg-bg-body text-text-main border-card-border"
+                value={reviewRating}
+                onChange={(e) => setReviewRating(e.target.value)}
+              >
+                {[5, 4, 3, 2, 1].map(num => <option key={num} value={num}>{num} Stars</option>)}
+              </select>
+            </div>
+            <div className="form-control">
+              <label className="label text-xs uppercase font-bold text-text-muted">Comment</label>
+              <textarea
+                className="textarea textarea-bordered w-full bg-bg-body text-text-main border-card-border h-32"
+                placeholder="Share your thoughts about this book..."
+                value={reviewComment}
+                onChange={(e) => setReviewComment(e.target.value)}
+                required
+              ></textarea>
+            </div>
+            <div className="modal-action">
+              <button type="button" className="btn btn-ghost" onClick={() => document.getElementById('review_modal').close()}>Cancel</button>
+              <button type="submit" className="btn btn-primary" onClick={() => document.getElementById('review_modal').close()}>Submit Review</button>
+            </div>
+          </form>
+        </div>
+      </dialog>
     </section>
   );
 };
 
 export default BookDetails;
-

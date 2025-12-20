@@ -85,7 +85,7 @@ const Payment = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Order Summary */}
-                <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 h-fit">
+                <div className="bg-bg-body p-6 rounded-xl border border-card-border h-fit">
                     <h3 className="text-lg font-bold text-text-main mb-4 border-b pb-2">Order Summary</h3>
                     <div className="flex gap-4 mb-4">
                         <img
@@ -99,14 +99,14 @@ const Payment = () => {
                             <p className="text-sm text-text-muted">Status: <span className="uppercase font-semibold">{order.status}</span></p>
                         </div>
                     </div>
-                    <div className="flex justify-between items-center text-lg font-bold mt-4 pt-4 border-t border-gray-200">
+                    <div className="flex justify-between items-center text-lg font-bold mt-4 pt-4 border-t border-card-border">
                         <span>Total Amount</span>
                         <span className="text-accent-gold">${order.totalPrice?.toFixed(2)}</span>
                     </div>
                 </div>
 
                 {/* Payment Form (Simulated) */}
-                <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                <div className="bg-bg-card p-6 rounded-xl shadow-lg border border-card-border">
                     <h3 className="text-lg font-bold text-text-main mb-6">Payment Details (Simulated)</h3>
                     <form onSubmit={handlePayment} className="space-y-4">
                         <div className="form-control">

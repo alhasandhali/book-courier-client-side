@@ -25,7 +25,7 @@ const Hero = () => {
       <div className="w-11/12 sm:w-10/12 mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-5 md:gap-12 lg:gap-20">
         {/* Left Part */}
         <div className="hero-text w-full text-center lg:text-left lg:pl-8 xl:pl-20 order-1">
-          <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] xl:text-[4.5rem] leading-[1.1] font-medium text-[#2b2b2b] mb-4 sm:mb-6">
+          <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] xl:text-[4.5rem] leading-[1.1] font-medium text-text-main mb-4 sm:mb-6">
             Find Your <br />
             Next Book
           </h1>
@@ -56,7 +56,7 @@ const Hero = () => {
               {books.map((book, index) => (
                 <SwiperSlide
                   key={book._id || index}
-                  className="bg-[#f2efe9] rounded-2xl shadow-xl overflow-hidden"
+                  className="bg-bg-card rounded-2xl shadow-xl overflow-hidden border border-card-border"
                 >
                   <img
                     src={book.image || book.img}

@@ -146,7 +146,7 @@ const About = () => {
                         {features.map((feature, index) => (
                             <div
                                 key={index}
-                                className={`bg-white rounded-2xl p-6 sm:p-8 text-center hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                                className={`bg-bg-card rounded-2xl p-6 sm:p-8 text-center hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-card-border ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                                 style={{ transitionDelay: `${400 + index * 100}ms` }}
                             >
                                 <div className="text-5xl sm:text-6xl mb-4">{feature.icon}</div>
@@ -215,7 +215,7 @@ const About = () => {
                         {values.map((value, index) => (
                             <div
                                 key={index}
-                                className={`bg-white rounded-2xl p-6 sm:p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                                className={`bg-bg-card rounded-2xl p-6 sm:p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-card-border ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                                 style={{ transitionDelay: `${1000 + index * 100}ms` }}
                             >
                                 <div className="text-5xl mb-4">{value.icon}</div>

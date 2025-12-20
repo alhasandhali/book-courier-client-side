@@ -127,7 +127,7 @@ const Login = () => {
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-3xl shadow-2xl p-8 sm:p-10 lg:p-12 border border-gray-100">
+        <div className="bg-bg-card rounded-3xl shadow-2xl p-8 sm:p-10 lg:p-12 border border-card-border">
           <div className="mb-8">
             <h2 className="text-3xl sm:text-4xl font-serif font-bold text-text-main mb-2">
               Sign In
@@ -153,7 +153,7 @@ const Login = () => {
                   type="email"
                   id="email"
                   {...register("email", { required: "Email is required" })}
-                  className={`w-full pl-12 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-accent-gold focus:border-transparent transition-all outline-none ${errors.email ? "border-red-500" : "border-gray-300"
+                  className={`w-full pl-12 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-accent-gold focus:border-transparent transition-all outline-none bg-bg-body text-text-main ${errors.email ? "border-red-500" : "border-card-border"
                     }`}
                   placeholder="you@example.com"
                 />
@@ -181,7 +181,9 @@ const Login = () => {
                   {...register("password", {
                     required: "Password is required",
                   })}
-                  className={`w-full pl-12 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-accent-gold focus:border-transparent transition-all outline-none ${errors.password ? "border-red-500" : "border-gray-300"
+                  className={`w-full pl-12 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-accent-gold focus:border-transparent transition-all outline-none bg-bg-body text-text-main ${errors.password
+                    ? "border-red-500"
+                    : "border-card-border"
                     }`}
                   placeholder="••••••••"
                 />
@@ -249,18 +251,18 @@ const Login = () => {
             </button>
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
+                <div className="w-full border-t border-card-border"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-text-muted">
-                  Or continue with
+                <span className="px-4 bg-bg-card text-text-muted">
+                  Or sign up with
                 </span>
               </div>
             </div>
             <button
               type="button"
               onClick={handleGoogleLogin}
-              className="w-full flex items-center justify-center gap-3 bg-white border-2 border-gray-300 text-text-main py-3 rounded-lg font-semibold hover:bg-gray-50 hover:border-gray-400 transition-all duration-300"
+              className="w-full flex items-center justify-center gap-3 bg-bg-body border-2 border-card-border text-text-main py-3 rounded-lg font-semibold hover:bg-bg-body/80 hover:border-accent-gold/50 transition-all duration-300"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path

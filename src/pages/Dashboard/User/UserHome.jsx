@@ -37,7 +37,7 @@ const UserHome = () => {
             </header>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                <div className="bg-bg-card p-6 rounded-xl shadow-md border border-card-border">
                     <div className="flex items-center justify-between mb-4">
                         <h3 className="text-lg font-semibold text-text-muted">My Orders</h3>
                         <div className="w-10 h-10 bg-accent-gold/10 rounded-full flex items-center justify-center">
@@ -47,7 +47,7 @@ const UserHome = () => {
                     <p className="text-3xl font-bold text-text-main">{orders.length}</p>
                     <p className="text-sm text-text-muted mt-2">View order history</p>
                 </div>
-                <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                <div className="bg-bg-card p-6 rounded-xl shadow-md border border-card-border">
                     <div className="flex items-center justify-between mb-4">
                         <h3 className="text-lg font-semibold text-text-muted">Wishlist</h3>
                         <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">

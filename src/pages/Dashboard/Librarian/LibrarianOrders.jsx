@@ -57,9 +57,9 @@ const LibrarianOrders = () => {
             <h2 className="text-3xl font-serif font-bold text-text-main mb-6">
                 Order Management
             </h2>
-            <div className="overflow-x-auto bg-white rounded-xl shadow-md border border-gray-100">
+            <div className="overflow-x-auto bg-bg-card rounded-xl shadow-md border border-card-border">
                 <table className="table w-full">
-                    <thead className="bg-gray-50 text-text-muted uppercase text-xs font-semibold">
+                    <thead className="bg-bg-body text-text-muted uppercase text-xs font-semibold">
                         <tr>
                             <th className="py-4">Book Title</th>
                             <th className="py-4">Customer</th>
@@ -72,7 +72,7 @@ const LibrarianOrders = () => {
                         {orders.map((order) => (
                             <tr
                                 key={order._id}
-                                className="border-b border-gray-50 hover:bg-gray-50/50"
+                                className="border-b border-card-border hover:bg-bg-body"
                             >
                                 <td className="font-medium text-text-main">
                                     {order.bookId?.name || order.bookId?.title || order.book?.name || order.book?.title || order.bookTitle || order.bookName || "Untitled"}
@@ -86,7 +86,7 @@ const LibrarianOrders = () => {
                                         value={order.status}
                                         onChange={(e) => handleStatusChange(order._id, e.target.value)}
                                         disabled={order.status === 'cancelled'}
-                                        className={`px-3 py-1 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-accent-gold outline-none ${order.status === 'cancelled' ? 'bg-gray-100 cursor-not-allowed' : 'bg-gray-50'
+                                        className={`px-3 py-1 border border-card-border rounded-lg text-sm focus:ring-2 focus:ring-accent-gold outline-none ${order.status === 'cancelled' ? 'bg-bg-body opacity-50 cursor-not-allowed' : 'bg-bg-body text-text-main'
                                             }`}
                                     >
                                         <option value="pending">Pending</option>

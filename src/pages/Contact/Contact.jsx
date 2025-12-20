@@ -93,7 +93,7 @@ const Contact = () => {
             <section className="w-11/12 sm:w-10/12 max-w-6xl mx-auto py-12">
                 <div className="grid lg:grid-cols-5 gap-y-6 lg:gap-6">
                     <div className={`lg:col-span-3 transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} px-0`}>
-                        <div className="bg-white rounded-2xl p-6 lg:p-10 shadow-lg border border-gray-100">
+                        <div className="bg-bg-card rounded-2xl p-6 lg:p-10 shadow-lg border border-card-border">
                             <h2 className="text-2xl font-serif font-bold text-text-main mb-6">
                                 Send us a Message
                             </h2>
@@ -110,7 +110,7 @@ const Contact = () => {
                                         value={formData.name}
                                         onChange={handleChange}
                                         required
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-gold focus:border-transparent transition-all outline-none"
+                                        className="w-full px-4 py-3 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold focus:border-transparent transition-all outline-none bg-bg-body text-text-main"
                                         placeholder="John Doe"
                                     />
                                 </div>
@@ -126,7 +126,7 @@ const Contact = () => {
                                         value={formData.email}
                                         onChange={handleChange}
                                         required
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-gold focus:border-transparent transition-all outline-none"
+                                        className="w-full px-4 py-3 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold focus:border-transparent transition-all outline-none bg-bg-body text-text-main"
                                         placeholder="john@example.com"
                                     />
                                 </div>
@@ -142,7 +142,7 @@ const Contact = () => {
                                         value={formData.subject}
                                         onChange={handleChange}
                                         required
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-gold focus:border-transparent transition-all outline-none"
+                                        className="w-full px-4 py-3 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold focus:border-transparent transition-all outline-none bg-bg-body text-text-main"
                                         placeholder="How can we help?"
                                     />
                                 </div>
@@ -158,7 +158,7 @@ const Contact = () => {
                                         onChange={handleChange}
                                         required
                                         rows="6"
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-gold focus:border-transparent transition-all outline-none resize-none"
+                                        className="w-full px-4 py-3 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold focus:border-transparent transition-all outline-none resize-none bg-bg-body text-text-main"
                                         placeholder="Tell us more about your inquiry..."
                                     />
                                 </div>
@@ -191,7 +191,7 @@ const Contact = () => {
                     </div>
 
                     <div className={`lg:col-span-2 space-y-6 transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} px-0`}>
-                        <div className="bg-white rounded-2xl p-6 lg:p-10 shadow-lg border border-gray-100">
+                        <div className="bg-bg-card rounded-2xl p-6 lg:p-10 shadow-lg border border-card-border">
                             <h2 className="text-2xl font-serif font-bold text-text-main mb-6">
                                 Contact Information
                             </h2>
@@ -226,7 +226,7 @@ const Contact = () => {
                             <div className="flex gap-4">
                                 <a
                                     href="#"
-                                    className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-text-muted hover:text-blue-600 transition-all duration-300 hover:scale-110 hover:shadow-lg"
+                                    className="w-12 h-12 bg-bg-body border border-card-border rounded-full flex items-center justify-center text-text-muted hover:text-blue-600 transition-all duration-300 hover:scale-110 hover:shadow-lg"
                                     aria-label="Facebook"
                                 >
                                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -235,7 +235,7 @@ const Contact = () => {
                                 </a>
                                 <a
                                     href="#"
-                                    className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-text-muted hover:text-blue-400 transition-all duration-300 hover:scale-110 hover:shadow-lg"
+                                    className="w-12 h-12 bg-bg-card border border-card-border rounded-full flex items-center justify-center text-text-muted hover:text-blue-400 transition-all duration-300 hover:scale-110 hover:shadow-lg"
                                     aria-label="Twitter"
                                 >
                                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -244,7 +244,7 @@ const Contact = () => {
                                 </a>
                                 <a
                                     href="#"
-                                    className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-text-muted hover:text-pink-600 transition-all duration-300 hover:scale-110 hover:shadow-lg"
+                                    className="w-12 h-12 bg-bg-card border border-card-border rounded-full flex items-center justify-center text-text-muted hover:text-pink-600 transition-all duration-300 hover:scale-110 hover:shadow-lg"
                                     aria-label="Instagram"
                                 >
                                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -253,7 +253,7 @@ const Contact = () => {
                                 </a>
                                 <a
                                     href="#"
-                                    className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-text-muted hover:text-blue-700 transition-all duration-300 hover:scale-110 hover:shadow-lg"
+                                    className="w-12 h-12 bg-bg-card border border-card-border rounded-full flex items-center justify-center text-text-muted hover:text-blue-700 transition-all duration-300 hover:scale-110 hover:shadow-lg"
                                     aria-label="LinkedIn"
                                 >
                                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">

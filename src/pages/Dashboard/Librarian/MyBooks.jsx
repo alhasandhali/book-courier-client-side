@@ -37,7 +37,7 @@ const MyBooks = () => {
                 </Link>
             </div>
 
-            <div className="overflow-x-auto bg-white rounded-xl shadow-md border border-gray-100">
+            <div className="overflow-x-auto bg-bg-card rounded-xl shadow-md border border-card-border">
                 {books.length === 0 ? (
                     <div className="p-12 text-center">
                         <div className="text-6xl mb-4">📚</div>
@@ -56,7 +56,7 @@ const MyBooks = () => {
                     </div>
                 ) : (
                     <table className="table w-full">
-                        <thead className="bg-gray-50 text-text-muted uppercase text-xs font-semibold">
+                        <thead className="bg-bg-body text-text-muted uppercase text-xs font-semibold">
                             <tr>
                                 <th className="py-4">Book</th>
                                 <th className="py-4">Author</th>
@@ -66,7 +66,7 @@ const MyBooks = () => {
                         </thead>
                         <tbody>
                             {books.map((book) => (
-                                <tr key={book._id} className="border-b border-gray-50 hover:bg-gray-50/50">
+                                <tr key={book._id} className="border-b border-card-border hover:bg-bg-body">
                                     <td>
                                         <div className="flex items-center gap-3">
                                             <img src={book.image} alt={book.title} className="w-12 h-16 object-cover rounded shadow-sm" />
@@ -81,7 +81,7 @@ const MyBooks = () => {
                                         </span>
                                     </td>
                                     <td className="text-right">
-                                        <Link to={`/dashboard/update-book/${book._id}`} className="px-3 py-1.5 border border-gray-200 rounded text-sm hover:bg-gray-50 mr-2 transition-colors inline-block">
+                                        <Link to={`/dashboard/update-book/${book._id}`} className="px-3 py-1.5 border border-card-border rounded text-sm hover:bg-bg-body mr-2 transition-colors inline-block text-text-main">
                                             <i className="fas fa-edit text-blue-500"></i> Edit
                                         </Link>
                                     </td>

@@ -91,7 +91,7 @@ const AddBook = () => {
     }, [imageFile]);
 
     return (
-        <div className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-md border border-gray-100">
+        <div className="max-w-4xl mx-auto bg-bg-card p-8 rounded-xl shadow-md border border-card-border">
             <h2 className="text-3xl font-serif font-bold text-text-main mb-6">
                 Add New Book
             </h2>
@@ -104,7 +104,7 @@ const AddBook = () => {
                             type="text"
                             {...register("title", { required: "Title is required" })}
                             placeholder="All the Light We Cannot See"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-gold outline-none"
+                            className="w-full px-4 py-2 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold outline-none bg-bg-body text-text-main"
                         />
                         {errors.title && <span className="text-red-500 text-xs mt-1">{errors.title.message}</span>}
                     </div>
@@ -114,7 +114,7 @@ const AddBook = () => {
                             type="text"
                             {...register("author", { required: "Author is required" })}
                             placeholder="Anthony Doerr"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-gold outline-none"
+                            className="w-full px-4 py-2 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold outline-none bg-bg-body text-text-main"
                         />
                         {errors.author && <span className="text-red-500 text-xs mt-1">{errors.author.message}</span>}
                     </div>
@@ -125,7 +125,7 @@ const AddBook = () => {
                         <label className="block text-sm font-medium text-text-main mb-1">Category</label>
                         <select
                             {...register("category", { required: "Category is required" })}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-gold outline-none"
+                            className="w-full px-4 py-2 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold outline-none bg-bg-body text-text-main"
                         >
                             <option value="">Select Category</option>
                             <option value="Fiction">Fiction</option>
@@ -146,7 +146,7 @@ const AddBook = () => {
                             type="text"
                             {...register("language", { required: "Language is required" })}
                             placeholder="English"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-gold outline-none"
+                            className="w-full px-4 py-2 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold outline-none bg-bg-body text-text-main"
                         />
                         {errors.language && <span className="text-red-500 text-xs mt-1">{errors.language.message}</span>}
                     </div>
@@ -158,7 +158,7 @@ const AddBook = () => {
                         <label className="block text-sm font-medium text-text-main mb-1">Status</label>
                         <select
                             {...register("status")}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-gold outline-none"
+                            className="w-full px-4 py-2 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold outline-none bg-bg-body text-text-main"
                         >
                             <option value="published">Published</option>
                             <option value="unpublished">Unpublished</option>
@@ -168,7 +168,7 @@ const AddBook = () => {
                         <label className="block text-sm font-medium text-text-main mb-1">Visibility</label>
                         <select
                             {...register("visibility")}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-gold outline-none"
+                            className="w-full px-4 py-2 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold outline-none bg-bg-body text-text-main"
                         >
                             <option value="public">Public</option>
                             <option value="private">Private</option>
@@ -185,7 +185,7 @@ const AddBook = () => {
                             step="0.01"
                             {...register("price", { required: "Required", min: 0 })}
                             placeholder="0.00"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-gold outline-none"
+                            className="w-full px-4 py-2 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold outline-none bg-bg-body text-text-main"
                         />
                         {errors.price && <span className="text-red-500 text-xs mt-1">{errors.price.message}</span>}
                     </div>
@@ -195,7 +195,7 @@ const AddBook = () => {
                             type="number"
                             {...register("discount", { min: 0, max: 100 })}
                             placeholder="0"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-gold outline-none"
+                            className="w-full px-4 py-2 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold outline-none bg-bg-body text-text-main"
                         />
                     </div>
                     <div>
@@ -204,7 +204,7 @@ const AddBook = () => {
                             type="number"
                             {...register("stock", { required: "Required", min: 0 })}
                             placeholder="12"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-gold outline-none"
+                            className="w-full px-4 py-2 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold outline-none bg-bg-body text-text-main"
                         />
                         {errors.stock && <span className="text-red-500 text-xs mt-1">{errors.stock.message}</span>}
                     </div>
@@ -214,7 +214,7 @@ const AddBook = () => {
                             type="number"
                             {...register("minStockAlert", { min: 1 })}
                             placeholder="5"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-gold outline-none"
+                            className="w-full px-4 py-2 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold outline-none bg-bg-body text-text-main"
                         />
                     </div>
                 </div>
@@ -226,7 +226,7 @@ const AddBook = () => {
                         type="text"
                         {...register("tags")}
                         placeholder="romance, classic, bestseller"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-gold outline-none"
+                        className="w-full px-4 py-2 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold outline-none bg-bg-body text-text-main"
                     />
                 </div>
 
@@ -238,7 +238,7 @@ const AddBook = () => {
                             type="number"
                             {...register("deliveryTimeDays", { min: 1 })}
                             placeholder="3"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-gold outline-none"
+                            className="w-full px-4 py-2 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold outline-none bg-bg-body text-text-main"
                         />
                     </div>
                     <div>
@@ -248,7 +248,7 @@ const AddBook = () => {
                             step="0.01"
                             {...register("deliveryCharge", { min: 0 })}
                             placeholder="0"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-gold outline-none"
+                            className="w-full px-4 py-2 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold outline-none bg-bg-body text-text-main"
                         />
                     </div>
                     <div>
@@ -257,7 +257,7 @@ const AddBook = () => {
                             type="text"
                             {...register("availableCities")}
                             placeholder="Austin, Dallas"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-gold outline-none"
+                            className="w-full px-4 py-2 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold outline-none bg-bg-body text-text-main"
                         />
                     </div>
                 </div>
@@ -275,7 +275,7 @@ const AddBook = () => {
                                 fileType: files => !files[0] || ["image/jpeg", "image/png", "image/jpg"].includes(files[0].type) || "Only JPG, JPEG, PNG allowed",
                             },
                         })}
-                        className={`w-full px-4 py-2 border ${errors.image ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-accent-gold outline-none`}
+                        className={`w-full px-4 py-2 border ${errors.image ? 'border-red-500' : 'border-card-border'} rounded-lg focus:ring-2 focus:ring-accent-gold outline-none bg-bg-body text-text-main`}
                     />
                     {imagePreview && (
                         <div className="mt-2">
@@ -292,7 +292,7 @@ const AddBook = () => {
                         {...register("description", { required: "Description is required" })}
                         rows="4"
                         placeholder="Book synopsis..."
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-gold outline-none"
+                        className="w-full px-4 py-2 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold outline-none bg-bg-body text-text-main"
                     ></textarea>
                     {errors.description && <span className="text-red-500 text-xs mt-1">{errors.description.message}</span>}
                 </div>
@@ -301,7 +301,7 @@ const AddBook = () => {
                 <div className="flex justify-end gap-4">
                     <button
                         type="button"
-                        className="px-6 py-2 border border-gray-300 rounded-lg text-text-muted hover:bg-gray-50 font-medium"
+                        className="px-6 py-2 border border-card-border rounded-lg text-text-muted hover:bg-bg-body font-medium"
                         onClick={() => reset()}
                     >
                         Reset

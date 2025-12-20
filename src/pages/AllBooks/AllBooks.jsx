@@ -165,7 +165,7 @@ const AllBooks = () => {
                             placeholder="Search by title, author, or category..."
                             value={searchTerm}
                             onChange={(e) => handleSearchChange(e.target.value)}
-                            className="w-full py-4 pl-12 pr-6 bg-white border border-gray-100 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-accent-gold/20 focus:border-accent-gold transition-all text-sm sm:text-base"
+                            className="w-full py-4 pl-12 pr-6 bg-bg-card border border-card-border rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-accent-gold/20 focus:border-accent-gold transition-all text-sm sm:text-base text-text-main"
                         />
                         {searchTerm && (
                             <button
@@ -191,7 +191,7 @@ const AllBooks = () => {
                     <aside className={`
                         fixed lg:sticky top-0 left-0 h-screen lg:h-auto
                         w-80 lg:w-64 xl:w-72 flex-shrink-0
-                        bg-white lg:bg-transparent
+                        bg-bg-card lg:bg-transparent
                         shadow-2xl lg:shadow-none
                         z-[100] lg:z-auto
                         transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1)
@@ -209,14 +209,14 @@ const AllBooks = () => {
                                 </div>
                                 <button
                                     onClick={() => setIsSidebarOpen(false)}
-                                    className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-text-muted hover:text-red-500 transition-colors shadow-sm"
+                                    className="w-10 h-10 rounded-full bg-bg-body flex items-center justify-center text-text-muted hover:text-red-500 transition-colors shadow-sm border border-card-border"
                                 >
                                     <i className="fa-solid fa-times"></i>
                                 </button>
                             </div>
 
                             <div className="space-y-6">
-                                <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100/50">
+                                <div className="bg-bg-card rounded-2xl p-6 shadow-sm border border-card-border">
                                     <h3 className="font-serif font-bold text-lg mb-4 text-text-main flex items-center gap-2">
                                         <i className="fa-solid fa-sort-amount-down text-accent-gold text-sm"></i> Sort By
                                     </h3>
@@ -246,7 +246,7 @@ const AllBooks = () => {
                                 </div>
 
                                 {categories.length > 0 && (
-                                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100/50">
+                                    <div className="bg-bg-card rounded-2xl p-6 shadow-sm border border-card-border">
                                         <h3 className="font-serif font-bold text-lg mb-4 text-text-main flex items-center gap-2">
                                             <i className="fa-solid fa-layer-group text-accent-gold text-sm"></i> Categories
                                         </h3>
@@ -268,7 +268,7 @@ const AllBooks = () => {
                                     </div>
                                 )}
 
-                                <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100/50">
+                                <div className="bg-bg-card rounded-2xl p-6 shadow-sm border border-card-border">
                                     <h3 className="font-serif font-bold text-lg mb-4 text-text-main flex items-center gap-2">
                                         <i className="fa-solid fa-tags text-accent-gold text-sm"></i> Price Range
                                     </h3>
@@ -289,7 +289,7 @@ const AllBooks = () => {
                                     </div>
                                 </div>
 
-                                <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100/50">
+                                <div className="bg-bg-card rounded-2xl p-6 shadow-sm border border-card-border">
                                     <h3 className="font-serif font-bold text-lg mb-4 text-text-main flex items-center gap-2">
                                         <i className="fa-solid fa-star text-accent-gold text-sm"></i> Min Rating
                                     </h3>
@@ -350,9 +350,9 @@ const AllBooks = () => {
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
                                 {[...Array(8)].map((_, i) => (
                                     <div key={i} className="animate-pulse">
-                                        <div className="bg-gray-200 rounded-xl h-64 mb-4"></div>
-                                        <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                                        <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                                        <div className="bg-bg-card border border-card-border rounded-xl h-64 mb-4"></div>
+                                        <div className="h-4 bg-bg-card border border-card-border rounded w-3/4 mb-2"></div>
+                                        <div className="h-3 bg-bg-card border border-card-border rounded w-1/2"></div>
                                     </div>
                                 ))}
                             </div>
@@ -387,7 +387,7 @@ const AllBooks = () => {
                                         <button
                                             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                                             disabled={currentPage === 1}
-                                            className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-200 text-text-muted hover:border-accent-gold hover:text-accent-gold disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-gray-200 disabled:hover:text-text-muted transition-all"
+                                            className="w-10 h-10 flex items-center justify-center rounded-full border border-card-border text-text-muted hover:border-accent-gold hover:text-accent-gold disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-card-border disabled:hover:text-text-muted transition-all"
                                         >
                                             <i className="fa-solid fa-chevron-left"></i>
                                         </button>
@@ -428,7 +428,7 @@ const AllBooks = () => {
                                                         onClick={() => setCurrentPage(pageNumber)}
                                                         className={`w-10 h-10 flex items-center justify-center rounded-full transition-all ${currentPage === pageNumber
                                                             ? 'bg-accent-gold text-white shadow-md transform scale-105'
-                                                            : 'border border-gray-200 text-text-muted hover:border-accent-gold hover:text-accent-gold'
+                                                            : 'border border-card-border text-text-muted hover:border-accent-gold hover:text-accent-gold'
                                                             }`}
                                                     >
                                                         {pageNumber}

@@ -25,18 +25,18 @@ const PromoBanners = () => {
         {promos.map((promo, index) => (
           <div
             key={index}
-            className="promo-banner bg-[#f4f1ea] border border-dashed border-[#d1cfc7] rounded-lg p-5 sm:p-6 flex items-center justify-between transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer"
+            className="srv-card bg-bg-card border border-card-border rounded-xl p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
           >
             <div className="promo-content">
-              <h3 className="font-serif text-[1rem] sm:text-[1.1rem] text-[#d84315] font-bold mb-1">
+              <h3 className="font-serif text-[1rem] sm:text-[1.1rem] text-accent-gold font-bold mb-1">
                 {promo.title}
               </h3>
-              <p className="text-[0.8rem] sm:text-[0.85rem] text-[#555]">
+              <p className="text-[0.8rem] sm:text-[0.85rem] text-text-muted">
                 {promo.desc}
               </p>
               <a
                 href="#"
-                className="text-[0.7rem] sm:text-[0.75rem] underline text-[#888] mt-1 block"
+                className="text-[0.7rem] sm:text-[0.75rem] underline text-text-muted/60 mt-1 block"
               >
                 View details <i className="fa-solid fa-arrow-right"></i>
               </a>

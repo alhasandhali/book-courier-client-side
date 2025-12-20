@@ -4,7 +4,7 @@ import logo from "../../assets/logo.png";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#fcfbf9] border-t border-gray-100 pt-16 pb-8 w-full mt-auto">
+    <footer className="bg-bg-body border-t border-card-border pt-16 pb-8 w-full mt-auto">
       <div className="w-11/12 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1.5fr] gap-12 mb-16">
           <div className="space-y-6">
@@ -23,7 +23,7 @@ const Footer = () => {
             </p>
             <div className="flex gap-4">
               {['facebook-f', 'instagram', 'twitter', 'linkedin-in'].map(social => (
-                <Link key={social} to="#" className="w-9 h-9 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 hover:text-accent-gold hover:shadow-md transition-all">
+                <Link key={social} to="#" className="w-9 h-9 rounded-full bg-bg-card shadow-sm flex items-center justify-center text-text-muted hover:text-accent-gold hover:shadow-md transition-all border border-card-border">
                   <i className={`fa-brands fa-${social} text-sm`}></i>
                 </Link>
               ))}
@@ -62,7 +62,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div className="bg-[#f3f0ea] p-8 rounded-3xl space-y-4">
+          <div className="bg-bg-card p-8 rounded-3xl space-y-4 border border-card-border shadow-sm">
             <h4 className="text-xs uppercase tracking-[2px] font-bold text-text-main">
               Get in touch
             </h4>
@@ -83,7 +83,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="pt-8 border-t border-gray-100 text-center">
+        <div className="pt-8 border-t border-card-border text-center">
           <p className="text-xs text-text-muted font-medium">
             &copy; {new Date().getFullYear()} BookCourier. Designed with <i className="fa-solid fa-heart text-red-400 mx-1"></i> for book lovers.
           </p>

@@ -19,21 +19,21 @@ const DashboardLayout = ({ title, sidebarLinks }) => {
             <aside
                 className={`
                     fixed lg:sticky top-0 left-0 h-screen lg:h-[calc(100vh-80px)] lg:top-20
-                    w-72 sm:w-80 lg:w-64 bg-[#f3f0ea] z-[70] transform transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1)
+                    w-72 sm:w-80 lg:w-64 bg-bg-card z-[70] transform transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1)
                     ${isSidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full lg:translate-x-0"}
                     overflow-y-auto
                     flex flex-col
-                    border-r border-gray-100 lg:border-none
+                    border-r border-card-border lg:border-none
                 `}
             >
                 {/* Logo & Title Section (only visible in mobile drawer or if needed) */}
-                <div className="p-6 border-b border-gray-200/50 flex justify-between items-center lg:hidden">
+                <div className="p-6 border-b border-card-border flex justify-between items-center lg:hidden">
                     <div className="flex items-center gap-2">
                         <img src={logo} alt="BookCourier Logo" className="w-8 h-8" />
                         <span className="text-xl font-serif font-bold text-text-main">BookCourier</span>
                     </div>
                     <button
-                        className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors shadow-sm"
+                        className="w-10 h-10 rounded-full bg-bg-body flex items-center justify-center text-text-muted hover:text-red-500 transition-colors shadow-sm border border-card-border"
                         onClick={() => setIsSidebarOpen(false)}
                     >
                         <i className="fas fa-times text-lg"></i>
@@ -54,8 +54,8 @@ const DashboardLayout = ({ title, sidebarLinks }) => {
                                 onClick={() => setIsSidebarOpen(false)}
                                 className={({ isActive }) =>
                                     `flex items-center gap-3.5 px-4 py-3.5 rounded-xl transition-all duration-300 ${isActive
-                                        ? "bg-black text-white shadow-lg shadow-black/10 scale-[1.02]"
-                                        : "text-text-muted hover:bg-white hover:text-text-main hover:shadow-sm"
+                                        ? "bg-accent-gold text-white shadow-lg shadow-accent-gold/20 scale-[1.02]"
+                                        : "text-text-muted hover:bg-bg-card hover:text-text-main hover:shadow-sm"
                                     }`
                                 }
                             >
@@ -72,11 +72,11 @@ const DashboardLayout = ({ title, sidebarLinks }) => {
             {/* Main Content */}
             <main className="flex-1 w-full min-w-0">
                 {/* Mobile Dash Header */}
-                <div className="lg:hidden sticky top-0 z-[40] bg-white/80 backdrop-blur-md border-b border-gray-100 p-4 flex items-center justify-between">
+                <div className="lg:hidden sticky top-0 z-[40] bg-bg-card/80 backdrop-blur-md border-b border-card-border p-4 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => setIsSidebarOpen(true)}
-                            className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-text-main hover:text-accent-gold transition-colors"
+                            className="w-10 h-10 rounded-lg bg-bg-body flex items-center justify-center text-text-main hover:text-accent-gold transition-colors border border-card-border"
                         >
                             <i className="fas fa-bars-staggered"></i>
                         </button>

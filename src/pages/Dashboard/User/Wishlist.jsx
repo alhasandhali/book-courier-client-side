@@ -51,7 +51,7 @@ const Wishlist = () => {
             </h2>
 
             {wishlist.length === 0 ? (
-                <div className="text-center py-16 bg-white rounded-xl shadow-sm border border-gray-100">
+                <div className="text-center py-16 bg-bg-card rounded-xl shadow-sm border border-card-border">
                     <div className="text-6xl mb-4">💝</div>
                     <h3 className="text-xl font-serif font-bold text-text-main mb-2">
                         Your wishlist is empty
@@ -71,9 +71,9 @@ const Wishlist = () => {
                     {wishlist.map((item) => (
                         <div
                             key={item._id}
-                            className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow"
+                            className="bg-bg-card rounded-xl shadow-sm border border-card-border overflow-hidden hover:shadow-md transition-shadow"
                         >
-                            <div className="aspect-[3/4] overflow-hidden bg-gray-100">
+                            <div className="aspect-[3/4] overflow-hidden bg-bg-body">
                                 <img
                                     src={item.bookId?.image || item.image || "https://via.placeholder.com/300x400?text=No+Image"}
                                     alt={item.bookId?.title || item.title || "Book"}
@@ -101,7 +101,7 @@ const Wishlist = () => {
                                 </div>
                                 <Link
                                     to={`/book/${item.bookId?._id || item.bookId}`}
-                                    className="block mt-3 w-full text-center px-4 py-2 bg-gray-100 text-text-main rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
+                                    className="block mt-3 w-full text-center px-4 py-2 bg-bg-body text-text-main rounded-lg hover:bg-paper-bg transition-colors text-sm font-medium border border-card-border"
                                 >
                                     View Details
                                 </Link>

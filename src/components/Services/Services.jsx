@@ -30,7 +30,7 @@ const Services = () => {
         {services.map((srv, index) => (
           <div
             key={index}
-            className="srv-card bg-white border border-gray-200 rounded-xl p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
+            className="srv-card bg-bg-card border border-card-border rounded-xl p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
           >
             <div className="icon-wrapper w-16 h-16 bg-accent-gold/10 rounded-full flex items-center justify-center mb-4 group-hover:bg-accent-gold/20 transition-colors">
               <i

@@ -20,7 +20,7 @@ const LibrarianHome = () => {
             </header>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                <div className="bg-bg-card p-6 rounded-xl shadow-md border border-card-border">
                     <div className="flex items-center justify-between mb-4">
                         <h3 className="text-lg font-semibold text-text-muted">
                             Total Books
@@ -34,7 +34,7 @@ const LibrarianHome = () => {
                         <i className="fas fa-check mr-1"></i> Active collection
                     </p>
                 </div>
-                <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                <div className="bg-bg-card p-6 rounded-xl shadow-md border border-card-border">
                     <div className="flex items-center justify-between mb-4">
                         <h3 className="text-lg font-semibold text-text-muted">
                             Currently Issued
@@ -48,7 +48,7 @@ const LibrarianHome = () => {
                         Books borrowed
                     </p>
                 </div>
-                <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                <div className="bg-bg-card p-6 rounded-xl shadow-md border border-card-border">
                     <div className="flex items-center justify-between mb-4">
                         <h3 className="text-lg font-semibold text-text-muted">Pending Returns</h3>
                         <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">

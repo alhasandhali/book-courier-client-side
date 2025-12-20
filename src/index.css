@@ -1,22 +1,57 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+:root {
+  --bg-body: #fdfbf7;
+  --bg-card: #ffffff;
+  --text-main: #1a1a1a;
+  --text-muted: #787878;
+  --accent-gold: #c69c6d;
+  --accent-green: #4ade80;
+  --paper-bg: #f8f5f2;
+
+  /* Card Backgrounds - Subtle for light mode */
+  --card-blue: #a7d7de;
+  --card-yellow: #f3d55b;
+  --card-purple: #9f8189;
+  --card-black: #2c2c2c;
+  --card-border: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] {
+  --bg-body: #0f1115;
+  --bg-card: #161a21;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent-gold: #d4a373;
+  --accent-green: #22c55e;
+  --paper-bg: #0d0f14;
+
+  /* Card Backgrounds - Adjusted for dark mode */
+  --card-blue: #1e3a8a;
+  --card-yellow: #ca8a04;
+  --card-purple: #581c87;
+  --card-black: #020617;
+  --card-border: rgba(255, 255, 255, 0.1);
+
+  /* Override DaisyUI variables if needed */
+  color-scheme: dark;
+}
+
 @theme {
-  --color-paper-bg: #f8f5f2;
+  --color-paper-bg: var(--paper-bg);
+  --color-bg-body: var(--bg-body);
+  --color-bg-card: var(--bg-card);
+  --color-text-main: var(--text-main);
+  --color-text-muted: var(--text-muted);
+  --color-accent-gold: var(--accent-gold);
+  --color-accent-green: var(--accent-green);
 
-  /* Palette Extraction */
-  --color-bg-body: #fdfbf7;
-  --color-bg-card: #ffffff;
-  --color-text-main: #1a1a1a;
-  --color-text-muted: #787878;
-  --color-accent-gold: #c69c6d;
-  --color-accent-green: #4ade80;
-
-  /* Card Backgrounds */
-  --color-card-blue: #a7d7de;
-  --color-card-yellow: #f3d55b;
-  --color-card-purple: #9f8189;
-  --color-card-black: #2c2c2c;
+  --color-card-blue: var(--card-blue);
+  --color-card-yellow: var(--card-yellow);
+  --color-card-purple: var(--card-purple);
+  --color-card-black: var(--card-black);
+  --color-card-border: var(--card-border);
 
   --font-serif: "Playfair Display", serif;
   --font-sans: "Inter", sans-serif;
@@ -28,6 +63,7 @@
     font-family: var(--font-sans);
     color: var(--color-text-main);
     -webkit-font-smoothing: antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
   button,
   input[type="file"] {
@@ -47,14 +83,14 @@
   }
 
   .btn-outline {
-    @apply bg-transparent border border-[#e5e5e5] px-3.5 py-1.5 rounded text-[0.8rem] text-text-main font-medium cursor-pointer hover:border-text-main transition-colors duration-200;
+    @apply bg-transparent border border-card-border px-3.5 py-1.5 rounded text-[0.8rem] text-text-main font-medium cursor-pointer hover:border-accent-gold transition-colors duration-200;
   }
 
   .section-head {
     @apply flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 sm:gap-0 mb-6;
   }
   .section-head h2 {
-    @apply font-serif text-[1.5rem] sm:text-[1.75rem] md:text-[2rem] font-semibold text-[#4a4a4a];
+    @apply font-serif text-[1.5rem] sm:text-[1.75rem] md:text-[2rem] font-semibold text-text-main;
   }
   .see-all {
     @apply text-[0.8rem] sm:text-[0.85rem] md:text-[0.9rem] text-text-muted font-medium flex items-center gap-1.5 hover:text-accent-gold transition-colors;

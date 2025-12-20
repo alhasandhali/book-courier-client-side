@@ -32,7 +32,7 @@ const MyProfile = () => {
     };
 
     return (
-        <div className="bg-white p-8 rounded-xl shadow-md border border-gray-100 max-w-2xl mx-auto">
+        <div className="bg-bg-card p-8 rounded-xl shadow-md border border-card-border max-w-2xl mx-auto">
             <div className="flex items-center justify-between mb-8">
                 <h2 className="text-3xl font-serif font-bold text-text-main">
                     My Profile
@@ -70,7 +70,7 @@ const MyProfile = () => {
                         <input
                             type="text"
                             {...register("name", { required: true })}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-gold focus:border-transparent outline-none"
+                            className="w-full px-4 py-2 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold focus:border-transparent outline-none bg-bg-body text-text-main"
                         />
                     </div>
                     <div>
@@ -80,7 +80,7 @@ const MyProfile = () => {
                         <input
                             type="url"
                             {...register("photoURL", { required: true })}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-gold focus:border-transparent outline-none"
+                            className="w-full px-4 py-2 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold focus:border-transparent outline-none bg-bg-body text-text-main"
                         />
                     </div>
                     <button
@@ -94,11 +94,11 @@ const MyProfile = () => {
                 <div className="space-y-4">
                     {/* Read-only view details if needed, currently header has most info */}
                     <div className="grid grid-cols-2 gap-4 text-sm">
-                        <div className="p-4 bg-gray-50 rounded-lg">
+                        <div className="p-4 bg-bg-body rounded-lg border border-card-border">
                             <p className="text-text-muted mb-1">Account Created</p>
                             <p className="font-medium text-text-main">{user?.metadata?.creationTime ? new Date(user.metadata.creationTime).toLocaleDateString() : 'N/A'}</p>
                         </div>
-                        <div className="p-4 bg-gray-50 rounded-lg">
+                        <div className="p-4 bg-bg-body rounded-lg border border-card-border">
                             <p className="text-text-muted mb-1">Last Login</p>
                             <p className="font-medium text-text-main">{user?.metadata?.lastSignInTime ? new Date(user.metadata.lastSignInTime).toLocaleDateString() : 'N/A'}</p>
                         </div>

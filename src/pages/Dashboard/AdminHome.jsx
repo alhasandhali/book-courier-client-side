@@ -20,7 +20,7 @@ const AdminHome = () => {
             </header>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                <div className="bg-bg-card p-6 rounded-xl shadow-md border border-card-border">
                     <div className="flex items-center justify-between mb-4">
                         <h3 className="text-lg font-semibold text-text-muted">
                             Total Users
@@ -34,7 +34,7 @@ const AdminHome = () => {
                         <i className="fas fa-arrow-up mr-1"></i> +12% this month
                     </p>
                 </div>
-                <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                <div className="bg-bg-card p-6 rounded-xl shadow-md border border-card-border">
                     <div className="flex items-center justify-between mb-4">
                         <h3 className="text-lg font-semibold text-text-muted">
                             Total Orders
@@ -48,7 +48,7 @@ const AdminHome = () => {
                         <i className="fas fa-arrow-up mr-1"></i> +5% this week
                     </p>
                 </div>
-                <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                <div className="bg-bg-card p-6 rounded-xl shadow-md border border-card-border">
                     <div className="flex items-center justify-between mb-4">
                         <h3 className="text-lg font-semibold text-text-muted">Revenue</h3>
                         <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">

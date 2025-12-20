@@ -26,7 +26,7 @@ const PopularBooks = () => {
   return (
     <section className="w-11/12 sm:w-10/12 mx-auto py-8 md:py-10">
       <div className="section-head">
-        <h2 className="capitalize">Popular this month</h2>
+        <h2 className="capitalize text-text-main">Popular this month</h2>
         <Link to="/books" className="see-all">
           See all <i className="fa-solid fa-arrow-right-long"></i>
         </Link>

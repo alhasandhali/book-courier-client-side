@@ -94,7 +94,7 @@ const Testimonials = () => {
 
   return (
     <section className="w-11/12 sm:w-10/12 mx-auto py-10">
-      <h2 className="text-center font-serif text-[1.75rem] sm:text-[2rem] md:text-[2.5rem] font-medium text-[#2b2b2b] mb-6 sm:mb-8 md:mb-10">
+      <h2 className="text-center font-serif text-[1.75rem] sm:text-[2rem] md:text-[2.5rem] font-medium text-text-main mb-6 sm:mb-8 md:mb-10">
         Our Happy Customers
       </h2>
       <Swiper
@@ -120,8 +120,8 @@ const Testimonials = () => {
       >
         {testimonials.map((testi, index) => (
           <SwiperSlide key={index}>
-            <div className="testi-card bg-white p-4 sm:p-5 md:p-6 rounded-lg sm:rounded-xl shadow-[0_5px_20px_rgba(0,0,0,0.03)] cursor-pointer hover:-translate-y-2 hover:shadow-xl transition-all duration-300 h-full min-h-[200px] sm:min-h-[220px]">
-              <div className="testi-head flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0 mb-4 sm:mb-5 border-b border-[#f0f0f0] pb-3 sm:pb-4">
+            <div className="testi-card bg-bg-card border border-card-border p-4 sm:p-5 md:p-6 rounded-lg sm:rounded-xl shadow-[0_5px_20px_rgba(0,0,0,0.03)] cursor-pointer hover:-translate-y-2 hover:shadow-xl transition-all duration-300 h-full min-h-[200px] sm:min-h-[220px]">
+              <div className="testi-head flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0 mb-4 sm:mb-5 border-b border-card-border pb-3 sm:pb-4">
                 <div className="user-block flex items-center gap-2 sm:gap-3">
                   <img
                     src={testi.img}
@@ -132,7 +132,7 @@ const Testimonials = () => {
                     <h5 className="text-[0.85rem] sm:text-[0.9rem] font-semibold text-text-main">
                       {testi.name}
                     </h5>
-                    <span className="text-[0.7rem] sm:text-[0.75rem] text-[#aaa]">
+                    <span className="text-[0.7rem] sm:text-[0.75rem] text-text-muted/60">
                       {testi.handle}
                     </span>
                   </div>
@@ -141,12 +141,12 @@ const Testimonials = () => {
                   {[...Array(5)].map((_, i) => (
                     <i
                       key={i}
-                      className="fa-solid fa-star text-[#fbbf24] text-[0.65rem] sm:text-[0.7rem]"
+                      className="fa-solid fa-star text-accent-gold text-[0.65rem] sm:text-[0.7rem]"
                     ></i>
                   ))}
                 </div>
               </div>
-              <div className="testi-body text-[0.85rem] sm:text-[0.9rem] text-[#666] leading-relaxed">
+              <div className="testi-body text-[0.85rem] sm:text-[0.9rem] text-text-muted leading-relaxed">
                 "{testi.review}"
               </div>
             </div>

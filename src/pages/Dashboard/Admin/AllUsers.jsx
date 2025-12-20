@@ -41,9 +41,9 @@ const AllUsers = () => {
     return (
         <div>
             <h2 className="text-3xl font-serif font-bold text-text-main mb-6">Manage Users</h2>
-            <div className="overflow-x-auto bg-white rounded-xl shadow-md border border-gray-100">
+            <div className="overflow-x-auto bg-bg-card rounded-xl shadow-md border border-card-border">
                 <table className="table w-full">
-                    <thead className="bg-gray-50 text-text-muted uppercase text-xs font-semibold">
+                    <thead className="bg-bg-body text-text-muted uppercase text-xs font-semibold">
                         <tr>
                             <th className="py-4">Name</th>
                             <th className="py-4">Email</th>
@@ -53,13 +53,13 @@ const AllUsers = () => {
                     </thead>
                     <tbody>
                         {users.map((user) => (
-                            <tr key={user._id} className="border-b border-gray-50 hover:bg-gray-50/50">
+                            <tr key={user._id} className="border-b border-card-border hover:bg-bg-body">
                                 <td className="font-bold text-text-main">{user.name}</td>
                                 <td className="text-text-muted">{user.email}</td>
                                 <td>
                                     <span className={`px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${user.role === 'admin' ? 'bg-purple-100 text-purple-600' :
                                         user.role === 'librarian' ? 'bg-blue-100 text-blue-600' :
-                                            'bg-gray-100 text-gray-500'
+                                            'bg-bg-body text-text-muted'
                                         }`}>
                                         {user.role}
                                     </span>
@@ -68,7 +68,7 @@ const AllUsers = () => {
                                     <select
                                         value={user.role}
                                         onChange={(e) => handleRoleChange(user._id, e.target.value)}
-                                        className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-accent-gold outline-none bg-gray-50 font-medium"
+                                        className="px-3 py-2 border border-card-border rounded-lg text-sm focus:ring-2 focus:ring-accent-gold outline-none bg-bg-body text-text-main font-medium"
                                     >
                                         <option value="user">User</option>
                                         <option value="librarian">Librarian</option>

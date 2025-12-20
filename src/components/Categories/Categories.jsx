@@ -23,7 +23,7 @@ const Categories = () => {
   ];
 
   return (
-    <div className="w-10/12 m-auto overflow-hidden border-y border-[#eaeaea] mt-4 mb-8">
+    <div className="w-10/12 m-auto overflow-hidden border-y border-card-border mt-4 mb-8">
       <div className="category-slider py-4 sm:py-6 md:py-8">
         <div className="category-track flex gap-6 sm:gap-8 md:gap-12 animate-scroll">
           {categories.map((cat, index) => (
@@ -31,7 +31,7 @@ const Categories = () => {
               key={`cat-1-${index}`}
               className="cat-item flex items-center gap-2 sm:gap-3 text-[0.8rem] sm:text-[0.9rem] text-text-muted cursor-pointer hover:text-accent-gold transition-colors whitespace-nowrap shrink-0"
             >
-              <span className="cat-icon-box text-[1rem] sm:text-[1.1rem] text-[#333]">
+              <span className="cat-icon-box text-[1rem] sm:text-[1.1rem] text-text-main">
                 <i className={`fa-solid ${cat.icon}`}></i>
               </span>
               {cat.name}
@@ -42,7 +42,7 @@ const Categories = () => {
               key={`cat-2-${index}`}
               className="cat-item flex items-center gap-2 sm:gap-3 text-[0.8rem] sm:text-[0.9rem] text-text-muted cursor-pointer hover:text-accent-gold transition-colors whitespace-nowrap shrink-0"
             >
-              <span className="cat-icon-box text-[1rem] sm:text-[1.1rem] text-[#333]">
+              <span className="cat-icon-box text-[1rem] sm:text-[1.1rem] text-text-main">
                 <i className={`fa-solid ${cat.icon}`}></i>
               </span>
               {cat.name}

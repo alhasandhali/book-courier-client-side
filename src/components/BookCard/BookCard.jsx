@@ -2,12 +2,11 @@ import React from "react";
 import { Link } from "react-router";
 
 const BookCard = ({ book, variant = "default" }) => {
-  // Default variant
   if (variant === "default") {
     return (
       <div className="book-card group cursor-pointer block relative">
         <Link to={`/book/${book._id}`}>
-          <div className="card-cover-wrap bg-[#f2f2f2] rounded-xl h-[220px] sm:h-[250px] md:h-[280px] flex items-center justify-center mb-3 sm:mb-4 relative overflow-hidden transition-all duration-300 group-hover:shadow-lg">
+          <div className="card-cover-wrap bg-bg-body rounded-xl h-[220px] sm:h-[250px] md:h-[280px] flex items-center justify-center mb-3 sm:mb-4 relative overflow-hidden transition-all duration-300 group-hover:shadow-lg border border-card-border">
             <img
               src={book.image}
               alt={book.title}
@@ -19,13 +18,13 @@ const BookCard = ({ book, variant = "default" }) => {
               </div>
             )}
             <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-              <button className="bg-white text-text-main px-4 py-2 rounded-full font-medium text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 shadow-lg hover:bg-accent-gold hover:text-white">
+              <button className="bg-bg-card text-text-main px-4 py-2 rounded-full font-medium text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 shadow-lg hover:bg-accent-gold hover:text-white border border-card-border">
                 <i className="fa-solid fa-book-reader mr-2"></i>Borrow
               </button>
             </div>
           </div>
           <div className="book-info px-5">
-            <h3 className="font-serif text-[1rem] sm:text-[1.1rem] font-bold mb-1 text-card-black group-hover:text-accent-gold transition-colors line-clamp-1">
+            <h3 className="font-serif text-[1rem] sm:text-[1.1rem] font-bold mb-1 text-text-main group-hover:text-accent-gold transition-colors line-clamp-1">
               {book.title}
             </h3>
             <p className="text-[0.85rem] text-text-muted mb-2 line-clamp-1">
@@ -53,12 +52,11 @@ const BookCard = ({ book, variant = "default" }) => {
     );
   }
 
-  // Recommended variant
   if (variant === "recommended") {
     return (
       <div className="book-card group cursor-pointer">
         <Link to={`/book/${book._id}`}>
-          <div className="card-cover-wrap bg-paper-bg rounded-xl h-[220px] sm:h-[250px] md:h-[280px] flex items-center justify-center mb-3 sm:mb-4 relative overflow-hidden transition-all duration-300 group-hover:shadow-md border border-transparent group-hover:border-[#e5e5e5]">
+          <div className="card-cover-wrap bg-bg-body rounded-xl h-[220px] sm:h-[250px] md:h-[280px] flex items-center justify-center mb-3 sm:mb-4 relative overflow-hidden transition-all duration-300 group-hover:shadow-md border border-card-border group-hover:border-accent-gold/30">
             <img
               src={book.image}
               alt={book.title}
@@ -66,7 +64,7 @@ const BookCard = ({ book, variant = "default" }) => {
             />
           </div>
           <div className="book-info px-5">
-            <h3 className="font-serif text-[1rem] sm:text-[1.1rem] font-bold mb-1 text-card-black group-hover:text-accent-gold transition-colors line-clamp-1">
+            <h3 className="font-serif text-[1rem] sm:text-[1.1rem] font-bold mb-1 text-text-main group-hover:text-accent-gold transition-colors line-clamp-1">
               {book.title}
             </h3>
             <p className="text-[0.85rem] text-text-muted mb-2 line-clamp-1">
@@ -88,7 +86,7 @@ const BookCard = ({ book, variant = "default" }) => {
           <span className="price font-serif font-bold text-[1.1rem] text-text-main">
             {book.price}
           </span>
-          <button className="btn-outline border-slate-300 hover:border-accent-gold hover:bg-accent-gold hover:text-white transition-all text-[0.8rem] px-4 py-2 rounded-full">
+          <button className="btn-outline border-card-border text-text-main hover:border-accent-gold hover:bg-accent-gold hover:text-white transition-all text-[0.8rem] px-4 py-2 rounded-full">
             Borrow
           </button>
         </div>
@@ -96,12 +94,11 @@ const BookCard = ({ book, variant = "default" }) => {
     );
   }
 
-  // Bestseller variant
   if (variant === "bestseller") {
     return (
       <Link
         to={`/book/${book._id}`}
-        className={`bs-card ${book.bgClass} rounded-2xl p-6 sm:p-8 relative overflow-hidden h-[350px] sm:h-[380px] md:h-[400px] flex flex-col group transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl cursor-pointer ring-1 ring-black/5`}
+        className={`bs-card ${book.bgClass} rounded-2xl p-6 sm:p-8 relative overflow-hidden h-[350px] sm:h-[380px] md:h-[400px] flex flex-col group transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl cursor-pointer ring-1 ring-card-border`}
       >
         <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-150 duration-700"></div>
 
@@ -119,8 +116,8 @@ const BookCard = ({ book, variant = "default" }) => {
           </h3>
           <p
             className={`text-[0.85rem] mb-2 ${book.bgClass?.includes("black")
-              ? "text-gray-300"
-              : "text-gray-600"
+              ? "text-white/70"
+              : "text-text-muted"
               } font-medium`}
           >
             By {book.author}
@@ -137,12 +134,11 @@ const BookCard = ({ book, variant = "default" }) => {
     );
   }
 
-  // Popular variant
   if (variant === "popular") {
     return (
       <Link
         to={`/book/${book._id}`}
-        className={`pop-card ${book.style} p-6 sm:p-8 rounded-2xl text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl cursor-pointer group border border-transparent hover:border-black/5 bg-white`}
+        className={`pop-card ${book.style} p-6 sm:p-8 rounded-2xl text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl cursor-pointer group border border-card-border hover:border-accent-gold/30 bg-bg-card`}
       >
         <div className="relative inline-block mx-auto mb-6">
           <img

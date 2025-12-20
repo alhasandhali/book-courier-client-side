@@ -51,7 +51,7 @@ const Invoices = () => {
                     <input
                         type="text"
                         placeholder="Search transaction or book..."
-                        className="input input-bordered w-full pl-10 focus:input-primary rounded-lg"
+                        className="input input-bordered w-full pl-10 focus:input-primary rounded-lg bg-bg-body text-text-main border-card-border"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
@@ -59,9 +59,9 @@ const Invoices = () => {
             </div>
 
             {/* Desktop Table View */}
-            <div className="hidden lg:block overflow-hidden bg-white rounded-xl shadow-sm border border-gray-200">
+            <div className="hidden lg:block overflow-hidden bg-bg-card rounded-xl shadow-sm border border-card-border">
                 <table className="table w-full">
-                    <thead className="bg-gray-50 text-text-muted uppercase text-xs font-bold tracking-wider">
+                    <thead className="bg-bg-body text-text-muted uppercase text-xs font-bold tracking-wider">
                         <tr>
                             <th className="py-5 pl-6">Reference ID</th>
                             <th className="py-5">Date</th>
@@ -71,9 +71,9 @@ const Invoices = () => {
                             <th className="py-5 pr-6 text-right">Actions</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-100">
+                    <tbody className="divide-y divide-card-border">
                         {filteredPayments.map(payment => (
-                            <tr key={payment._id} className="hover:bg-gray-50/60 transition-colors">
+                            <tr key={payment._id} className="hover:bg-bg-body/60 transition-colors">
                                 <td className="pl-6 font-mono text-xs font-semibold text-gray-500">
                                     {payment.transactionId}
                                 </td>
@@ -111,7 +111,7 @@ const Invoices = () => {
             {/* Mobile Card View */}
             <div className="lg:hidden space-y-4">
                 {filteredPayments.map(payment => (
-                    <div key={payment._id} className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-4">
+                    <div key={payment._id} className="bg-bg-card p-5 rounded-xl border border-card-border shadow-sm space-y-4">
                         <div className="flex justify-between items-start border-b border-gray-50 pb-3">
                             <div>
                                 <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Reference ID</p>
@@ -140,7 +140,7 @@ const Invoices = () => {
 
                         <button
                             onClick={() => handlePrint(payment)}
-                            className="w-full py-2.5 bg-gray-50 text-text-main rounded-lg text-xs font-bold flex items-center justify-center gap-2 border border-gray-100 hover:bg-gray-100 transition-colors"
+                            className="w-full py-2.5 bg-bg-body text-text-main rounded-lg text-xs font-bold flex items-center justify-center gap-2 border border-card-border hover:bg-bg-body/80 transition-colors"
                         >
                             <i className="fa-solid fa-print"></i> Print Invoice
                         </button>
@@ -149,7 +149,7 @@ const Invoices = () => {
             </div>
 
             {filteredPayments.length === 0 && (
-                <div className="p-12 text-center bg-white rounded-xl border border-gray-200 mt-4">
+                <div className="p-12 text-center bg-bg-card rounded-xl border border-card-border mt-4">
                     <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-400">
                         <i className="fa-solid fa-file-invoice text-2xl"></i>
                     </div>
