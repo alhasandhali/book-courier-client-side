@@ -8,6 +8,7 @@ import PromoBanners from '../PromoBanners/PromoBanners';
 import Services from '../Services/Services';
 import PopularBooks from '../PopularBooks/PopularBooks';
 import Testimonials from '../Testimonials/Testimonials';
+import MapSection from '../MapSection/MapSection';
 
 const Home = () => {
     return (
@@ -20,6 +21,7 @@ const Home = () => {
             <PopularBooks />
             <PromoBanners />
             <Services />
+            <MapSection />
             <Testimonials />
         </main>
     );
