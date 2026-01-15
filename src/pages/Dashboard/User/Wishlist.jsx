@@ -75,7 +75,7 @@ const Wishlist = () => {
                         >
                             <div className="aspect-[3/4] overflow-hidden bg-bg-body">
                                 <img
-                                    src={item.bookId?.image || item.image || "https://via.placeholder.com/300x400?text=No+Image"}
+                                    src={item.bookId?.image || item.image || "https://placehold.co/300x400/f9fafb/374151?text=No+Image"}
                                     alt={item.bookId?.title || item.title || "Book"}
                                     className="w-full h-full object-cover"
                                 />

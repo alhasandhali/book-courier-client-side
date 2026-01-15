@@ -4,11 +4,12 @@ import DashboardLayout from "./Shared/DashboardLayout";
 
 const UserDashboard = () => {
     const sidebarLinks = [
-        { name: "Dashboard", path: "/dashboard", icon: "fa-home", end: true },
+        { name: "Overview", path: "/dashboard", icon: "fa-columns", end: true },
         { name: "My Orders", path: "/dashboard/my-orders", icon: "fa-shopping-bag" },
         { name: "My Wishlist", path: "/dashboard/wishlist", icon: "fa-heart" },
-        { name: "My Profile", path: "/dashboard/profile", icon: "fa-user" },
         { name: "Invoices", path: "/dashboard/invoices", icon: "fa-file-invoice-dollar" },
+        { name: "My Profile", path: "/dashboard/profile", icon: "fa-user-circle" },
+        { name: "Main Home", path: "/", icon: "fa-arrow-left", end: false },
     ];
 
     return (

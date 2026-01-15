@@ -1,12 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import useAuth from "../../../hooks/useAuth";
-import useAxios from "../../../hooks/useAxios";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
-
 
 const Invoices = () => {
     const { user } = useAuth();
-    const axiosPublic = useAxios();
+    const axiosSecure = useAxiosSecure();
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedInvoice, setSelectedInvoice] = useState(null);
 
@@ -14,15 +13,15 @@ const Invoices = () => {
         queryKey: ["payments", user?.email],
         queryFn: async () => {
             if (!user?.email) return [];
-            const res = await axiosPublic.get(`/payments?email=${user.email}`);
+            const res = await axiosSecure.get(`/payments?email=${user.email}`);
             return res.data;
         },
         enabled: !!user?.email
     });
 
     const filteredPayments = payments.filter(payment =>
-        payment.transactionId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (payment.bookTitle && payment.bookTitle.toLowerCase().includes(searchTerm.toLowerCase()))
+        (payment.transactionId?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+        (payment.bookTitle?.toLowerCase() || "").includes(searchTerm.toLowerCase())
     );
 
     const handlePrint = (invoice) => {
@@ -31,7 +30,7 @@ const Invoices = () => {
         setTimeout(() => {
             window.print();
             setSelectedInvoice(null);
-        }, 100);
+        }, 500);
     };
 
     if (isLoading) {
@@ -83,11 +82,11 @@ const Invoices = () => {
                                     <span className="text-xs text-text-muted">{new Date(payment.date).toLocaleTimeString()}</span>
                                 </td>
                                 <td>
-                                    <div className="font-bold text-text-main text-sm">{payment.bookTitle || "Book Title Unavailable"}</div>
-                                    <div className="text-xs text-text-muted">Qty: 1</div>
+                                    <div className="font-bold text-text-main text-sm">{payment.bookTitle || "Order Reference"}</div>
+                                    <div className="text-xs text-text-muted">Qty: {payment.quantity || 1}</div>
                                 </td>
                                 <td className="text-right font-bold text-text-main">
-                                    ${payment.price.toFixed(2)}
+                                    ${(payment.amount || payment.price || 0).toFixed(2)}
                                 </td>
                                 <td className="text-center">
                                     <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200">
@@ -97,7 +96,7 @@ const Invoices = () => {
                                 <td className="pr-6 text-right">
                                     <button
                                         onClick={() => handlePrint(payment)}
-                                        className="btn btn-sm btn-ghost hover:bg-gray-100 text-text-muted hover:text-text-main gap-2"
+                                        className="btn btn-sm btn-ghost hover:bg-gray-500 text-text-muted hover:text-text-main gap-2"
                                     >
                                         <i className="fa-solid fa-print"></i> Print
                                     </button>
@@ -129,13 +128,14 @@ const Invoices = () => {
                             </div>
                             <div className="text-right">
                                 <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Amount</p>
-                                <p className="text-sm font-bold text-accent-gold">${payment.price.toFixed(2)}</p>
+                                <p className="text-sm font-bold text-accent-gold">${(payment.amount || payment.price || 0).toFixed(2)}</p>
                             </div>
                         </div>
 
                         <div>
                             <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Book</p>
-                            <p className="text-xs font-bold text-text-main line-clamp-1">{payment.bookTitle}</p>
+                            <p className="text-xs font-bold text-text-main line-clamp-1">{payment.bookTitle || "Order Reference"}</p>
+                            <p className="text-[10px] text-text-muted">Quantity: {payment.quantity || 1}</p>
                         </div>
 
                         <button
@@ -221,10 +221,10 @@ const Invoices = () => {
                             </thead>
                             <tbody className="divide-y divide-gray-100">
                                 <tr>
-                                    <td className="py-4 font-medium text-gray-900">{selectedInvoice.bookTitle}</td>
-                                    <td className="py-4 text-right text-gray-600">1</td>
-                                    <td className="py-4 text-right text-gray-600">${selectedInvoice.price.toFixed(2)}</td>
-                                    <td className="py-4 text-right font-bold text-gray-900">${selectedInvoice.price.toFixed(2)}</td>
+                                    <td className="py-4 font-medium text-gray-900">{selectedInvoice.bookTitle || "Book Order"}</td>
+                                    <td className="py-4 text-right text-gray-600">{selectedInvoice.quantity || 1}</td>
+                                    <td className="py-4 text-right text-gray-600">${(selectedInvoice.amount || selectedInvoice.price || 0).toFixed(2)}</td>
+                                    <td className="py-4 text-right font-bold text-gray-900">${(selectedInvoice.amount || selectedInvoice.price || 0).toFixed(2)}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -232,8 +232,12 @@ const Invoices = () => {
                         <div className="flex justify-end border-t border-gray-200 pt-6">
                             <div className="w-64">
                                 <div className="flex justify-between items-center py-2">
-                                    <span className="text-gray-500">Subtotal</span>
-                                    <span className="font-medium text-gray-900">${selectedInvoice.price.toFixed(2)}</span>
+                                    <span className="text-gray-500">Subtotal (Items)</span>
+                                    <span className="font-medium text-gray-900">${((selectedInvoice.amount || selectedInvoice.price || 0) - (selectedInvoice.deliveryCharge || 0)).toFixed(2)}</span>
+                                </div>
+                                <div className="flex justify-between items-center py-2">
+                                    <span className="text-gray-500">Delivery</span>
+                                    <span className="font-medium text-gray-900">${(selectedInvoice.deliveryCharge || 0).toFixed(2)}</span>
                                 </div>
                                 <div className="flex justify-between items-center py-2 border-b border-gray-200 pb-4 mb-4">
                                     <span className="text-gray-500">Tax (0%)</span>
@@ -241,7 +245,7 @@ const Invoices = () => {
                                 </div>
                                 <div className="flex justify-between items-center text-xl font-bold">
                                     <span className="text-gray-900">Total</span>
-                                    <span className="text-accent-gold">${selectedInvoice.price.toFixed(2)}</span>
+                                    <span className="text-accent-gold">${(selectedInvoice.amount || selectedInvoice.price || 0).toFixed(2)}</span>
                                 </div>
                             </div>
                         </div>

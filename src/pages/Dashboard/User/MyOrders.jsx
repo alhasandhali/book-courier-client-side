@@ -1,13 +1,14 @@
 import React from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router";
 import toast from "react-hot-toast";
 
 const MyOrders = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
+    const queryClient = useQueryClient();
 
     const {
         data: orders = [],
@@ -29,9 +30,13 @@ const MyOrders = () => {
         if (!confirm("Are you sure you want to cancel this order?")) return;
 
         try {
-            await axiosSecure.patch(`/order/${orderId}`, { status: "cancelled" });
+            await axiosSecure.patch(`/order/${orderId}`, {
+                status: "cancelled",
+                shipping_status: "cancelled",
+                payment_status: "cancelled"
+            });
             toast.success("Order cancelled successfully");
-            refetch();
+            queryClient.invalidateQueries(["my-orders", user?.email]);
         } catch (error) {
             console.error(error);
             toast.error("Failed to cancel order");
@@ -59,7 +64,8 @@ const MyOrders = () => {
                         <tr>
                             <th className="py-4">Book Title</th>
                             <th className="py-4">Order Date</th>
-                            <th className="py-4">Status</th>
+                            <th className="py-4">Payment</th>
+                            <th className="py-4">Shipping</th>
                             <th className="py-4">Total</th>
                             <th className="py-4">Actions</th>
                         </tr>
@@ -78,25 +84,31 @@ const MyOrders = () => {
                                 </td>
                                 <td>
                                     <span
-                                        className={`px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${order.status === "pending"
-                                            ? "bg-yellow-100 text-yellow-600"
-                                            : order.status === "shipped"
-                                                ? "bg-blue-100 text-blue-600"
-                                                : order.status === "paid"
-                                                    ? "bg-green-100 text-green-600"
-                                                    : order.status === "cancelled"
-                                                        ? "bg-red-100 text-red-600"
-                                                        : "bg-gray-100 text-gray-600"
+                                        className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${order.payment_status === "paid"
+                                            ? "bg-green-100 text-green-600 border border-green-200"
+                                            : "bg-yellow-100 text-yellow-600 border border-yellow-200"
                                             }`}
                                     >
-                                        {order.status}
+                                        {order.payment_status || order.status || 'pending'}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span
+                                        className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${order.shipping_status === "delivered"
+                                            ? "bg-green-100 text-green-600 border border-green-200"
+                                            : order.shipping_status === "shipped"
+                                                ? "bg-blue-100 text-blue-600 border border-blue-200"
+                                                : "bg-gray-100 text-gray-500 border border-gray-200"
+                                            }`}
+                                    >
+                                        {order.shipping_status || 'pending'}
                                     </span>
                                 </td>
                                 <td className="font-semibold text-text-main">
                                     ${order.totalPrice ? order.totalPrice.toFixed(2) : "0.00"}
                                 </td>
                                 <td className="flex gap-2">
-                                    {order.status === "pending" && (
+                                    {(order.payment_status === "pending" || order.status === "pending") && (
                                         <>
                                             <Link
                                                 to={`/dashboard/payment/${order._id}`}
@@ -131,20 +143,20 @@ const MyOrders = () => {
                     <div key={order._id} className="bg-bg-card p-5 rounded-xl border border-card-border shadow-md space-y-4">
                         <div className="flex justify-between items-start border-b border-card-border pb-3">
                             <h3 className="font-bold text-text-main line-clamp-1 flex-1">{order.bookTitle}</h3>
-                            <span
-                                className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${order.status === "pending"
-                                    ? "bg-yellow-100 text-yellow-600 border border-yellow-200"
-                                    : order.status === "shipped"
-                                        ? "bg-blue-100 text-blue-600 border border-blue-200"
-                                        : order.status === "paid"
-                                            ? "bg-green-100 text-green-700 border border-green-200"
-                                            : order.status === "cancelled"
-                                                ? "bg-red-100 text-red-600 border border-red-200"
-                                                : "bg-gray-100 text-gray-600 border border-gray-200"
-                                    }`}
-                            >
-                                {order.status}
-                            </span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2 border-b border-card-border pb-3">
+                            <div>
+                                <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Payment</p>
+                                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${order.payment_status === "paid" ? "bg-green-100 text-green-600 border border-green-200" : "bg-yellow-100 text-yellow-600 border border-yellow-200"}`}>
+                                    {order.payment_status || 'pending'}
+                                </span>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Shipping</p>
+                                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${order.shipping_status === "delivered" ? "bg-green-100 text-green-600 border border-green-200" : order.shipping_status === "shipped" ? "bg-blue-100 text-blue-600 border border-blue-200" : "bg-gray-100 text-gray-500 border border-gray-200"}`}>
+                                    {order.shipping_status || 'pending'}
+                                </span>
+                            </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
@@ -158,7 +170,7 @@ const MyOrders = () => {
                             </div>
                         </div>
 
-                        {order.status === "pending" && (
+                        {(order.payment_status === "pending" || order.status === "pending") && (
                             <div className="flex gap-3 pt-2">
                                 <Link
                                     to={`/dashboard/payment/${order._id}`}

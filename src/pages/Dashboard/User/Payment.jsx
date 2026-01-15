@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 
 const Payment = () => {
@@ -10,6 +10,7 @@ const Payment = () => {
     const location = useLocation();
     const axiosSecure = useAxiosSecure();
     const [processing, setProcessing] = useState(false);
+    const queryClient = useQueryClient();
 
     const { data: order, isLoading, isError } = useQuery({
         queryKey: ['order', id],
@@ -35,11 +36,18 @@ const Payment = () => {
 
         const paymentInfo = {
             orderId: id,
-            transactionId: "MOCK_" + new Date().getTime() + "_" + Math.floor(Math.random() * 1000),
+            transactionId: "ORD-" + new Date().getTime() + "-" + Math.floor(Math.random() * 1000),
             amount: order?.totalPrice,
+            price: order?.totalPrice, // added for compatibility
+            deliveryCharge: order?.deliveryCharge || 0,
+            bookTitle: order?.bookTitle || order?.bookId?.title,
+            bookImage: order?.bookImage || order?.bookId?.image,
+            quantity: order?.quantity || 1,
             currency: "USD",
             email: order?.email || order?.userEmail,
-            date: new Date()
+            date: new Date(),
+            payment_status: 'paid',
+            status: 'paid'
         };
 
         try {
@@ -47,9 +55,36 @@ const Payment = () => {
             await axiosSecure.post('/payment', paymentInfo);
 
             // 2. Update order status
-            await axiosSecure.patch(`/order/${id}`, { status: 'paid' });
+            await axiosSecure.patch(`/order/${id}`, {
+                payment_status: 'paid',
+                status: 'paid' // sync legacy status
+            });
+
+            // 3. Update Book Stock
+            if (order?.bookId) {
+                try {
+                    // Fetch current book data to get current stock
+                    // Depending on your API, bookId might be the ID or a populated object
+                    const bookId = typeof order.bookId === 'object' ? order.bookId._id : order.bookId;
+                    const bookRes = await axiosSecure.get(`/book/${bookId}`);
+                    const currentBook = bookRes.data;
+
+                    if (currentBook && typeof currentBook.stock !== 'undefined') {
+                        const newStock = Math.max(0, currentBook.stock - (order.quantity || 1));
+                        await axiosSecure.patch(`/book/${bookId}`, { stock: newStock });
+                        console.log(`Stock updated for ${bookId}: ${currentBook.stock} -> ${newStock}`);
+                    }
+                } catch (stockError) {
+                    console.error("Failed to update stock:", stockError);
+                    // We don't block the whole process if stock update fails, but we log it
+                }
+            }
 
             toast.success('Payment Successful!');
+            queryClient.invalidateQueries(['my-orders']);
+            queryClient.invalidateQueries(['payments']);
+            queryClient.invalidateQueries(['all-books']);
+            queryClient.invalidateQueries(['my-books']);
             navigate('/dashboard/my-orders');
         } catch (err) {
             console.error(err);
@@ -89,7 +124,7 @@ const Payment = () => {
                     <h3 className="text-lg font-bold text-text-main mb-4 border-b pb-2">Order Summary</h3>
                     <div className="flex gap-4 mb-4">
                         <img
-                            src={order.bookImage || order.bookId?.image || "https://via.placeholder.com/150"}
+                            src={order.bookImage || order.bookId?.image || "https://placehold.co/150x200/f9fafb/374151?text=No+Image"}
                             alt="Book Cover"
                             className="w-20 h-28 object-cover rounded shadow-sm"
                         />
@@ -99,9 +134,19 @@ const Payment = () => {
                             <p className="text-sm text-text-muted">Status: <span className="uppercase font-semibold">{order.status}</span></p>
                         </div>
                     </div>
-                    <div className="flex justify-between items-center text-lg font-bold mt-4 pt-4 border-t border-card-border">
-                        <span>Total Amount</span>
-                        <span className="text-accent-gold">${order.totalPrice?.toFixed(2)}</span>
+                    <div className="space-y-4">
+                        <div className="flex justify-between items-center text-sm text-text-muted">
+                            <span>Book Price ({order.quantity}x)</span>
+                            <span>${((order.price || order.totalPrice - (order.deliveryCharge || 0)) * order.quantity).toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between items-center text-sm text-text-muted">
+                            <span>Delivery Charge</span>
+                            <span>${(order.deliveryCharge || 0).toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between items-center text-lg font-bold pt-4 border-t border-card-border">
+                            <span className="text-text-main">Total Amount</span>
+                            <span className="text-accent-gold">${order.totalPrice?.toFixed(2)}</span>
+                        </div>
                     </div>
                 </div>
 

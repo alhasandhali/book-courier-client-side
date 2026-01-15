@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
@@ -10,18 +10,41 @@ const Login = () => {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm();
   const [showPassword, setShowPassword] = useState(false);
-  const { signInWithEmailPass, signInWithGoogle } = useAuth();
+  const { signInWithEmailPass, signInWithGoogle, resetPassword } = useAuth();
   const axiosPublic = useAxios();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
+  const emailValue = watch("email");
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("rememberedEmail");
+    const savedPassword = localStorage.getItem("rememberedPassword");
+    if (savedEmail) {
+      setValue("email", savedEmail);
+      if (savedPassword) {
+        setValue("password", savedPassword);
+      }
+      setValue("rememberMe", true);
+    }
+  }, [setValue]);
 
   const onSubmit = async (data) => {
     setLoading(true);
     try {
       await signInWithEmailPass(data.email, data.password);
+      if (data.rememberMe) {
+        localStorage.setItem("rememberedEmail", data.email);
+        localStorage.setItem("rememberedPassword", data.password);
+      } else {
+        localStorage.removeItem("rememberedEmail");
+        localStorage.removeItem("rememberedPassword");
+      }
       toast.success("Login successful!");
       navigate("/dashboard");
     } catch (error) {
@@ -37,17 +60,6 @@ const Login = () => {
     try {
       const result = await signInWithGoogle(googleProvider);
       const user = result.user;
-
-      // Check if user exists in DB, if not save them (optional, but handled in Register usually)
-      // Since this is just login, we assume user might exist. 
-      // Ideally, Google Login acts as Register if user doesn't exist.
-      // We'll mimic the Register logic here just in case:
-      // BUT for strict Login, we might just log them in. 
-      // Given the previous Register implementation handled this, we can optionally do it here or skip.
-      // Let's ensure consistency: If they login with Google for the first time here, they should be saved.
-
-      // Attempt to save user if new (optimistic) or just rely on them being logged in.
-      // For robustness, let's post the user info again (backend usually handles "if exists update/ignore").
 
       const userInfo = {
         name: user.displayName,
@@ -73,9 +85,6 @@ const Login = () => {
         updatedAt: new Date().toISOString(),
       };
 
-      // We use axiosPublic to sync user data (upsert logic on backend recommended)
-      // If backend creates duplicate on every POST, this is bad. 
-      // Assuming backend handles "create if not exists".
       await axiosPublic.post("/user", userInfo);
 
       toast.success("Google Login successful!");
@@ -83,6 +92,20 @@ const Login = () => {
     } catch (error) {
       console.error(error);
       toast.error(error.message || "Google Login failed.");
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    if (!emailValue) {
+      toast.error("Please enter your email address first.");
+      return;
+    }
+    try {
+      await resetPassword(emailValue);
+      toast.success("Password reset email sent! Check your inbox.");
+    } catch (error) {
+      console.error(error);
+      toast.error(error.message || "Failed to send reset email.");
     }
   };
 
@@ -215,12 +238,13 @@ const Login = () => {
                 />
                 <span className="text-sm text-text-muted">Remember me</span>
               </label>
-              <Link
-                to="#"
+              <button
+                type="button"
+                onClick={handleForgotPassword}
                 className="text-sm text-accent-gold hover:text-accent-gold/80 transition-colors font-medium"
               >
                 Forgot password?
-              </Link>
+              </button>
             </div>
             <button
               type="submit"

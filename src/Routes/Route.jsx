@@ -22,6 +22,7 @@ import MyBooks from "../pages/Dashboard/Librarian/MyBooks";
 import LibrarianOrders from "../pages/Dashboard/Librarian/LibrarianOrders";
 import AllUsers from "../pages/Dashboard/Admin/AllUsers";
 import ManageAllBooks from "../pages/Dashboard/Admin/ManageAllBooks";
+import ManageAllOrders from "../pages/Dashboard/Admin/ManageAllOrders";
 import PrivateRoute from "./PrivateRoute";
 
 export const router = createBrowserRouter([
@@ -120,7 +121,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "orders",
-            element: <LibrarianOrders />,
+            element: <ManageAllOrders />,
           }
         ]
       },

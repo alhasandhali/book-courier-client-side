@@ -60,6 +60,7 @@ const MyBooks = () => {
                             <tr>
                                 <th className="py-4">Book</th>
                                 <th className="py-4">Author</th>
+                                <th className="py-4">Stock</th>
                                 <th className="py-4">Status</th>
                                 <th className="py-4 text-right">Actions</th>
                             </tr>
@@ -74,6 +75,11 @@ const MyBooks = () => {
                                         </div>
                                     </td>
                                     <td className="text-text-muted">{book.author}</td>
+                                    <td>
+                                        <span className={`font-bold ${book.stock <= (book.minStockAlert || 5) ? 'text-red-500' : 'text-text-main'}`}>
+                                            {book.stock || 0}
+                                        </span>
+                                    </td>
                                     <td>
                                         <span className={`px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${book.status === 'published' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-500'
                                             }`}>

@@ -72,6 +72,7 @@ const ManageAllBooks = () => {
                         <tr>
                             <th className="py-4">Book</th>
                             <th className="py-4">Added By</th>
+                            <th className="py-4">Stock</th>
                             <th className="py-4">Status</th>
                             <th className="py-4 text-right">Actions</th>
                         </tr>
@@ -100,6 +101,11 @@ const ManageAllBooks = () => {
                                     </div>
                                 </td>
                                 <td className="text-text-muted text-sm">{book.addedBy}</td>
+                                <td>
+                                    <span className={`font-bold ${book.stock <= (book.minStockAlert || 5) ? 'text-red-500' : 'text-text-main'}`}>
+                                        {book.stock || 0}
+                                    </span>
+                                </td>
                                 <td>
                                     <span
                                         className={`px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${book.status === "published"

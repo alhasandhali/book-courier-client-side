@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useAuth from "../../../hooks/useAuth";
+import axios from "axios";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -8,26 +9,60 @@ const MyProfile = () => {
     const { user, updateUser } = useAuth();
     const axiosSecure = useAxiosSecure();
     const [isEditing, setIsEditing] = useState(false);
-    const { register, handleSubmit, reset } = useForm({
+    const [submitting, setSubmitting] = useState(false);
+    const [imagePreview, setImagePreview] = useState(null);
+    const { register, handleSubmit, watch, reset } = useForm({
         defaultValues: {
             name: user?.displayName || "",
-            photoURL: user?.photoURL || "",
         },
     });
 
-    const onSubmit = async (data) => {
-        try {
-            // 1. Update Firebase Profile
-            await updateUser(user, data.name, data.photoURL);
+    const photoFile = watch('photo');
 
-            // 2. Update DB (Optional but recommended to keep sync)
-            // Assuming endpoint PATCH /user/:email exists or similar
+    useEffect(() => {
+        if (photoFile && photoFile[0]) {
+            const reader = new FileReader();
+            reader.onload = e => setImagePreview(e.target.result);
+            reader.readAsDataURL(photoFile[0]);
+        } else {
+            setImagePreview(null);
+        }
+    }, [photoFile]);
+
+    const onSubmit = async (data) => {
+        setSubmitting(true);
+        try {
+            let finalPhotoURL = user?.photoURL || "";
+
+            // 1. Upload Image to ImgBB if a new photo is selected
+            if (data.photo && data.photo[0]) {
+                const formData = new FormData();
+                formData.append('image', data.photo[0]);
+                const imgRes = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_img_hosting}`, formData);
+                finalPhotoURL = imgRes.data.data.url;
+            }
+
+            // 2. Update Firebase Profile
+            await updateUser(user, data.name, finalPhotoURL);
+
+            // 3. Update DB (Keeping user profile in sync on backend)
+            try {
+                await axiosSecure.patch(`/user/${user.email}`, {
+                    name: data.name,
+                    image: finalPhotoURL,
+                    updatedAt: new Date().toISOString()
+                });
+            } catch (dbErr) {
+                console.warn("DB Sync failed, but Firebase updated:", dbErr);
+            }
 
             setIsEditing(false);
             toast.success("Profile updated successfully!");
         } catch (error) {
             console.error(error);
             toast.error("Failed to update profile.");
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -38,8 +73,11 @@ const MyProfile = () => {
                     My Profile
                 </h2>
                 <button
-                    onClick={() => setIsEditing(!isEditing)}
-                    className="text-accent-gold hover:text-accent-gold/80 font-medium transition-colors"
+                    onClick={() => {
+                        setIsEditing(!isEditing);
+                        setImagePreview(null);
+                    }}
+                    className={`${isEditing ? 'text-red-500 hover:text-red-600' : 'text-accent-gold hover:text-accent-gold/80'} font-medium transition-colors`}
                 >
                     {isEditing ? "Cancel" : "Edit Profile"}
                 </button>
@@ -47,9 +85,9 @@ const MyProfile = () => {
 
             <div className="flex flex-col items-center mb-8">
                 <img
-                    src={user?.photoURL || "https://placehold.co/150"}
+                    src={imagePreview || user?.photoURL || "https://placehold.co/150"}
                     alt="Profile"
-                    className="w-32 h-32 rounded-full object-cover border-4 border-accent-gold/20 mb-4"
+                    className="w-32 h-32 rounded-full object-cover border-4 border-accent-gold/20 mb-4 shadow-lg"
                 />
                 <h3 className="text-xl font-bold text-text-main">
                     {user?.displayName}
@@ -75,19 +113,29 @@ const MyProfile = () => {
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-text-main mb-1">
-                            Photo URL
+                            Profile Picture
                         </label>
-                        <input
-                            type="url"
-                            {...register("photoURL", { required: true })}
-                            className="w-full px-4 py-2 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold focus:border-transparent outline-none bg-bg-body text-text-main"
-                        />
+                        <div className="relative group">
+                            <input
+                                type="file"
+                                accept="image/*"
+                                {...register("photo")}
+                                className="w-full px-4 py-2 border border-card-border rounded-lg focus:ring-2 focus:ring-accent-gold focus:border-transparent outline-none bg-bg-body text-text-main file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-accent-gold/10 file:text-accent-gold hover:file:bg-accent-gold/20 transition-all"
+                            />
+                        </div>
+                        <p className="text-[10px] text-text-muted mt-1 uppercase tracking-wider font-bold opacity-60">Leave empty to keep current photo</p>
                     </div>
                     <button
                         type="submit"
-                        className="w-full bg-accent-gold text-white py-2 rounded-lg font-semibold hover:bg-accent-gold/90 transition-colors"
+                        disabled={submitting}
+                        className="w-full bg-accent-gold text-white py-3 rounded-lg font-bold hover:bg-accent-gold/90 transition-all shadow-lg shadow-accent-gold/20 flex items-center justify-center gap-2 disabled:opacity-50"
                     >
-                        Save Changes
+                        {submitting ? (
+                            <>
+                                <span className="loading loading-spinner loading-xs"></span>
+                                Saving Changes...
+                            </>
+                        ) : "Save Changes"}
                     </button>
                 </form>
             ) : (

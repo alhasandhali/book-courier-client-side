@@ -10,6 +10,7 @@ import {
   signOut,
   updatePassword,
   updateProfile,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 
 const AuthProvider = ({ children }) => {
@@ -53,6 +54,11 @@ const AuthProvider = ({ children }) => {
     return updatePassword(u, newPassword);
   };
 
+  // Password Reset
+  const resetPassword = (email) => {
+    return sendPasswordResetEmail(auth, email);
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -74,6 +80,7 @@ const AuthProvider = ({ children }) => {
     userDelete,
     updateUser,
     changePassword,
+    resetPassword,
   };
 
   return <AuthContext value={authInfo}>{children}</AuthContext>;

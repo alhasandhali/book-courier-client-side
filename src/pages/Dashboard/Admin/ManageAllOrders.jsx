@@ -1,27 +1,25 @@
 import React, { useState } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
+import useAdmin from "../../../hooks/useAdmin";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
-const LibrarianOrders = () => {
+const ManageAllOrders = () => {
     const axiosSecure = useAxiosSecure();
     const { user, loading } = useAuth();
+    const [isAdmin, isAdminLoading] = useAdmin();
     const [searchTerm, setSearchTerm] = useState("");
     const queryClient = useQueryClient();
 
     const { data: orders = [], refetch, isLoading } = useQuery({
-        queryKey: ["librarian-orders", user?.email],
+        queryKey: ["all-orders"],
         queryFn: async () => {
-            const res = await axiosSecure.get(
-                `/orders?librarianEmail=${user.email}`
-            );
-            // Filter on client side as well for safety
-            return (res.data || []).filter(order => order.librarianEmail === user.email);
+            const res = await axiosSecure.get("/orders");
+            return res.data || [];
         },
-        enabled: !!user?.email,
+        enabled: !loading && !!user && !isAdminLoading && !!isAdmin,
     });
-
 
     const handleShippingStatusChange = async (orderId, newStatus) => {
         try {
@@ -30,8 +28,7 @@ const LibrarianOrders = () => {
                 status: newStatus // sync legacy
             });
             toast.success(`Shipping status updated to ${newStatus}`);
-            queryClient.invalidateQueries(["librarian-orders"]);
-            queryClient.invalidateQueries(["librarian-orders-stats"]);
+            queryClient.invalidateQueries(["all-orders"]);
         } catch (error) {
             console.error(error);
             toast.error("Failed to update shipping status");
@@ -48,8 +45,7 @@ const LibrarianOrders = () => {
                 status: "cancelled"
             });
             toast.success("Order cancelled");
-            queryClient.invalidateQueries(["librarian-orders"]);
-            queryClient.invalidateQueries(["librarian-orders-stats"]);
+            queryClient.invalidateQueries(["all-orders"]);
         } catch (error) {
             console.error(error);
             toast.error("Failed to cancel order");
@@ -75,7 +71,7 @@ const LibrarianOrders = () => {
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <h2 className="text-3xl font-serif font-bold text-text-main">
-                    Order Management
+                    Manage All Orders
                 </h2>
                 <div className="relative w-full md:w-72">
                     <i className="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-sm"></i>
@@ -114,6 +110,9 @@ const LibrarianOrders = () => {
                                     <div className="text-[10px] text-text-muted flex items-center gap-2 mt-1">
                                         <i className="fa-regular fa-calendar text-accent-gold"></i>
                                         {new Date(order.orderDate).toLocaleDateString()}
+                                    </div>
+                                    <div className="text-[10px] text-text-muted mt-1">
+                                        Seller: {order.librarianEmail || "Unknown"}
                                     </div>
                                 </td>
                                 <td className="py-4 px-4">
@@ -180,4 +179,4 @@ const LibrarianOrders = () => {
     );
 };
 
-export default LibrarianOrders;
+export default ManageAllOrders;

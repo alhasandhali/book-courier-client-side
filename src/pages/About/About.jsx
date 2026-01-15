@@ -105,7 +105,7 @@ const About = () => {
                         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-text-main mb-4 sm:mb-6">
                             Our Story
                         </h2>
-                        <div className="space-y-4 text-text-muted leading-relaxed">
+                        <div className="space-y-4 text-text-muted leading-relaxed text-justify">
                             <p>
                                 Founded in 2020, BookCourier was born from a simple idea: making books more accessible to everyone. We noticed that many book lovers struggled to find the titles they wanted locally, and online shopping often meant long waits.
                             </p>

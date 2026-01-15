@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router";
 import useAxios from "../../hooks/useAxios";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useAuth from "../../hooks/useAuth";
 import toast from "react-hot-toast";
 
@@ -11,6 +11,7 @@ const BookDetails = () => {
   const axiosPublic = useAxios();
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,19 +43,45 @@ const BookDetails = () => {
     }
 
     const orderData = {
-      bookId: book._id,
-      bookTitle: book.title,
-      bookImage: book.image,
+      // User Info
+      userId: user.uid,
+      uid: user.uid,
+      userName: user.displayName || user.email.split('@')[0],
+      customerName: user.displayName || user.email.split('@')[0],
       userEmail: user.email,
       email: user.email,
-      userId: user.uid,
-      userName: user.displayName,
-      phone,
-      address,
-      quantity,
-      totalPrice: book.price * quantity,
-      status: 'pending',
-      orderDate: new Date().toISOString()
+      customerEmail: user.email,
+
+      // Book Info
+      bookId: book._id,
+      bookTitle: book.title,
+      title: book.title,
+      bookImage: book.image,
+      image: book.image,
+      bookAuthor: book.author,
+      author: book.author,
+
+      // Price & Quantity
+      price: book.price,
+      quantity: parseInt(quantity),
+      deliveryCharge: book?.delivery?.deliveryCharge || 0,
+      totalPrice: parseFloat(((book.price * quantity) + (book?.delivery?.deliveryCharge || 0)).toFixed(2)),
+
+      // Fulfillment
+      phone: phone,
+      address: address,
+
+      // Status & Dates
+      payment_status: 'pending',
+      shipping_status: 'pending',
+      status: 'pending', // Keeping for backward compatibility temporarily if needed
+      orderDate: new Date().toISOString(),
+      timestamp: Date.now(),
+      orderNumber: `ORD-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+
+      // Librarian Info
+      librarianId: book.librarianId || null,
+      librarianEmail: book.addedBy || book.librarianEmail || null
     };
 
     try {
@@ -64,7 +91,7 @@ const BookDetails = () => {
       setPhone("");
       setAddress("");
     } catch (error) {
-      console.error(error);
+      console.log(error.response.data);
       toast.error("Failed to place order");
     }
   };
@@ -82,7 +109,14 @@ const BookDetails = () => {
     enabled: !!user?.email,
   });
 
-  const wishlistItem = wishlist.find(item => (item.bookId?._id === id) || (item.bookId === id));
+  const wishlistItem = wishlist.find(item =>
+    (item.bookId?._id === book?._id) ||
+    (item.bookId === book?._id) ||
+    (item.bookId === id) ||
+    (item.bookId?._id === id) ||
+    (item.slug === id) ||
+    (item.bookSlug === id)
+  );
   const isInWishlist = !!wishlistItem;
 
   const handleWishlistToggle = async () => {
@@ -99,18 +133,32 @@ const BookDetails = () => {
       } else {
         const wishData = {
           email: user.email,
-          bookId: id,
+          userEmail: user.email,
+          userId: user.uid,
+          bookId: id, // Restore slug as bookId
+          bookObjectId: book._id,
+          book_id: book._id,
+          bookIdString: book._id,
+          bookTitle: book.title,
           title: book.title,
+          bookImage: book.image,
           image: book.image,
+          bookPrice: book.price,
           price: book.price,
-          author: book.author
+          bookAuthor: book.author,
+          author: book.author,
+          bookSlug: id,
+          slug: id,
+          addedAt: new Date().toISOString(),
+          timestamp: Date.now()
         };
         await axiosSecure.post('/wishlist', wishData);
         toast.success("Added to wishlist");
       }
-      refetchWishlist();
+      await queryClient.invalidateQueries(["wishlist", user?.email]);
+      await refetchWishlist();
     } catch (error) {
-      console.error(error);
+      console.log("Wishlist Error:", error.response?.data || error);
       toast.error("Failed to update wishlist");
     }
   };
@@ -368,7 +416,7 @@ const BookDetails = () => {
               <div key={review._id || Math.random()} className="border-b border-card-border last:border-0 pb-6 last:pb-0">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-10 h-10 rounded-full bg-bg-card border border-card-border overflow-hidden">
-                    <img src={review.userImage || "https://via.placeholder.com/40"} alt="User" className="w-full h-full object-cover" />
+                    <img src={review.userImage || "https://placehold.co/40x40/f9fafb/374151?text=User"} alt="User" className="w-full h-full object-cover" />
                   </div>
                   <div>
                     <h5 className="font-bold text-text-main text-sm">{review.userName || "Anonymous User"}</h5>
@@ -437,9 +485,19 @@ const BookDetails = () => {
                 ></textarea>
               </div>
 
-              <div className="bg-bg-body p-4 rounded-lg flex justify-between items-center text-sm font-medium text-text-main border border-card-border">
-                <span>Quantity: {quantity}</span>
-                <span>Total: <span className="text-accent-gold font-bold text-lg">${(book.price * quantity).toFixed(2)}</span></span>
+              <div className="bg-bg-body p-4 rounded-lg space-y-2 text-sm border border-card-border">
+                <div className="flex justify-between items-center text-text-muted">
+                  <span>Price ({quantity}x):</span>
+                  <span>${(book.price * quantity).toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between items-center text-text-muted">
+                  <span>Delivery Charge:</span>
+                  <span>${(book?.delivery?.deliveryCharge || 0).toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between items-center pt-2 mt-2 border-t border-card-border text-text-main font-bold">
+                  <span>Total Payable:</span>
+                  <span className="text-accent-gold text-lg">${((book.price * quantity) + (book?.delivery?.deliveryCharge || 0)).toFixed(2)}</span>
+                </div>
               </div>
 
               <button type="submit" className="btn-primary w-full py-3 rounded-lg text-lg font-bold shadow-lg shadow-accent-gold/20 hover:shadow-accent-gold/30 mt-4">

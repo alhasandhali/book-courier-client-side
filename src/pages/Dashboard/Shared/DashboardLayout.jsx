@@ -1,9 +1,18 @@
 import React, { useState } from "react";
 import { Link, NavLink, Outlet } from "react-router";
-import logo from "../../../assets/logo.png"
+import logo from "../../../assets/logo.png";
+import useAuth from "../../../hooks/useAuth";
+import toast from "react-hot-toast";
 
 const DashboardLayout = ({ title, sidebarLinks }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const { user, logOut } = useAuth();
+
+    const handleLogout = () => {
+        logOut().then(() => {
+            toast.success("Logged out successfully");
+        });
+    };
 
     return (
         <div className="flex min-h-screen bg-bg-body relative">
@@ -18,31 +27,39 @@ const DashboardLayout = ({ title, sidebarLinks }) => {
             {/* Sidebar */}
             <aside
                 className={`
-                    fixed lg:sticky top-0 left-0 h-screen lg:h-[calc(100vh-80px)] lg:top-20
+                    fixed lg:sticky top-0 left-0 h-screen lg:h-screen lg:top-0
                     w-72 sm:w-80 lg:w-64 bg-bg-card z-[70] transform transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1)
                     ${isSidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full lg:translate-x-0"}
                     overflow-y-auto
                     flex flex-col
-                    border-r border-card-border lg:border-none
+                    border-r border-card-border
                 `}
             >
-                {/* Logo & Title Section (only visible in mobile drawer or if needed) */}
-                <div className="p-6 border-b border-card-border flex justify-between items-center lg:hidden">
-                    <div className="flex items-center gap-2">
-                        <img src={logo} alt="BookCourier Logo" className="w-8 h-8" />
-                        <span className="text-xl font-serif font-bold text-text-main">BookCourier</span>
+                {/* User Profile Section */}
+                <div className="p-6 border-b border-card-border">
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="w-12 h-12 rounded-2xl bg-accent-gold/10 border border-accent-gold/20 flex items-center justify-center overflow-hidden">
+                            {user?.photoURL ? (
+                                <img src={user.photoURL} alt="Avatar" className="w-full h-full object-cover" />
+                            ) : (
+                                <i className="fas fa-user text-accent-gold text-xl"></i>
+                            )}
+                        </div>
+                        <div className="min-w-0">
+                            <h4 className="text-sm font-bold text-text-main truncate">{user?.displayName || "Guest User"}</h4>
+                            <p className="text-[11px] text-text-muted truncate">{user?.email}</p>
+                        </div>
                     </div>
-                    <button
-                        className="w-10 h-10 rounded-full bg-bg-body flex items-center justify-center text-text-muted hover:text-red-500 transition-colors shadow-sm border border-card-border"
-                        onClick={() => setIsSidebarOpen(false)}
-                    >
-                        <i className="fas fa-times text-lg"></i>
-                    </button>
+                    <div className="bg-bg-body rounded-lg p-2 flex items-center justify-around text-[10px] uppercase font-bold text-text-muted tracking-wider">
+                        <div className="flex flex-col items-center">
+                            <span className="text-accent-gold uppercase">{title.split(' ')[0]}</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="p-6 lg:p-4">
+                <div className="p-6 lg:p-4 flex-1">
                     <p className="text-[10px] uppercase font-bold text-text-muted tracking-[2px] mb-4 opacity-60">
-                        {title}
+                        Menu
                     </p>
                     {/* Navigation Links */}
                     <nav className="space-y-1.5 font-medium">
@@ -52,21 +69,36 @@ const DashboardLayout = ({ title, sidebarLinks }) => {
                                 to={link.path}
                                 end={link.end}
                                 onClick={() => setIsSidebarOpen(false)}
-                                className={({ isActive }) =>
-                                    `flex items-center gap-3.5 px-4 py-3.5 rounded-xl transition-all duration-300 ${isActive
-                                        ? "bg-accent-gold text-white shadow-lg shadow-accent-gold/20 scale-[1.02]"
-                                        : "text-text-muted hover:bg-bg-card hover:text-text-main hover:shadow-sm"
-                                    }`
-                                }
                             >
-                                <i className={`fas ${link.icon} w-5 text-center text-sm ${link.isActive ? 'text-white' : 'text-accent-gold'}`}></i>
-                                <span className="text-sm">{link.name}</span>
+                                {({ isActive }) => (
+                                    <div className={`flex items-center gap-3.5 px-4 py-3.5 rounded-xl transition-all duration-300 ${isActive
+                                        ? "bg-accent-gold text-white shadow-lg shadow-accent-gold/20 scale-[1.02]"
+                                        : "text-text-muted hover:bg-bg-body hover:text-text-main hover:shadow-sm"
+                                        }`}>
+                                        <i className={`fas ${link.icon} w-5 text-center text-sm ${isActive ? 'text-white' : 'text-accent-gold'}`}></i>
+                                        <span className="text-sm">{link.name}</span>
+                                    </div>
+                                )}
                             </NavLink>
                         ))}
                     </nav>
                 </div>
 
-                {/* Sidebar Footer or User info could go here for mobile */}
+                {/* Sidebar Footer */}
+                <div className="p-6 mt-auto border-t border-card-border">
+                    <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-3.5 px-4 py-3.5 rounded-xl w-full text-red-500 hover:bg-red-50 transition-all duration-300 font-medium group"
+                    >
+                        <i className="fas fa-sign-out-alt w-5 text-center text-sm transition-transform group-hover:-translate-x-1"></i>
+                        <span className="text-sm">Logout</span>
+                    </button>
+                    <div className="mt-4 pt-4 border-t border-card-border/50 text-center">
+                        <p className="text-[10px] text-text-muted font-medium opacity-50 uppercase tracking-widest">
+                            &copy; {new Date().getFullYear()} BookCourier
+                        </p>
+                    </div>
+                </div>
             </aside>
 
             {/* Main Content */}
