@@ -28,7 +28,7 @@ const DashboardLayout = ({ title, sidebarLinks }) => {
             <aside
                 className={`
                     fixed lg:sticky top-0 left-0 h-screen lg:h-screen lg:top-0
-                    w-72 sm:w-80 lg:w-64 bg-bg-card z-[70] transform transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1)
+                    w-72 sm:w-80 lg:w-64 bg-bg-card z-[10] transform transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1)
                     ${isSidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full lg:translate-x-0"}
                     overflow-y-auto
                     flex flex-col
