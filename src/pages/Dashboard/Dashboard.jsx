@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import AdminDashboard from "./AdminDashboard";
 import UserDashboard from "./UserDashboard";
 import LibrarianDashboard from "./LibrarianDashboard";
+import DashboardLoading from "../../components/Shared/DashboardLoading";
 
 const Dashboard = () => {
     const { user, loading } = useAuth();
@@ -20,11 +21,7 @@ const Dashboard = () => {
     });
 
     if (loading || isUserLoading) {
-        return (
-            <div className="flex justify-center items-center h-screen">
-                <span className="loading loading-spinner loading-lg text-accent-gold"></span>
-            </div>
-        );
+        return <DashboardLoading fullScreen={true} />;
     }
 
     const role = userInfo?.role;

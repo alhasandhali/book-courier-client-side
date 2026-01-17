@@ -3,12 +3,13 @@ import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
+import DashboardLoading from "../../../components/Shared/DashboardLoading";
 
 const UserHome = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
 
-    const { data: orders = [] } = useQuery({
+    const { data: orders = [], isLoading: ordersLoading } = useQuery({
         queryKey: ["my-orders", user?.email],
         queryFn: async () => {
             if (!user?.email) return [];
@@ -18,7 +19,7 @@ const UserHome = () => {
         enabled: !!user?.email,
     });
 
-    const { data: wishlist = [] } = useQuery({
+    const { data: wishlist = [], isLoading: wishlistLoading } = useQuery({
         queryKey: ["wishlist", user?.email],
         queryFn: async () => {
             if (!user?.email) return [];
@@ -38,6 +39,12 @@ const UserHome = () => {
         }
         return sum;
     }, 0);
+
+    const isLoading = ordersLoading || wishlistLoading;
+
+    if (isLoading) {
+        return <DashboardLoading />;
+    }
 
     return (
         <div>

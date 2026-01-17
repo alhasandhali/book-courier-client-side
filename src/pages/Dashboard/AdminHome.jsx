@@ -2,6 +2,7 @@ import React from "react";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
+import DashboardLoading from "../../components/Shared/DashboardLoading";
 
 const AdminHome = () => {
     const { user } = useAuth();
@@ -41,11 +42,7 @@ const AdminHome = () => {
     const isLoading = usersLoading || booksLoading || ordersLoading;
 
     if (isLoading) {
-        return (
-            <div className="flex justify-center items-center h-64">
-                <span className="loading loading-spinner loading-lg text-accent-gold"></span>
-            </div>
-        );
+        return <DashboardLoading />;
     }
 
     return (

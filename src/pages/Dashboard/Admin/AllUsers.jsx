@@ -4,6 +4,7 @@ import useAuth from "../../../hooks/useAuth";
 import useAdmin from "../../../hooks/useAdmin";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import DashboardLoading from "../../../components/Shared/DashboardLoading";
 
 const AllUsers = () => {
     const axiosSecure = useAxiosSecure();
@@ -31,11 +32,7 @@ const AllUsers = () => {
     };
 
     if (isLoading) {
-        return (
-            <div className="flex justify-center items-center h-64">
-                <span className="loading loading-spinner loading-lg text-accent-gold"></span>
-            </div>
-        );
+        return <DashboardLoading />;
     }
 
     return (
