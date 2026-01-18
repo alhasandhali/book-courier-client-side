@@ -111,6 +111,10 @@ const ManageAllOrders = () => {
                                         <i className="fa-regular fa-calendar text-accent-gold"></i>
                                         {new Date(order.orderDate).toLocaleDateString()}
                                     </div>
+                                    <div className="text-[10px] text-text-muted flex items-center gap-2 mt-1">
+                                        <i className="fa-solid fa-clock-rotate-left text-accent-gold"></i>
+                                        Return: {order.returnDays ? `${order.returnDays} Days` : "7 Days"}
+                                    </div>
                                     <div className="text-[10px] text-text-muted mt-1">
                                         Seller: {order.librarianEmail || "Unknown"}
                                     </div>

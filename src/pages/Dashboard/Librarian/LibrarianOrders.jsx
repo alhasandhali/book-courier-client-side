@@ -115,6 +115,10 @@ const LibrarianOrders = () => {
                                         <i className="fa-regular fa-calendar text-accent-gold"></i>
                                         {new Date(order.orderDate).toLocaleDateString()}
                                     </div>
+                                    <div className="text-[10px] text-text-muted flex items-center gap-2 mt-1">
+                                        <i className="fa-solid fa-clock-rotate-left text-accent-gold"></i>
+                                        Return: {order.returnDays ? `${order.returnDays} Days` : "7 Days"}
+                                    </div>
                                 </td>
                                 <td className="py-4 px-4">
                                     <div className="font-semibold text-text-main text-sm">

@@ -67,7 +67,7 @@ const AdminHome = () => {
                 </div>
             </header>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 <div className="bg-bg-card p-6 rounded-xl shadow-md border border-card-border">
                     <div className="flex items-center justify-between mb-4">
                         <h3 className="text-lg font-semibold text-text-muted">
@@ -107,6 +107,57 @@ const AdminHome = () => {
                     <p className="text-sm text-text-muted mt-2">
                         From completed shipments
                     </p>
+                </div>
+            </div>
+
+            <div className="bg-bg-card rounded-xl shadow-md border border-card-border overflow-hidden">
+                <div className="p-6 border-b border-card-border flex justify-between items-center">
+                    <h3 className="text-xl font-serif font-bold text-text-main">Top Rated Books</h3>
+                    <button className="text-sm text-accent-gold font-bold hover:underline">View All</button>
+                </div>
+                <div className="overflow-x-auto">
+                    <table className="table w-full">
+                        <thead className="bg-bg-body text-text-muted uppercase text-[10px] font-bold">
+                            <tr>
+                                <th className="px-6 py-4">Book Title</th>
+                                <th className="px-4 py-4">Author</th>
+                                <th className="px-4 py-4 text-center">Average Rating</th>
+                                <th className="px-4 py-4 text-center">Reviews</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {books
+                                .filter(b => b.rating)
+                                .sort((a, b) => {
+                                    const aVal = typeof a.rating === 'object' ? a.rating.average : a.rating;
+                                    const bVal = typeof b.rating === 'object' ? b.rating.average : b.rating;
+                                    return bVal - aVal;
+                                })
+                                .slice(0, 5)
+                                .map((book) => (
+                                    <tr key={book._id} className="border-b border-card-border last:border-none hover:bg-bg-body/50 transition-colors">
+                                        <td className="px-6 py-4">
+                                            <div className="flex items-center gap-3">
+                                                <img src={book.image} alt="" className="w-8 h-10 object-cover rounded" />
+                                                <span className="font-bold text-text-main text-sm">{book.title}</span>
+                                            </div>
+                                        </td>
+                                        <td className="px-4 py-4 text-sm text-text-muted">{book.author}</td>
+                                        <td className="px-4 py-4 text-center">
+                                            <div className="flex items-center justify-center gap-1.5">
+                                                <i className="fa-solid fa-star text-orange-400 text-xs"></i>
+                                                <span className="font-bold text-text-main">
+                                                    {typeof book.rating === 'object' ? book.rating.average.toFixed(1) : parseFloat(book.rating).toFixed(1)}
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td className="px-4 py-4 text-center text-sm font-semibold text-text-muted">
+                                            {typeof book.rating === 'object' ? book.rating.count : 0}
+                                        </td>
+                                    </tr>
+                                ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

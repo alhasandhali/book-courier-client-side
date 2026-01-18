@@ -131,6 +131,7 @@ const Payment = () => {
                         <div>
                             <p className="font-bold text-text-main">{order.bookTitle || order.bookId?.title}</p>
                             <p className="text-sm text-text-muted">Qty: {order.quantity}</p>
+                            <p className="text-sm text-text-muted italic">Return After: <span className="font-semibold text-accent-gold">{order.returnDays || 7} Days</span></p>
                             <p className="text-sm text-text-muted">Status: <span className="uppercase font-semibold">{order.status}</span></p>
                         </div>
                     </div>

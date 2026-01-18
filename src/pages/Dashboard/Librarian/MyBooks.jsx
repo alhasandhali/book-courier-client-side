@@ -61,6 +61,7 @@ const MyBooks = () => {
                                 <th className="py-4">Book</th>
                                 <th className="py-4">Author</th>
                                 <th className="py-4">Stock</th>
+                                <th className="py-4">Rating</th>
                                 <th className="py-4">Status</th>
                                 <th className="py-4 text-right">Actions</th>
                             </tr>
@@ -79,6 +80,17 @@ const MyBooks = () => {
                                         <span className={`font-bold ${book.stock <= (book.minStockAlert || 5) ? 'text-red-500' : 'text-text-main'}`}>
                                             {book.stock || 0}
                                         </span>
+                                    </td>
+                                    <td>
+                                        <div className="flex items-center justify-center gap-1.5">
+                                            <i className="fa-solid fa-star text-orange-400 text-xs"></i>
+                                            <span className="font-bold text-text-main text-sm">
+                                                {typeof book.rating === 'object' ? book.rating.average.toFixed(1) : (parseFloat(book.rating) || 0).toFixed(1)}
+                                            </span>
+                                            {typeof book.rating === 'object' && book.rating.count > 0 && (
+                                                <span className="text-[10px] text-text-muted">({book.rating.count})</span>
+                                            )}
+                                        </div>
                                     </td>
                                     <td>
                                         <span className={`px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${book.status === 'published' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-500'

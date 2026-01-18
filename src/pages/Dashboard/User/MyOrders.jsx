@@ -66,6 +66,7 @@ const MyOrders = () => {
                             <th className="py-4">Order Date</th>
                             <th className="py-4">Payment</th>
                             <th className="py-4">Shipping</th>
+                            <th className="py-4">Return In</th>
                             <th className="py-4">Total</th>
                             <th className="py-4">Actions</th>
                         </tr>
@@ -102,6 +103,11 @@ const MyOrders = () => {
                                             }`}
                                     >
                                         {order.shipping_status || 'pending'}
+                                    </span>
+                                </td>
+                                <td className="text-center">
+                                    <span className="text-xs font-bold text-accent-gold">
+                                        {order.returnDays ? `${order.returnDays} Days` : "7 Days"}
                                     </span>
                                 </td>
                                 <td className="font-semibold text-text-main">
@@ -167,6 +173,10 @@ const MyOrders = () => {
                             <div className="text-right">
                                 <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Total Price</p>
                                 <p className="text-sm font-bold text-text-main">${order.totalPrice?.toFixed(2) || "0.00"}</p>
+                            </div>
+                            <div className="col-span-2 mt-2 pt-2 border-t border-dashed border-card-border flex justify-between items-center">
+                                <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Return Period</span>
+                                <span className="text-xs font-bold text-accent-gold">{order.returnDays ? `${order.returnDays} Days` : "Standard (7 Days)"}</span>
                             </div>
                         </div>
 

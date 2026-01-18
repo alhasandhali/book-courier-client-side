@@ -18,6 +18,7 @@ const BookDetails = () => {
 
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [returnDays, setReturnDays] = useState(7);
 
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewComment, setReviewComment] = useState("");
@@ -70,6 +71,7 @@ const BookDetails = () => {
       // Fulfillment
       phone: phone,
       address: address,
+      returnDays: parseInt(returnDays),
 
       // Status & Dates
       payment_status: 'pending',
@@ -90,6 +92,7 @@ const BookDetails = () => {
       setIsModalOpen(false);
       setPhone("");
       setAddress("");
+      setReturnDays(7);
     } catch (error) {
       console.log(error.response.data);
       toast.error("Failed to place order");
@@ -209,6 +212,7 @@ const BookDetails = () => {
       setReviewComment("");
       setReviewRating(5);
       refetchReviews();
+      queryClient.invalidateQueries(["book", id]);
     } catch (error) {
       console.error(error);
       toast.error("Failed to submit review");
@@ -235,27 +239,26 @@ const BookDetails = () => {
   }
 
   const renderRating = () => {
-    const ratingVal =
-      typeof book.rating === "object" ? book.rating.average : book.rating;
+    const ratingVal = typeof book.rating === "object" ? book.rating.average : book.rating || 0;
     const ratingCount = typeof book.rating === "object" ? book.rating.count : 0;
 
     return (
       <div className="flex items-center gap-2 mb-4">
         <div className="flex items-center text-orange-400 gap-0.5">
-          {[...Array(5)].map((_, i) => (
+          {[1, 2, 3, 4, 5].map((star) => (
             <i
-              key={i}
-              className={`fa-star ${i < Math.floor(ratingVal || 0) ? "fa-solid" : "fa-regular"
-                } text-sm`}
+              key={star}
+              className={`${star <= Math.round(ratingVal) ? "fa-solid" : "fa-regular"
+                } fa-star text-sm`}
             ></i>
           ))}
         </div>
-        <span className="text-text-muted text-sm font-medium">
-          ({ratingVal || 0})
+        <span className="text-text-main text-sm font-bold">
+          {ratingVal > 0 ? ratingVal.toFixed(1) : "No rating"}
         </span>
         {ratingCount > 0 && (
-          <span className="text-text-muted text-sm border-l border-card-border pl-2 ml-1">
-            {ratingCount} reviews
+          <span className="text-text-muted text-xs border-l border-card-border pl-2 ml-1">
+            {ratingCount} {ratingCount === 1 ? 'review' : 'reviews'}
           </span>
         )}
       </div>
@@ -485,6 +488,29 @@ const BookDetails = () => {
                 ></textarea>
               </div>
 
+              <div className="form-control">
+                <label htmlFor="returnDays" className="label text-xs uppercase font-bold text-text-muted">Return After (Days)</label>
+                <div className="flex items-center gap-3">
+                  <input
+                    id="returnDays"
+                    name="returnDays"
+                    type="range"
+                    min="1"
+                    max="30"
+                    step="1"
+                    className="range range-xs range-primary flex-1"
+                    value={returnDays}
+                    onChange={(e) => setReturnDays(e.target.value)}
+                  />
+                  <div className="bg-bg-body border border-card-border rounded-lg px-3 py-1 font-bold text-accent-gold min-w-[60px] text-center">
+                    {returnDays} Days
+                  </div>
+                </div>
+                <label className="label">
+                  <span className="label-text-alt text-text-muted italic text-[10px]">How many days would you like to keep the book?</span>
+                </label>
+              </div>
+
               <div className="bg-bg-body p-4 rounded-lg space-y-2 text-sm border border-card-border">
                 <div className="flex justify-between items-center text-text-muted">
                   <span>Price ({quantity}x):</span>
@@ -514,16 +540,19 @@ const BookDetails = () => {
           <h3 className="font-bold text-xl text-text-main mb-4">Write a Review</h3>
           <form onSubmit={handleSubmitReview} className="space-y-4">
             <div className="form-control">
-              <label htmlFor="reviewRating" className="label text-xs uppercase font-bold text-text-muted">Rating</label>
-              <select
-                id="reviewRating"
-                name="reviewRating"
-                className="select select-bordered w-full bg-bg-body text-text-main border-card-border"
-                value={reviewRating}
-                onChange={(e) => setReviewRating(e.target.value)}
-              >
-                {[5, 4, 3, 2, 1].map(num => <option key={num} value={num}>{num} Stars</option>)}
-              </select>
+              <label className="label text-xs uppercase font-bold text-text-muted">Rating</label>
+              <div className="rating rating-lg gap-1">
+                {[1, 2, 3, 4, 5].map((num) => (
+                  <input
+                    key={num}
+                    type="radio"
+                    name="rating-2"
+                    className="mask mask-star-2 bg-orange-400"
+                    checked={reviewRating === num}
+                    onChange={() => setReviewRating(num)}
+                  />
+                ))}
+              </div>
             </div>
             <div className="form-control">
               <label htmlFor="reviewComment" className="label text-xs uppercase font-bold text-text-muted">Comment</label>
