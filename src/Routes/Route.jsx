@@ -19,6 +19,7 @@ import Wishlist from "../pages/Dashboard/User/Wishlist";
 import AddBook from "../pages/Dashboard/Librarian/AddBook";
 
 import MyBooks from "../pages/Dashboard/Librarian/MyBooks";
+import UpdateBook from "../pages/Dashboard/Librarian/UpdateBook";
 import LibrarianOrders from "../pages/Dashboard/Librarian/LibrarianOrders";
 import AllUsers from "../pages/Dashboard/Admin/AllUsers";
 import ManageAllBooks from "../pages/Dashboard/Admin/ManageAllBooks";
@@ -100,6 +101,10 @@ export const router = createBrowserRouter([
           {
             path: "add-book",
             element: <AddBook />,
+          },
+          {
+            path: "update-book/:id",
+            element: <UpdateBook />,
           },
 
           {
