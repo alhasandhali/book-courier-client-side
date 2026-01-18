@@ -42,6 +42,7 @@ const Payment = () => {
             deliveryCharge: order?.deliveryCharge || 0,
             bookTitle: order?.bookTitle || order?.bookId?.title,
             bookImage: order?.bookImage || order?.bookId?.image,
+            bookId: typeof order.bookId === 'object' ? order.bookId._id : order.bookId,
             quantity: order?.quantity || 1,
             currency: "USD",
             email: order?.email || order?.userEmail,
@@ -60,25 +61,7 @@ const Payment = () => {
                 status: 'paid' // sync legacy status
             });
 
-            // 3. Update Book Stock
-            if (order?.bookId) {
-                try {
-                    // Fetch current book data to get current stock
-                    // Depending on your API, bookId might be the ID or a populated object
-                    const bookId = typeof order.bookId === 'object' ? order.bookId._id : order.bookId;
-                    const bookRes = await axiosSecure.get(`/book/${bookId}`);
-                    const currentBook = bookRes.data;
-
-                    if (currentBook && typeof currentBook.stock !== 'undefined') {
-                        const newStock = Math.max(0, currentBook.stock - (order.quantity || 1));
-                        await axiosSecure.patch(`/book/${bookId}`, { stock: newStock });
-                        console.log(`Stock updated for ${bookId}: ${currentBook.stock} -> ${newStock}`);
-                    }
-                } catch (stockError) {
-                    console.error("Failed to update stock:", stockError);
-                    // We don't block the whole process if stock update fails, but we log it
-                }
-            }
+            // 3. Stock update is now handled by the server in /payment endpoint for security
 
             toast.success('Payment Successful!');
             queryClient.invalidateQueries(['my-orders']);

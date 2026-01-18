@@ -1,6 +1,6 @@
 # 📚 BookCourier - Modern Bookstore Platform (Client Side)
 
-BookCourier is a premium, feature-rich web application designed for a seamless book browsing, ordering, and management experience. Built with the latest web technologies, it offers a polished interface for readers, librarians, and administrators alike.
+BookCourier is a premium, feature-rich web application designed for a seamless book browsing, ordering, and management experience. Built with the latest web technologies, it offers a polished interface for readers, librarians, and administrators alike. This is the client-side frontend for the BookCourier ecosystem, powered by a robust backend.
 
 ## 🚀 Key Features & Functionalities
 
@@ -20,10 +20,11 @@ BookCourier is a premium, feature-rich web application designed for a seamless b
   - **Payment Integration**: Secure payment processing for orders.
 - **Librarian Dashboard**:
   - **Inventory Management**: Add new books with high-quality image uploads (integrated with Imgbb).
-  - **My Books**: Edit details or update the status of books added by the librarian.
-  - **Order Tracking**: Manage issued books, update shipping status, and follow up on returns.
+  - **Stock Control**: Real-time stock updates for managed books to ensure inventory accuracy.
+  - **Order Tracking**: Manage issued books, update shipping status (Shipped/Delivered), and handle cancellations.
+  - **Return Management**: flexible "Return Day" updates to track and modify book return schedules for customers.
 - **Admin Dashboard**:
-  - **User Control**: Oversee all registered users and manage roles (User ↔ Librarian ↔ Admin).
+  - **User Usage**: Oversee all registered users and manage roles (User ↔ Librarian ↔ Admin).
   - **Global Inventory**: Manage all books across the platform (Publish/Unpublish/Delete).
   - **Order Management**: View and manage all orders placed on the platform, including shipping status updates and cancellations.
   - **Platform Overview**: Real-time statistics on total users, revenue, and order distribution.
@@ -36,7 +37,8 @@ BookCourier is a premium, feature-rich web application designed for a seamless b
 
 ## 🛠️ Technology Stack
 
-- **Frontend Core**: [React 19](https://react.dev/) & [Vite](https://vitejs.dev/)
+### Frontend (This Repository)
+- **Framework**: [React 19](https://react.dev/) & [Vite](https://vitejs.dev/)
 - **Styling**: [Tailwind CSS 4](https://tailwindcss.com/) & [DaisyUI 5](https://daisyui.com/)
 - **State Management**: [TanStack React Query 5](https://tanstack.com/query) for efficient caching and synchronization.
 - **Authentication**: [Firebase Auth](https://firebase.google.com/docs/auth) for secure login/registration (including Google Login).
@@ -44,6 +46,12 @@ BookCourier is a premium, feature-rich web application designed for a seamless b
 - **Form Handling**: [React Hook Form](https://react-hook-form.com/) for optimized performance.
 - **API Communication**: [Axios](https://axios-http.com/) for reliable backend requests.
 - **Maps**: [React Leaflet](https://react-leaflet.js.org/) for interactive maps.
+
+### Backend (Context)
+- **Runtime**: [Node.js](https://nodejs.org/)
+- **Framework**: [Express.js](https://expressjs.com/)
+- **Database**: [MongoDB](https://www.mongodb.com/) (using native driver)
+- **Security**: JWT tokens (via HTTP-only cookies) for secure role-based access control.
 
 ## 📦 Installation & Setup
 
@@ -106,7 +114,7 @@ src/
 ├── firebase/        # Firebase initialization and config
 ├── hooks/           # Custom React hooks (useAuth, useAxiosSecure, etc.)
 ├── pages/           # Page components (Home, Dashboard, Login, etc.)
-├── Routes/          # Routing configuration and PrivateRoute
+├── routes/          # Routing configuration and PrivateRoute
 └── main.jsx         # Entry point
 ```
 

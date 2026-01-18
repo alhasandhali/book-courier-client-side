@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 const LibrarianOrders = () => {
@@ -9,6 +9,8 @@ const LibrarianOrders = () => {
     const { user, loading } = useAuth();
     const [searchTerm, setSearchTerm] = useState("");
     const queryClient = useQueryClient();
+    const [selectedOrder, setSelectedOrder] = useState(null);
+    const [newReturnDay, setNewReturnDay] = useState("");
 
     const { data: orders = [], refetch, isLoading } = useQuery({
         queryKey: ["librarian-orders", user?.email],
@@ -22,6 +24,33 @@ const LibrarianOrders = () => {
         enabled: !!user?.email,
     });
 
+    const updateReturnDayMutation = useMutation({
+        mutationFn: async ({ id, returnDay }) => {
+            const res = await axiosSecure.patch(`/order/return-day/${id}`, { returnDay });
+            return res.data;
+        },
+        onSuccess: () => {
+            toast.success("Return day updated successfully!");
+            queryClient.invalidateQueries(["librarian-orders"]);
+            document.getElementById("update_return_day_modal").close();
+            setSelectedOrder(null);
+        },
+        onError: (error) => {
+            toast.error(error.response?.data?.error || "Failed to update return day");
+        },
+    });
+
+    const handleUpdateReturnDayClick = (order) => {
+        setSelectedOrder(order);
+        setNewReturnDay(order.returnDay || "");
+        document.getElementById("update_return_day_modal").showModal();
+    };
+
+    const handleReturnDaySubmit = (e) => {
+        e.preventDefault();
+        if (!selectedOrder) return;
+        updateReturnDayMutation.mutate({ id: selectedOrder._id, returnDay: newReturnDay });
+    };
 
     const handleShippingStatusChange = async (orderId, newStatus) => {
         try {
@@ -117,7 +146,14 @@ const LibrarianOrders = () => {
                                     </div>
                                     <div className="text-[10px] text-text-muted flex items-center gap-2 mt-1">
                                         <i className="fa-solid fa-clock-rotate-left text-accent-gold"></i>
-                                        Return: {order.returnDays ? `${order.returnDays} Days` : "7 Days"}
+                                        Return: {order.returnDay || order.returnDays || "7 Days"}
+                                        <button
+                                            onClick={() => handleUpdateReturnDayClick(order)}
+                                            className="ml-1 text-accent-gold hover:text-accent-gold/80 transition-colors"
+                                            title="Update Return Day"
+                                        >
+                                            <i className="fas fa-edit"></i>
+                                        </button>
                                     </div>
                                 </td>
                                 <td className="py-4 px-4">
@@ -180,6 +216,48 @@ const LibrarianOrders = () => {
                     </div>
                 )}
             </div>
+
+            {/* Update Return Day Modal */}
+            <dialog id="update_return_day_modal" className="modal modal-bottom sm:modal-middle">
+                <div className="modal-box bg-bg-card border border-card-border">
+                    <h3 className="font-bold text-lg text-text-main mb-4">Update Return Day</h3>
+                    <p className="text-sm text-text-muted mb-4">Set the return date or duration for: <span className="text-text-main font-semibold">{selectedOrder?.bookTitle}</span></p>
+                    <form onSubmit={handleReturnDaySubmit}>
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text text-text-muted">Return Day/Date Information</span>
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="e.g. 2024-02-15 or 14 Days"
+                                value={newReturnDay}
+                                onChange={(e) => setNewReturnDay(e.target.value)}
+                                className="input input-bordered w-full bg-bg-body text-text-main"
+                                required
+                            />
+                        </div>
+                        <div className="modal-action">
+                            <button
+                                type="button"
+                                className="btn btn-ghost"
+                                onClick={() => document.getElementById("update_return_day_modal").close()}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                className="btn bg-accent-gold text-white hover:bg-accent-gold/90"
+                                disabled={updateReturnDayMutation.isPending}
+                            >
+                                {updateReturnDayMutation.isPending ? "Updating..." : "Update Return Day"}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <form method="dialog" className="modal-backdrop">
+                    <button>close</button>
+                </form>
+            </dialog>
         </div>
     );
 };

@@ -7,7 +7,7 @@ const LibrarianDashboard = () => {
         { name: "Overview", path: "/dashboard", icon: "fa-columns", end: true },
         { name: "Add Book", path: "/dashboard/add-book", icon: "fa-plus-circle" },
         { name: "My Books", path: "/dashboard/my-books", icon: "fa-book" },
-        { name: "Manage Orders", path: "/dashboard/orders", icon: "fa-tasks" },
+        { name: "Manage Orders", path: "/dashboard/issued-books", icon: "fa-tasks" },
         { name: "My Profile", path: "/dashboard/profile", icon: "fa-user-circle" },
         { name: "Main Home", path: "/", icon: "fa-arrow-left", end: false },
     ];
