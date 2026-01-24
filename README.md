@@ -1,123 +1,123 @@
-# 📚 BookCourier - Modern Bookstore Platform (Client Side)
+# 📖 BookCourier - The Ultimate Bookstore Ecosystem (Client)
 
-BookCourier is a premium, feature-rich web application designed for a seamless book browsing, ordering, and management experience. Built with the latest web technologies, it offers a polished interface for readers, librarians, and administrators alike. This is the client-side frontend for the BookCourier ecosystem, powered by a robust backend.
+![BookCourier Banner](./home-page.png)
 
-## 🚀 Key Features & Functionalities
+BookCourier is a state-of-the-art, full-stack bookstore platform that bridges the gap between readers, librarians, and administrators. This repository contains the **Client-side** code, built with React 19 and Tailwind CSS 4, providing a premium, high-performance user interface.
 
-### 👤 Guest & User Experience
-- **Interactive Landing Page**: Featuring dynamic Hero carousels, curated collections (Best Sellers, Recommended, Recently Added), and promotional banners to drive engagement.
-- **Advanced Book Explorer**: A robust search and filter system allowing users to find books by title, author, or category, with real-time price-based sorting.
-- **Detailed Book Insights**: High-quality book details page showing descriptions, pricing, availability, and user reviews.
-- **Smart Wishlist**: Users can save their favorite books to a personal wishlist for future purchases.
-- **Secure Ordering & Payments**: Unified checkout process where users can place orders and manage payments (Invoices).
-- **Profile Management**: Customizable user profiles with personal details and history tracking.
+## 🔗 Important Links
 
-### 🛡️ Role-Based Dashboards
-- **User Dashboard**:
-  - **My Orders**: Track the status of all current and past orders.
-  - **Invoices**: View and download payment records for transparency.
-  - **Personal Wishlist**: Quick access to saved books.
-  - **Payment Integration**: Secure payment processing for orders.
-- **Librarian Dashboard**:
-  - **Inventory Management**: Add new books with high-quality image uploads (integrated with Imgbb).
-  - **Stock Control**: Real-time stock updates for managed books to ensure inventory accuracy.
-  - **Order Tracking**: Manage issued books, update shipping status (Shipped/Delivered), and handle cancellations.
-  - **Return Management**: flexible "Return Day" updates to track and modify book return schedules for customers.
-- **Admin Dashboard**:
-  - **User Usage**: Oversee all registered users and manage roles (User ↔ Librarian ↔ Admin).
-  - **Global Inventory**: Manage all books across the platform (Publish/Unpublish/Delete).
-  - **Order Management**: View and manage all orders placed on the platform, including shipping status updates and cancellations.
-  - **Platform Overview**: Real-time statistics on total users, revenue, and order distribution.
+- 🌐 **Live Site**: [https://book-courier.vercel.app/](https://book-courier.vercel.app/)
+- 💻 **Client-Side Repository**: [GitHub Repo](https://github.com/alhasandhali/book-courier-client-side.git)
+- 🖥️ **Server-Side Repository**: [GitHub Repo](https://github.com/alhasandhali/book-courier-server-side.git)
 
-### 🎨 Design & UI/UX
-- **Premium Aesthetics**: Crafted with **Tailwind CSS 4** and **DaisyUI 5** for a modern, sleek look.
-- **Fully Responsive**: Optimized for Mobile, Tablet, and Desktop with fluid layouts and touch-friendly components.
-- **Rich Interactions**: Smooth animations using **Swiper.js**, location mapping with **React Leaflet**, and tactile feedback via **React Hot Toast**.
-- **Dark Mode Support**: Harmonious color palettes designed for comfort in any lighting.
+---
 
-## 🛠️ Technology Stack
+## 🌟 Key Features
 
-### Frontend (This Repository)
-- **Framework**: [React 19](https://react.dev/) & [Vite](https://vitejs.dev/)
-- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/) & [DaisyUI 5](https://daisyui.com/)
-- **State Management**: [TanStack React Query 5](https://tanstack.com/query) for efficient caching and synchronization.
-- **Authentication**: [Firebase Auth](https://firebase.google.com/docs/auth) for secure login/registration (including Google Login).
-- **Navigation**: [React Router 7](https://reactrouter.com/) with protected route logic.
-- **Form Handling**: [React Hook Form](https://react-hook-form.com/) for optimized performance.
-- **API Communication**: [Axios](https://axios-http.com/) for reliable backend requests.
-- **Maps**: [React Leaflet](https://react-leaflet.js.org/) for interactive maps.
+### 👤 User Roles & Workflows
+- **User Dashboard**: Manage profiles, track orders, view wishlist, and process simulated payments.
+- **Librarian Dashboard**: Comprehensive tools for adding books, managing stock, and updating return schedules.
+- **Admin Dashboard**: Global user management, role assignment, and platform-wide analytics.
 
-### Backend (Context)
-- **Runtime**: [Node.js](https://nodejs.org/)
-- **Framework**: [Express.js](https://expressjs.com/)
-- **Database**: [MongoDB](https://www.mongodb.com/) (using native driver)
-- **Security**: JWT tokens (via HTTP-only cookies) for secure role-based access control.
+### 🎨 Design & UI
+- **Premium Aesthetics**: Crafted with **Tailwind CSS 4** and **DaisyUI 5**.
+- **Responsive Layouts**: Optimized for seamless experience across mobile, tablet, and desktop.
+- **Micro-interactions**: Smooth carousels, maps, and toast notifications for enhanced UX.
 
-## 📦 Installation & Setup
+---
 
-Follow these steps to get the project running on your local machine.
+## 📂 Project File Structure (Client-Side)
 
-### Prerequisites
-- Node.js (v16 or higher)
-- npm or yarn
+The frontend is built with a modular and scalable architecture:
 
-### 1. Clone the Repository
-```bash
-git clone <repository-url>
-cd book-courier-client-side
-```
-
-### 2. Install Dependencies
-```bash
-npm install
-```
-
-### 3. Environment Configuration
-Create a `.env.local` file in the root directory and add the following variables. You will need a Firebase project and an Imgbb API key.
-
-```env
-# Firebase Configuration
-VITE_FIREBASE_API_KEY=your_firebase_api_key
-VITE_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=your_project_id
-VITE_FIREBASE_STORAGE_BUCKET=your_project_id.appspot.com
-VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
-VITE_FIREBASE_APP_ID=your_app_id
-
-# Backend API URL
-VITE_API_URL=http://localhost:5000
-
-# Image Hosting (Imgbb)
-VITE_img_hosting=your_imgbb_api_key
-```
-
-### 4. Run the Application
-Start the development server:
-```bash
-npm run dev
-```
-The app should now be running at `http://localhost:5173` (or the port shown in your terminal).
-
-### 5. Build for Production
-To create a production-ready build:
-```bash
-npm run build
-```
-
-## 📂 Project Structure
-
-```
-src/
-├── assets/          # Static assets (images, icons)
-├── components/      # Reusable UI components
-├── contexts/        # React Context providers (Auth, etc.)
-├── firebase/        # Firebase initialization and config
-├── hooks/           # Custom React hooks (useAuth, useAxiosSecure, etc.)
-├── pages/           # Page components (Home, Dashboard, Login, etc.)
-├── routes/          # Routing configuration and PrivateRoute
-└── main.jsx         # Entry point
+```text
+book-courier-client-side/
+├── public/                  # Static assets (images, JSON data)
+│   ├── home-page.png        # Banner image
+│   └── warehouses.json      # Map data for library locations
+├── src/
+│   ├── assets/              # Component-specific styles and static images
+│   ├── components/          # Reusable UI components (Shared across pages)
+│   │   ├── Common/          # Navbar, Footer, Section Titles
+│   │   ├── Home/            # Hero, Featured, Collections
+│   │   └── Cards/           # Book cards, Wishlist cards
+│   ├── context/             # React Context for Auth and Global State
+│   ├── firebase/            # Firebase SDK initialization
+│   ├── hooks/               # Custom React hooks (useAxios, useAuth, etc.)
+│   ├── pages/               # Functional page views
+│   │   ├── Home/            # Main landing page
+│   │   ├── AllBooks/        # Searchable book catalog
+│   │   ├── BookDetails/     # Pricing, reviews, and description
+│   │   ├── Dashboard/       # Role-based panels
+│   │   │   ├── Admin/       # User management, site stats
+│   │   │   ├── Librarian/   # Add/Update books, order tracking
+│   │   │   ├── User/        # My orders, Wishlist, Payments
+│   │   │   └── Shared/      # Sidebar and common dashboard UI
+│   │   ├── Login/           # Firebase Authentication
+│   │   └── Register/        # New user enrollment
+│   ├── Routes/              # React Router 7 configuration & Protected Routes
+│   ├── index.css            # Global Tailwind 4 styles & Design tokens
+│   └── main.jsx             # Application entry point
+├── package.json             # NPM dependencies (React 19, Tailwind 4)
+├── vite.config.js           # Vite build configuration
+└── .env.local               # Local environment variables (Firebase/API)
 ```
 
 ---
 
-Built with ❤️ for a better reading world.
+## 🚀 Detailed Installation Process
+
+Follow these steps to set up the client-side application locally:
+
+### 1. Prerequisites
+Ensure you have the following installed:
+- **Node.js**: Version 18.0.0 or higher
+- **npm**: (Included with Node.js)
+
+### 2. Clone and Navigate
+If you haven't already, clone the client repository and enter the directory:
+```bash
+git clone https://github.com/alhasandhali/book-courier-client-side.git
+cd book-courier-client-side
+```
+
+### 3. Install Dependencies
+Install all required packages listed in `package.json`:
+```bash
+npm install
+```
+
+### 4. Setup Environment Variables
+Create a file named `.env.local` in the root of the `book-courier-client-side` folder and add your credentials:
+```env
+# Firebase Configuration
+VITE_apiKey=your_firebase_api_key
+VITE_authDomain=your_project_id.firebaseapp.com
+VITE_projectId=your_project_id
+VITE_storageBucket=your_project_id.appspot.com
+VITE_messagingSenderId=your_messaging_sender_id
+VITE_appId=your_app_id
+
+# Backend API URL (Connect to local server or live API)
+VITE_base_url=http://localhost:5000
+```
+
+### 5. Launch the Development Server
+Run the following command to start the app in development mode:
+```bash
+npm run dev
+```
+The application will be accessible at [http://localhost:5173](http://localhost:5173).
+
+---
+
+## 🛠️ Build for Production
+To generate a production-ready bundle (output to `dist/` folder):
+```bash
+npm run build
+```
+
+---
+
+## 📄 License
+Internal use for the PHW BookCourier project. Developed for a premium bookstore experience.
