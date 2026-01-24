@@ -1,6 +1,6 @@
 # 📖 BookCourier - The Ultimate Bookstore Ecosystem (Client)
 
-![BookCourier Banner](./home-page.png)
+![BookCourier Banner](./public/home-page.png)
 
 BookCourier is a state-of-the-art, full-stack bookstore platform that bridges the gap between readers, librarians, and administrators. This repository contains the **Client-side** code, built with React 19 and Tailwind CSS 4, providing a premium, high-performance user interface.
 
@@ -33,34 +33,55 @@ The frontend is built with a modular and scalable architecture:
 ```text
 book-courier-client-side/
 ├── public/                  # Static assets (images, JSON data)
-│   ├── home-page.png        # Banner image
+│   ├── home-page.png        # Main project banner
 │   └── warehouses.json      # Map data for library locations
 ├── src/
-│   ├── assets/              # Component-specific styles and static images
-│   ├── components/          # Reusable UI components (Shared across pages)
-│   │   ├── Common/          # Navbar, Footer, Section Titles
-│   │   ├── Home/            # Hero, Featured, Collections
-│   │   └── Cards/           # Book cards, Wishlist cards
-│   ├── context/             # React Context for Auth and Global State
-│   ├── firebase/            # Firebase SDK initialization
-│   ├── hooks/               # Custom React hooks (useAxios, useAuth, etc.)
-│   ├── pages/               # Functional page views
-│   │   ├── Home/            # Main landing page
-│   │   ├── AllBooks/        # Searchable book catalog
-│   │   ├── BookDetails/     # Pricing, reviews, and description
-│   │   ├── Dashboard/       # Role-based panels
-│   │   │   ├── Admin/       # User management, site stats
-│   │   │   ├── Librarian/   # Add/Update books, order tracking
-│   │   │   ├── User/        # My orders, Wishlist, Payments
-│   │   │   └── Shared/      # Sidebar and common dashboard UI
-│   │   ├── Login/           # Firebase Authentication
-│   │   └── Register/        # New user enrollment
-│   ├── Routes/              # React Router 7 configuration & Protected Routes
-│   ├── index.css            # Global Tailwind 4 styles & Design tokens
-│   └── main.jsx             # Application entry point
-├── package.json             # NPM dependencies (React 19, Tailwind 4)
-├── vite.config.js           # Vite build configuration
-└── .env.local               # Local environment variables (Firebase/API)
+│   ├── assets/              # Standard assets like SVGs or local images
+│   ├── components/          # Reusable UI components
+│   │   ├── BestSellers/     # Best selling books slider/grid
+│   │   ├── BookCard/        # Individual book display card
+│   │   ├── Categories/      # Book categories browsing
+│   │   ├── Footer/          # Application footer
+│   │   ├── Hero/            # Impactful landing banner
+│   │   ├── Home/            # Main Home component entry
+│   │   ├── MapSection/      # Leaflet map integration for store locations
+│   │   ├── Navbar/          # Responsive navigation with role-based links
+│   │   ├── PopularBooks/    # Curated popular books section
+│   │   ├── PromoBanners/    # Promotional marketing banners
+│   │   ├── RecentlyAdded/   # New arrivals showcase
+│   │   ├── RecommendedBooks/# Personalized recommendations
+│   │   ├── Root/            # High-level layout wrapper
+│   │   ├── Services/        # Store service highlights
+│   │   ├── Shared/          # Components used across multiple pages
+│   │   └── Testimonials/    # User reviews and feedback slider
+│   ├── context/             # Global state management (Auth, Theme)
+│   │   ├── AuthContext.js   # Authentication state definition
+│   │   └── AuthProvider.jsx # Firebase connection logic & user state
+│   ├── firebase/            # Firebase SDK configuration & initialization
+│   ├── hooks/               # Custom React hooks for logic reuse
+│   │   ├── useAdmin.jsx     # Logic to identify admin status
+│   │   ├── useAuth.jsx      # Hook for accessing authentication data
+│   │   ├── useAxios.jsx     # Public Axios instance for basic API calls
+│   │   └── useAxiosSecure.jsx# Secure Axios with JWT interceptors
+│   ├── pages/               # Full-page views and layouts
+│   │   ├── About/           # Team information and mission
+│   │   ├── AllBooks/        # Searchable and filterable catalog
+│   │   ├── BookDetails/     # In-depth book specifications & reviews
+│   │   ├── Contact/         # Support system and contact form
+│   │   ├── Dashboard/       # Role-specific administrative panels
+│   │   │   ├── Admin/       # User management and platform control
+│   │   │   ├── Librarian/   # Stock updates and return management
+│   │   │   ├── User/        # Order tracking and wishlist management
+│   │   │   └── Shared/      # Sidebar, Profile, and common elements
+│   │   ├── ErrorPage/       # 404 and application error handling
+│   │   ├── Login/           # Authentication portal (Email/Google)
+│   │   └── Register/        # Account creation workflow
+│   ├── Routes/              # Routing logic (React Router 7)
+│   ├── index.css            # Global Tailwind 4 styles & typography
+│   └── main.jsx             # React 19 application entry point
+├── package.json             # NPM scripts and project dependencies
+├── vite.config.js           # Vite build and server configuration
+└── .env.local               # Environment variables (Firebase & API)
 ```
 
 ---
